@@ -124,7 +124,7 @@ button { font: inherit; }
 .analysis-section.conclusion h4 { color: #86d9ab; }
 .analysis-section.news-context { border-left: 3px solid #8198a0; }
 .report-image-link { display: block; border: 1px solid #2a3b3f; border-radius: 7px; overflow: hidden; margin: 13px 0; }
-.report-image-link img { display: block; width: 100%; max-height: 330px; object-fit: contain; background: #081014; }
+.report-image-link img { display: block; width: 100%; height: auto; background: #081014; }
 .report-image-link span { display: block; padding: 8px 10px; font: 9px var(--mono); color: #cfac69; border-top: 1px solid #263438; }
 .source-row { display: flex; gap: 10px; border-top: 1px solid #243237; padding-top: 10px; color: #88989b; font: 8px/1.6 var(--mono); }
 .source-row span:first-child { color: #bd9e62; flex: 0 0 auto; }

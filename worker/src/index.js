@@ -65,6 +65,25 @@ function reportView(row) {
   return report;
 }
 
+function notificationText(report, summary) {
+  const textValue = (value, fallback) => {
+    if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean).join(" / ") || fallback;
+    if (typeof value === "string" || typeof value === "number") return String(value).trim() || fallback;
+    return fallback;
+  };
+  const targets = report.targets || report.takeProfit || report.target || [report.tp1, report.tp2].filter(Boolean);
+  const lines = [
+    "สรุป: " + textValue(summary || report.headline, "มีบทวิเคราะห์ XAU/USD ใหม่"),
+    "ฝั่ง: " + textValue(report.bias || report.direction || report.status, "WAIT"),
+    "จุดรอ/เข้า: " + textValue(report.entryZone || report.entry, "รอดูรายงานเต็ม"),
+    "รอสัญญาณ: " + textValue(report.trigger, "รอดูรายงานเต็ม"),
+    "TP: " + textValue(targets, "ดูเป้าหมายในรายงานเต็ม"),
+    "ยกเลิกแผน/SL: " + textValue(report.invalidation || report.stop, "ดูจุดยกเลิกในรายงานเต็ม")
+  ];
+  if (report.newsRisk) lines.push("ข่าวเสี่ยง: " + textValue(report.newsRisk, ""));
+  return lines.join("\n").slice(0, 900);
+}
+
 function vapidConfig(env) {
   if (!env.VAPID_PRIVATE_KEY || !env.VAPID_PUBLIC_KEY) throw new Error("Web Push keys are not configured.");
   return {
@@ -235,9 +254,9 @@ async function route(request, env, url) {
     const subscriptions = subscriptionsResult.results || [];
     const notification = {
       title: "XAU Desk · " + status,
-      body: summary || "A new XAU/USD desk brief is ready to review.",
+      body: notificationText(body, summary),
       url: env.APP_URL,
-      tag: "xau-desk-brief",
+      tag: "xau-desk-brief-" + id,
       image: imageUrl || undefined
     };
     let delivered = 0;

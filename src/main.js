@@ -70,7 +70,7 @@ function renderReport(report) {
   const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "TradingView · Pepperstone");
   byId("report-sources").textContent = sources;
   byId("snapshot-time").textContent = formatDate(report.snapshotAt);
-  byId("snapshot-source").textContent = report.priceSource || "Analysis source: Codex desk schedule · PEPPERSTONE:XAUUSD";
+  byId("snapshot-source").textContent = "แหล่งข้อมูลอยู่ในรายงานฉบับเต็ม";
   const imageUrl = report.imageUrl || (report.image ? (BASE_URL + "reports/latest.png") : "");
   const imageLink = byId("report-image-link");
   if (imageUrl) {

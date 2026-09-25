@@ -72,15 +72,10 @@ function fieldCard(x, label, value) {
 
 const status = String(report.status || report.bias || "WAIT").toUpperCase();
 const statusColor = status.includes("BUY") ? "#70d69d" : status.includes("SELL") ? "#ff9085" : "#e4bd71";
-const snapshot = report.snapshotAt
-  ? new Intl.DateTimeFormat("th-TH", { timeZone: "Asia/Bangkok", dateStyle: "medium", timeStyle: "short", hour12: false }).format(new Date(report.snapshotAt)) + " ICT"
-  : "TIME NOT PROVIDED";
 const summaryLines = wrap(report.summary || report.headline || "No summary provided.", 89, 2);
 const summaryText = summaryLines.map((line, index) => lineText(88, 232 + index * 24, line, 18, "#e8ede6", 500)).join("");
 const contextLines = wrap(report.newsRisk || report.risk || report.context || "Review the full report for session and event risk.", 142, 2);
 const contextText = contextLines.map((line, index) => lineText(88, 570 + index * 22, line, 14, "#c0cbc4", 400)).join("");
-const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "PEPPERSTONE:XAUUSD · TradingView");
-const sourceLine = wrap(sources, 135, 1)[0];
 const targets = Array.isArray(report.targets) ? report.targets.join(" · ") : (report.targets || report.takeProfit || "Targets depend on confirmed structure.");
 const rr = report.riskReward || report.rr || "";
 const targetValue = rr ? String(targets) + " · R " + String(rr) : String(targets);
@@ -93,10 +88,9 @@ const svg = [
   '<circle cx="78" cy="75" r="23" fill="#dcb364"/>',
   lineText(78, 80, "Au", 16, "#172126", 700),
   lineText(118, 70, "XAU DESK", 13, "#e9eee7", 700),
-  lineText(118, 91, "PEPPERSTONE · GOLD SPOT", 9, "#91a1a2", 500),
+  lineText(118, 91, "XAU/USD · GOLD SPOT", 9, "#91a1a2", 500),
   '<rect x="892" y="56" width="108" height="31" rx="6" fill="#18272a" stroke="#354449"/>',
   lineText(946, 76, status, 10, statusColor, 700),
-  rightText(1140, 76, snapshot, 10, "#b5c1bb", 500),
   lineText(64, 137, "XAU/USD MARKET PLAN", 27, "#f0f0e9", 700),
   lineText(64, 158, report.headline || "Structured analysis · conditional scenarios", 10, "#899a9c", 400),
   '<rect x="64" y="178" width="1072" height="98" rx="11" fill="#142226" stroke="#304145"/>',
@@ -113,7 +107,7 @@ const svg = [
   contextText,
   '<line x1="64" y1="617" x2="1136" y2="617" stroke="#253439"/>',
   lineText(64, 637, "แผนผังระดับราคา ไม่ใช่กราฟราคาจริง", 11, "#e0b96a", 600, "Segoe UI, Arial, sans-serif"),
-  rightText(1136, 637, sourceLine, 8, "#819194", 400),
+  rightText(1136, 637, "ดูเวลาและแหล่งข้อมูลในรายงานฉบับเต็ม", 9, "#819194", 400),
   "</svg>"
 ].join("");
 

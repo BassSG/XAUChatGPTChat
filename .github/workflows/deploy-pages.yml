@@ -55,7 +55,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Publish the report and send mobile alerts
-        if: steps.report-change.outputs.changed == 'true'
+        if: steps.report-change.outputs.changed == 'true' && !contains(github.event.head_commit.message, '[skip notify]')
         env:
           WORKER_URL: ${{ vars.XAU_WORKER_URL }}
           REPORT_TOKEN: ${{ secrets.XAU_REPORT_TOKEN }}

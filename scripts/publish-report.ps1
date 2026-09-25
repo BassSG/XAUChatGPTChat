@@ -13,7 +13,7 @@ $targetImage = Join-Path $reportDirectory 'latest.png'
 if (-not (Test-Path -LiteralPath $ReportPath -PathType Leaf)) {
   throw "Report file not found: $ReportPath"
 }
-$reportJson = Get-Content -LiteralPath $ReportPath -Raw
+$reportJson = [System.IO.File]::ReadAllText($ReportPath, [System.Text.Encoding]::UTF8)
 $report = $reportJson | ConvertFrom-Json
 if (-not $report.snapshotAt -or -not $report.status -or -not $report.summary) {
   throw 'Report JSON must include snapshotAt, status, and summary.'
@@ -38,7 +38,8 @@ if ($ImagePath) {
 }
 $report | Add-Member -MemberType NoteProperty -Name imageUrl -Value $imageUrl -Force
 
-$report | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $targetReport -Encoding utf8
+$serializedReport = $report | ConvertTo-Json -Depth 20
+[System.IO.File]::WriteAllText($targetReport, $serializedReport, (New-Object System.Text.UTF8Encoding($false)))
 Set-Location -LiteralPath $repoRoot
 git add -- public/reports/latest.json
 if ($ImagePath) {

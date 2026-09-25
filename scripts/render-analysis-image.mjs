@@ -64,8 +64,8 @@ function rightText(x, y, value, size, color, weight = 400) {
 function fieldCard(x, label, value) {
   const width = 250;
   const y = 302;
-  const lines = wrap(value, 18, 4);
-  const text = lines.map((line, index) => lineText(x + 19, y + 76 + index * 22, line, 16, "#e9eee7", 600)).join("");
+  const lines = wrap(value, 22, 5);
+  const text = lines.map((line, index) => lineText(x + 19, y + 66 + index * 18, line, 14, "#e9eee7", 600)).join("");
   return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="165" rx="12" fill="#111d21" stroke="#2b3a3e"/>' +
     lineText(x + 19, y + 32, label, 10, "#91a1a2", 500, "Arial, sans-serif") + text;
 }
@@ -106,13 +106,13 @@ const svg = [
   fieldCard(64, "BIAS", report.bias || status),
   fieldCard(338, "CONDITIONAL ENTRY ZONE", report.entryZone || report.entry || "No active entry zone"),
   fieldCard(612, "TRIGGER", report.trigger || "Wait for a confirmed candle close"),
-  fieldCard(886, "STOP / INVALIDATION", report.invalidation || report.stop || "See the full report"),
+  fieldCard(886, "STOP / INVALIDATION", [report.stop, report.invalidation].filter(Boolean).join(" · ") || "See the full report"),
   '<rect x="64" y="490" width="1072" height="111" rx="11" fill="#101c20" stroke="#293a3e"/>',
   lineText(88, 520, "TARGETS & SESSION CONTEXT", 9, "#cba85e", 600),
   lineText(88, 545, wrap(targetValue, 132, 1)[0], 13, "#e6ebe4", 600),
   contextText,
   '<line x1="64" y1="617" x2="1136" y2="617" stroke="#253439"/>',
-  lineText(64, 637, "PRICE MAP · NOT AN ACTUAL PRICE CHART", 9, "#e0b96a", 600),
+  lineText(64, 637, "แผนผังระดับราคา ไม่ใช่กราฟราคาจริง", 11, "#e0b96a", 600, "Segoe UI, Arial, sans-serif"),
   rightText(1136, 637, sourceLine, 8, "#819194", 400),
   "</svg>"
 ].join("");

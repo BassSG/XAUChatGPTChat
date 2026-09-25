@@ -16,6 +16,10 @@ function originAllowed(request, env) {
   return /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
 }
 
+function sameSiteRequest(request, env) {
+  return Boolean(request.headers.get("Origin") && originAllowed(request, env));
+}
+
 function corsHeaders(request, env) {
   const origin = request.headers.get("Origin");
   const headers = {
@@ -99,7 +103,7 @@ async function route(request, env, url) {
   }
 
   if (method === "POST" && path === "/api/push/subscribe") {
-    if (!originAllowed(request, env)) return json({ error: "Origin is not allowed." }, 403);
+    if (!sameSiteRequest(request, env)) return json({ error: "Origin is not allowed." }, 403);
     const body = await request.json().catch(() => null);
     const subscription = body && body.subscription;
     if (!validateSubscription(subscription)) return json({ error: "Invalid push subscription." }, 400);
@@ -119,7 +123,7 @@ async function route(request, env, url) {
   }
 
   if (method === "POST" && path === "/api/push/unsubscribe") {
-    if (!originAllowed(request, env)) return json({ error: "Origin is not allowed." }, 403);
+    if (!sameSiteRequest(request, env)) return json({ error: "Origin is not allowed." }, 403);
     const body = await request.json().catch(() => null);
     const endpoint = body && body.endpoint;
     if (typeof endpoint !== "string" || !endpoint.startsWith("https://")) return json({ error: "Invalid endpoint." }, 400);
@@ -128,7 +132,7 @@ async function route(request, env, url) {
   }
 
   if (method === "POST" && path === "/api/push/test") {
-    if (!originAllowed(request, env)) return json({ error: "Origin is not allowed." }, 403);
+    if (!sameSiteRequest(request, env)) return json({ error: "Origin is not allowed." }, 403);
     const body = await request.json().catch(() => null);
     const subscription = body && body.subscription;
     if (!validateSubscription(subscription)) return json({ error: "Invalid push subscription." }, 400);

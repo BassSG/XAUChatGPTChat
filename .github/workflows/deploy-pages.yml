@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -34,6 +36,15 @@ jobs:
         run: npm run build
         env:
           VITE_API_BASE_URL: ${{ vars.XAU_WORKER_URL }}
+      - name: Check for a new analysis report
+        id: report-change
+        if: github.event_name == 'push'
+        run: |
+          if git diff-tree --root --no-commit-id --name-only -r "$GITHUB_SHA" | grep -qE '^public/reports/latest(\.json|\.png)$'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
@@ -43,3 +54,34 @@ jobs:
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Publish the report and send mobile alerts
+        if: steps.report-change.outputs.changed == 'true'
+        env:
+          WORKER_URL: ${{ vars.XAU_WORKER_URL }}
+          REPORT_TOKEN: ${{ secrets.XAU_REPORT_TOKEN }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from "node:fs/promises";
+
+          if (!process.env.WORKER_URL || !process.env.REPORT_TOKEN) {
+            throw new Error("XAU_WORKER_URL and XAU_REPORT_TOKEN must be configured.");
+          }
+
+          const report = JSON.parse(await readFile("public/reports/latest.json", "utf8"));
+          if (!report.snapshotAt) {
+            console.log("No generated analysis yet; skipping.");
+            process.exit(0);
+          }
+
+          const response = await fetch(process.env.WORKER_URL.replace(/\/$/, "") + "/api/admin/reports", {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + process.env.REPORT_TOKEN,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(report)
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error("Report publish failed with HTTP " + response.status + ": " + (result.error || "unknown error"));
+          console.log(JSON.stringify(result));
+          NODE

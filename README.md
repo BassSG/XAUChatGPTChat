@@ -8,7 +8,7 @@ A Thai-language XAU/USD market workspace built as a PWA. GitHub Pages hosts the 
 - Scheduled-report view and a review log.
 - PWA installation and per-device notification opt-in.
 - Cloudflare Worker API and D1 storage for subscriptions and report history.
-- GitHub Actions workflows for Pages deployment and protected report publishing.
+- GitHub Actions workflow that deploys Pages first, then stores changed reports and sends push alerts.
 
 ## Local development
 
@@ -32,8 +32,9 @@ The repository Actions secret XAU_REPORT_TOKEN must match the Worker secret. The
 
 ## Publish a scheduled report
 
-Write a report and image to a temporary directory, then run:
+Write a report JSON, render a number-accurate image from that same JSON, then publish both:
 
+    node scripts/render-analysis-image.mjs --input C:\path\to\latest.json --output C:\path\to\latest.png
     .\scripts\publish-report.ps1 -ReportPath C:\path\to\latest.json -ImagePath C:\path\to\latest.png
 
-The report JSON needs snapshotAt, status, and summary. Optional fields include headline, bias, entryZone, trigger, invalidation, body, and sources. The publish script adds a dated image URL, commits the report to GitHub, and triggers Pages plus the protected Worker workflow. This repository is public; do not put personal data or secrets in reports.
+The report JSON needs snapshotAt, status, and summary. Optional fields include headline, bias, entryZone, trigger, invalidation, stop, targets, riskReward, newsRisk, body, and sources. The publish script adds a dated image URL and commits the report to GitHub. GitHub Pages deploys the report and image first; its workflow then stores the analysis in the Worker and sends push alerts. This repository is public, so reports must not contain personal details or secrets.

@@ -59,6 +59,7 @@ function reportView(row) {
   report.status = row.status;
   report.headline = row.headline;
   report.summary = row.summary;
+  report.createdAt = row.created_at;
   report.imageUrl = row.image_url || null;
   report.image = Boolean(row.image_url);
   return report;
@@ -161,17 +162,41 @@ async function route(request, env, url) {
 
   if (method === "GET" && path === "/api/reports/latest") {
     const row = await env.DB.prepare(
-      "SELECT id, snapshot_at, status, headline, summary, report_json, image_url, created_at FROM reports ORDER BY snapshot_at DESC LIMIT 1"
+      "SELECT id, snapshot_at, status, headline, summary, report_json, image_url, created_at FROM reports ORDER BY snapshot_at DESC, created_at DESC, id DESC LIMIT 1"
     ).first();
     return json({ report: row ? reportView(row) : null });
   }
 
   if (method === "GET" && path === "/api/reports/history") {
-    const limit = Math.max(1, Math.min(30, Number.parseInt(url.searchParams.get("limit") || "12", 10) || 12));
-    const result = await env.DB.prepare(
-      "SELECT id, snapshot_at, status, headline, summary, report_json, image_url, created_at FROM reports ORDER BY snapshot_at DESC LIMIT ?"
-    ).bind(limit).all();
-    return json({ reports: (result.results || []).map(reportView) });
+    const limit = Math.max(1, Math.min(30, Number.parseInt(url.searchParams.get("limit") || "30", 10) || 30));
+    const beforeSnapshotAt = url.searchParams.get("beforeSnapshotAt");
+    const beforeCreatedAt = url.searchParams.get("beforeCreatedAt");
+    const beforeId = url.searchParams.get("beforeId");
+    const hasCursorParts = [beforeSnapshotAt, beforeCreatedAt, beforeId].filter(Boolean).length;
+    if (hasCursorParts !== 0 && hasCursorParts !== 3) return json({ error: "Invalid history cursor." }, 400);
+
+    const countRow = await env.DB.prepare("SELECT COUNT(*) AS total FROM reports").first();
+    const query = hasCursorParts === 3
+      ? env.DB.prepare(
+          "SELECT id, snapshot_at, status, headline, summary, report_json, image_url, created_at FROM reports " +
+          "WHERE snapshot_at < ? OR (snapshot_at = ? AND created_at < ?) OR (snapshot_at = ? AND created_at = ? AND id < ?) " +
+          "ORDER BY snapshot_at DESC, created_at DESC, id DESC LIMIT ?"
+        ).bind(beforeSnapshotAt, beforeSnapshotAt, beforeCreatedAt, beforeSnapshotAt, beforeCreatedAt, beforeId, limit + 1)
+      : env.DB.prepare(
+          "SELECT id, snapshot_at, status, headline, summary, report_json, image_url, created_at FROM reports " +
+          "ORDER BY snapshot_at DESC, created_at DESC, id DESC LIMIT ?"
+        ).bind(limit + 1);
+    const result = await query.all();
+    const rows = result.results || [];
+    const hasMore = rows.length > limit;
+    const page = rows.slice(0, limit);
+    const last = page[page.length - 1];
+    return json({
+      reports: page.map(reportView),
+      total: Number(countRow && countRow.total) || 0,
+      hasMore,
+      nextCursor: hasMore && last ? { snapshotAt: last.snapshot_at, createdAt: last.created_at, id: last.id } : null
+    });
   }
 
   if (method === "POST" && path === "/api/admin/reports") {

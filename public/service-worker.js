@@ -16,7 +16,7 @@ self.addEventListener("push", (event) => {
   const title = payload.title || "XAU Desk · New brief";
   const options = {
     body: payload.body || "A new XAU/USD desk brief is ready.",
-    icon: new URL("icons/gold-mark.svg", self.registration.scope).toString(),
+    icon: new URL("icons/xau-desk-192.png", self.registration.scope).toString(),
     badge: new URL("icons/gold-mark.svg", self.registration.scope).toString(),
     image: payload.image || undefined,
     tag: payload.tag || "xau-desk-brief",

@@ -6,6 +6,12 @@ const byId = (id) => document.getElementById(id);
 let currentReport = null;
 let toastTimer = 0;
 let installPrompt = null;
+let historyReports = [];
+let historyTotal = null;
+let historyCursor = null;
+let historyHasMore = false;
+let historyLoading = false;
+const HISTORY_PAGE_SIZE = 30;
 
 function showToast(message) {
   const toast = byId("toast");
@@ -74,26 +80,65 @@ function renderReport(report) {
   } else {
     imageLink.hidden = true;
   }
-  renderHistory([report]);
   return true;
 }
 
-function renderHistory(reports) {
+function safeWebUrl(value) {
+  if (!value) return "";
+  try {
+    const url = new URL(value, window.location.href);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function historyField(label, value) {
+  return '<div class="history-plan-cell"><small>' + escapeHTML(label) + '</small><strong>' +
+    escapeHTML(value || "—") + '</strong></div>';
+}
+
+function renderHistory() {
   const list = byId("history-list");
-  if (!Array.isArray(reports) || !reports.length) {
+  byId("history-loading").hidden = !historyLoading;
+  if (!historyReports.length) {
     list.innerHTML = '<div class="history-empty">Reports will be listed here after the first scheduled analysis.</div>';
     byId("history-count").textContent = "0 reports";
+    byId("history-more").hidden = true;
+    byId("history-more").disabled = historyLoading;
     return;
   }
-  byId("history-count").textContent = reports.length + (reports.length === 1 ? " report" : " reports");
-  list.innerHTML = reports.map((report) => {
+  const count = historyTotal === null
+    ? historyReports.length + " reports"
+    : historyReports.length + " of " + historyTotal + " reports";
+  byId("history-count").textContent = count;
+  byId("history-more").hidden = !historyHasMore;
+  byId("history-more").disabled = historyLoading;
+  byId("history-loading").hidden = !historyLoading;
+  list.innerHTML = historyReports.map((report) => {
     const status = normalizeStatus(report.status || report.bias);
     const title = report.headline || report.summary || "XAU/USD desk brief";
-    return '<a class="history-row" href="#analysis">' +
+    const summary = report.summary || "";
+    const body = report.body || report.analysis || "";
+    const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "");
+    const imageUrl = safeWebUrl(report.imageUrl);
+    return '<details class="history-entry"><summary class="history-row">' +
       '<span class="history-time">' + escapeHTML(formatDate(report.snapshotAt)) + '</span>' +
       '<span class="history-tag ' + status.className + '">' + escapeHTML(status.label) + '</span>' +
       '<span class="history-summary">' + escapeHTML(title) + '</span>' +
-      '<span class="history-arrow">›</span></a>';
+      '<span class="history-arrow" aria-hidden="true">›</span></summary>' +
+      '<div class="history-detail">' +
+      (summary ? '<p class="history-detail-summary">' + escapeHTML(summary) + '</p>' : '') +
+      '<div class="history-plan-grid">' +
+      historyField("BIAS", report.bias || report.status) +
+      historyField("CONDITIONAL ZONE", report.entryZone || report.entry) +
+      historyField("TRIGGER", report.trigger) +
+      historyField("INVALIDATION", report.invalidation || report.stop) +
+      '</div>' +
+      (body ? '<div class="history-body">' + escapeHTML(body) + '</div>' : '') +
+      (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="XAU/USD historical analysis image" /><span>Open analysis image ↗</span></a>' : '') +
+      (sources ? '<div class="history-sources"><strong>DATA AND SOURCES</strong> ' + escapeHTML(sources) + '</div>' : '') +
+      '</div></details>';
   }).join("");
 }
 
@@ -106,23 +151,20 @@ function escapeHTML(value) {
 async function loadReports() {
   let workerOnline = false;
   if (API_BASE) {
-    try {
-      const [latestResponse, historyResponse] = await Promise.all([
-        fetch(API_BASE + "/api/reports/latest", { cache: "no-store" }),
-        fetch(API_BASE + "/api/reports/history?limit=12", { cache: "no-store" })
-      ]);
-      if (latestResponse.ok) {
-        const payload = await latestResponse.json();
+    const [latestResult, historyResult] = await Promise.allSettled([
+      fetch(API_BASE + "/api/reports/latest", { cache: "no-store" }),
+      refreshHistory()
+    ]);
+    if (latestResult.status === "fulfilled" && latestResult.value.ok) {
+      try {
+        const payload = await latestResult.value.json();
         workerOnline = true;
         if (payload.report) renderReport(payload.report);
+      } catch {
+        // The archive and existing report remain available if the latest payload is malformed.
       }
-      if (historyResponse.ok) {
-        const payload = await historyResponse.json();
-        if (payload.reports && payload.reports.length) renderHistory(payload.reports);
-      }
-    } catch {
-      workerOnline = false;
     }
+    if (historyResult.status === "fulfilled" && historyResult.value) workerOnline = true;
   }
 
   if (!currentReport) {
@@ -140,6 +182,78 @@ async function loadReports() {
   const label = byId("connection-label");
   label.textContent = workerOnline ? "API connected" : (API_BASE ? "API unavailable" : "Backend setup required");
   label.style.color = workerOnline ? "#70d49f" : "#d9b56a";
+}
+
+function updateHistoryFromPayload(payload, append) {
+  const incoming = Array.isArray(payload.reports) ? payload.reports : [];
+  if (append) {
+    historyReports = uniqueReports(historyReports.concat(incoming));
+    historyCursor = payload.nextCursor || null;
+    historyHasMore = Boolean(payload.hasMore && historyCursor);
+  } else if (historyReports.length) {
+    const previouslyHadMore = historyHasMore;
+    const previousCursor = historyCursor;
+    historyReports = uniqueReports(incoming.concat(historyReports));
+    historyCursor = previouslyHadMore ? previousCursor : null;
+    historyHasMore = previouslyHadMore && Boolean(previousCursor);
+  } else {
+    historyReports = uniqueReports(incoming);
+    historyCursor = payload.nextCursor || null;
+    historyHasMore = Boolean(payload.hasMore && historyCursor);
+  }
+  const total = Number(payload.total);
+  historyTotal = Number.isFinite(total) ? total : null;
+  renderHistory();
+}
+
+function uniqueReports(reports) {
+  const seen = new Set();
+  return reports.filter((report) => {
+    const key = report.id || [report.snapshotAt, report.createdAt, report.headline].join("|");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+async function refreshHistory() {
+  if (!API_BASE || historyLoading) return false;
+  historyLoading = true;
+  renderHistory();
+  try {
+    const query = new URLSearchParams({ limit: String(HISTORY_PAGE_SIZE) });
+    const response = await fetch(API_BASE + "/api/reports/history?" + query.toString(), { cache: "no-store" });
+    if (!response.ok) return false;
+    updateHistoryFromPayload(await response.json(), false);
+    return true;
+  } catch {
+    return false;
+  } finally {
+    historyLoading = false;
+    renderHistory();
+  }
+}
+
+async function loadOlderHistory() {
+  if (!API_BASE || !historyHasMore || !historyCursor || historyLoading) return;
+  historyLoading = true;
+  renderHistory();
+  try {
+    const query = new URLSearchParams({
+      limit: String(HISTORY_PAGE_SIZE),
+      beforeSnapshotAt: historyCursor.snapshotAt,
+      beforeCreatedAt: historyCursor.createdAt,
+      beforeId: historyCursor.id
+    });
+    const response = await fetch(API_BASE + "/api/reports/history?" + query.toString(), { cache: "no-store" });
+    if (!response.ok) throw new Error("The archive could not be loaded.");
+    updateHistoryFromPayload(await response.json(), true);
+  } catch (error) {
+    showToast(error.message || "The archive could not be loaded.");
+  } finally {
+    historyLoading = false;
+    renderHistory();
+  }
 }
 
 function mountTradingView() {
@@ -215,9 +329,7 @@ async function subscribeForPush() {
     showToast("Push service is not connected yet.");
     return;
   }
-  const isAppleMobile = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  const installed = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-  if (isAppleMobile && !installed) {
+  if (isAppleMobile() && !isStandalone()) {
     showToast("Add XAU Desk to the Home Screen first, then open the installed app.");
     return;
   }
@@ -251,6 +363,15 @@ async function subscribeForPush() {
   }
 }
 
+function isAppleMobile() {
+  return /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function isStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
 async function sendTestAlert() {
   try {
     const registration = await navigator.serviceWorker.ready;
@@ -282,15 +403,25 @@ function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     installPrompt = event;
-    byId("install-button").hidden = false;
   });
   byId("install-button").addEventListener("click", async () => {
-    if (!installPrompt) return;
-    installPrompt.prompt();
-    await installPrompt.userChoice;
-    installPrompt = null;
-    byId("install-button").hidden = true;
+    if (installPrompt) {
+      const prompt = installPrompt;
+      installPrompt = null;
+      await prompt.prompt();
+      const choice = await prompt.userChoice;
+      if (choice && choice.outcome === "accepted") byId("install-button").hidden = true;
+      return;
+    }
+    const guide = byId("install-help");
+    guide.open = true;
+    guide.scrollIntoView({ behavior: "smooth", block: "center" });
   });
+  window.addEventListener("appinstalled", () => {
+    byId("install-button").hidden = true;
+    showToast("XAU Desk was added to this device.");
+  });
+  if (isStandalone()) byId("install-button").hidden = true;
 }
 
 function setupNav() {
@@ -309,6 +440,7 @@ async function init() {
   byId("subscribe-button").addEventListener("click", subscribeForPush);
   byId("test-button").addEventListener("click", sendTestAlert);
   byId("unsubscribe-button").addEventListener("click", unsubscribePush);
+  byId("history-more").addEventListener("click", loadOlderHistory);
   await loadReports();
   if ("serviceWorker" in navigator) {
     try {

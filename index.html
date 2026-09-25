@@ -2,18 +2,22 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#081014" />
     <meta name="description" content="XAU/USD Trading Desk — Pepperstone market analysis, chart, and mobile alerts." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="XAU Desk" />
     <link rel="manifest" href="/XAUChatGPTChat/manifest.webmanifest" />
-    <link rel="icon" href="/XAUChatGPTChat/icons/gold-mark.svg" type="image/svg+xml" />
+    <link rel="icon" href="/XAUChatGPTChat/icons/xau-desk-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/XAUChatGPTChat/icons/apple-touch-icon-180.png" sizes="180x180" />
     <title>XAU Desk — Gold market brief</title>
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar">
         <a class="brand" href="#overview" aria-label="XAU Desk home">
-          <span class="brand-mark">Au</span>
+          <img class="brand-mark" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" />
           <span class="brand-name">XAU<span>DESK</span></span>
         </a>
         <div class="sidebar-label">WORKSPACE</div>
@@ -32,11 +36,11 @@
       </aside>
       <main class="main-content">
         <header class="topbar">
-          <div class="mobile-brand"><span class="brand-mark">Au</span><span class="brand-name">XAU<span>DESK</span></span></div>
+          <div class="mobile-brand"><img class="brand-mark" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" /><span class="brand-name">XAU<span>DESK</span></span></div>
           <div class="breadcrumb"><span>MARKETS</span><b>/</b><strong>GOLD SPOT</strong></div>
           <div class="top-actions">
             <span class="timezone-chip"><span class="tiny-clock">◷</span><span id="local-clock">--:-- ICT</span></span>
-            <button id="install-button" class="button button-quiet install-button" hidden>Install app</button>
+            <button id="install-button" class="button button-quiet install-button">Install app</button>
           </div>
         </header>
         <section id="overview" class="hero">
@@ -85,15 +89,23 @@
               <div><span class="panel-kicker">STAY IN THE LOOP</span><h3>Mobile notifications</h3></div>
               <span id="notify-indicator" class="notify-indicator">OFF</span>
             </div>
-            <p class="panel-description">Get a compact text alert when a new desk brief is published. Tap it to open the full analysis and chart.</p>
+            <p class="panel-description">Get an alert when a new desk brief is published, then tap it to open the full analysis and chart. This dashboard does not receive general chat messages.</p>
             <div class="notification-preview">
-              <span class="preview-icon">Au</span>
+              <img class="preview-icon" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" />
               <span><small>XAU DESK · JUST NOW</small><strong>New gold market brief</strong><em>Summary and key levels are ready to review.</em></span>
             </div>
             <button id="subscribe-button" class="button button-primary full-width">Enable notifications</button>
             <button id="test-button" class="button button-secondary full-width" disabled>Send a test alert</button>
             <button id="unsubscribe-button" class="text-button" hidden>Turn notifications off</button>
-            <p id="notify-help" class="small-help">On iPhone, add this app to your Home Screen first, then allow notifications.</p>
+            <p id="notify-help" class="small-help">On iPhone or iPad, install this web app from Safari first; push alerts require iOS/iPadOS 16.4 or later.</p>
+            <details id="install-help" class="install-help">
+              <summary>Install on a phone or tablet</summary>
+              <div class="install-steps">
+                <p><strong>iPhone or iPad:</strong> Open this page in Safari, tap Share, choose Add to Home Screen, turn on Open as Web App, then tap Add.</p>
+                <p><strong>Android:</strong> In Chrome, open the browser menu and choose Install app or Add to Home screen.</p>
+                <p>After installation, open XAU Desk from its new Home Screen icon for the app-style view.</p>
+              </div>
+            </details>
           </section>
           <section id="chart" class="panel chart-panel">
             <div class="panel-header chart-header">
@@ -114,7 +126,8 @@
           <section id="history" class="panel history-panel">
             <div class="panel-header"><div><span class="panel-kicker">DECISION HISTORY</span><h3>Recent desk briefs</h3></div><span class="history-count" id="history-count">0 reports</span></div>
             <div id="history-list" class="history-list"><div class="history-empty">Reports will be listed here after the first scheduled analysis.</div></div>
-            <div class="history-note">Historical notes are for review and learning. They are not a record of trades placed in your account.</div>
+            <div class="history-controls"><button id="history-more" class="button button-secondary" hidden>Load older briefs</button><span id="history-loading" class="history-loading" hidden>Loading older briefs…</span></div>
+            <div class="history-note">Published briefs stay in the archive, newest first. The latest brief remains at the top of the Analysis panel. Historical notes are not a record of trades placed in your account.</div>
           </section>
         </div>
         <footer class="footer"><span>XAU DESK · PERSONAL MARKET WORKSPACE</span><span>Built for clear decisions, not automatic execution.</span></footer>

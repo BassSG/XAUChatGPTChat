@@ -60,6 +60,8 @@ function renderReport(report) {
   const status = normalizeStatus(report.status || report.bias);
   byId("bias-pill").textContent = status.label;
   byId("bias-pill").className = "bias-pill " + status.className;
+  byId("analysis").classList.remove("status-neutral", "status-buy", "status-sell");
+  byId("analysis").classList.add("status-" + status.className);
   byId("report-title").textContent = report.headline || "XAU/USD desk brief";
   byId("report-summary").textContent = report.summary || "";
   byId("report-bias").textContent = report.bias || report.status || "WAIT";
@@ -83,33 +85,50 @@ function renderReport(report) {
   return true;
 }
 
+const ANALYSIS_SECTIONS = [
+  { pattern: /^XAU\/USD\s*[—:]/i, title: "ภาพรวม", style: "overview" },
+  { pattern: /^(?:ข้อมูลจริง|ภาพหลายกรอบเวลา)/, title: "ภาพราคา", style: "timeframes" },
+  { pattern: /^(?:แผนหลัก|แผนขาย|แผนซื้อ)/, title: "แผนหลัก", style: "trade-plan" },
+  { pattern: /^(?:เปลี่ยนมุมมอง|ยกเลิก|เงื่อนไขยกเลิก)/, title: "เงื่อนไขยกเลิก", style: "invalidation" },
+  { pattern: /^(?:ข่าว|ปฏิทิน|ความเสี่ยงก่อนข่าว)/, title: "ข่าวและความเสี่ยง", style: "news-context" },
+  { pattern: /^(?:บริบท|DXY)/, title: "บริบทเพิ่มเติม", style: "context" },
+  { pattern: /^(?:ทบทวน|ผลตรวจ)/, title: "ทบทวนแผนก่อน", style: "review" },
+  { pattern: /^ข้อสรุป/, title: "ข้อสรุป", style: "conclusion" }
+];
+
+function analysisBlocks(value) {
+  return String(value || "").split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean).map((block) => {
+    const section = ANALYSIS_SECTIONS.find(({ pattern }) => pattern.test(block));
+    if (!section) return { title: "รายละเอียด", style: "detail", text: block };
+    const explicitHeading = block.match(/^(?:ภาพหลายกรอบเวลา|แผนหลัก|ข่าวและปัจจัยพื้นฐาน|ข้อสรุป):\s*([\s\S]*)$/);
+    const text = explicitHeading ? explicitHeading[1].trim() : block;
+    return {
+      title: section.title,
+      style: section.style,
+      text: section.style === "trade-plan" ? text.replace(/^แผนหลัก\s*[—:–-]\s*/, "") : text
+    };
+  });
+}
+
 function renderAnalysisBody(value) {
-  const body = byId("report-body");
-  const headings = new Map([
-    ["ภาพหลายกรอบเวลา", "timeframes"],
-    ["แผนหลัก", "trade-plan"],
-    ["ข่าวและปัจจัยพื้นฐาน", "news-context"],
-    ["ข้อสรุป", "conclusion"]
-  ]);
-  const blocks = String(value || "").split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
-  const nodes = blocks.map((block) => {
-    const match = block.match(/^(ภาพหลายกรอบเวลา|แผนหลัก|ข่าวและปัจจัยพื้นฐาน|ข้อสรุป):\s*([\s\S]*)$/);
-    if (!match || !headings.has(match[1])) {
-      const paragraph = document.createElement("p");
-      paragraph.className = "analysis-paragraph";
-      paragraph.textContent = block;
-      return paragraph;
-    }
+  const nodes = analysisBlocks(value).map((block) => {
     const section = document.createElement("section");
-    section.className = "analysis-section " + headings.get(match[1]);
+    section.className = "analysis-section " + block.style;
     const title = document.createElement("h4");
-    title.textContent = match[1];
+    title.textContent = block.title;
     const paragraph = document.createElement("p");
-    paragraph.textContent = match[2].trim();
+    paragraph.textContent = block.text;
     section.append(title, paragraph);
     return section;
   });
-  body.replaceChildren(...nodes);
+  byId("report-body").replaceChildren(...nodes);
+}
+
+function historyBody(value) {
+  return analysisBlocks(value).map((block) =>
+    '<section class="analysis-section ' + block.style + '"><h4>' + escapeHTML(block.title) +
+    '</h4><p>' + escapeHTML(block.text) + '</p></section>'
+  ).join("");
 }
 
 function safeWebUrl(value) {
@@ -164,7 +183,7 @@ function renderHistory() {
       historyField("TRIGGER", report.trigger) +
       historyField("INVALIDATION", report.invalidation || report.stop) +
       '</div>' +
-      (body ? '<div class="history-body">' + escapeHTML(body) + '</div>' : '') +
+      (body ? '<div class="history-body">' + historyBody(body) + '</div>' : '') +
       (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="XAU/USD historical analysis image" /><span>Open analysis image ↗</span></a>' : '') +
       (sources ? '<div class="history-sources"><strong>DATA AND SOURCES</strong> ' + escapeHTML(sources) + '</div>' : '') +
       '</div></details>';

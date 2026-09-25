@@ -66,7 +66,7 @@ function renderReport(report) {
   byId("report-entry").textContent = report.entryZone || report.entry || "No active entry zone";
   byId("report-trigger").textContent = report.trigger || "Wait for a confirmed candle close";
   byId("report-invalidation").textContent = report.invalidation || report.stop || "See the full analysis";
-  byId("report-body").textContent = report.body || report.analysis || "";
+  renderAnalysisBody(report.body || report.analysis || "");
   const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "TradingView · Pepperstone");
   byId("report-sources").textContent = sources;
   byId("snapshot-time").textContent = formatDate(report.snapshotAt);
@@ -81,6 +81,35 @@ function renderReport(report) {
     imageLink.hidden = true;
   }
   return true;
+}
+
+function renderAnalysisBody(value) {
+  const body = byId("report-body");
+  const headings = new Map([
+    ["ภาพหลายกรอบเวลา", "timeframes"],
+    ["แผนหลัก", "trade-plan"],
+    ["ข่าวและปัจจัยพื้นฐาน", "news-context"],
+    ["ข้อสรุป", "conclusion"]
+  ]);
+  const blocks = String(value || "").split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const nodes = blocks.map((block) => {
+    const match = block.match(/^(ภาพหลายกรอบเวลา|แผนหลัก|ข่าวและปัจจัยพื้นฐาน|ข้อสรุป):\s*([\s\S]*)$/);
+    if (!match || !headings.has(match[1])) {
+      const paragraph = document.createElement("p");
+      paragraph.className = "analysis-paragraph";
+      paragraph.textContent = block;
+      return paragraph;
+    }
+    const section = document.createElement("section");
+    section.className = "analysis-section " + headings.get(match[1]);
+    const title = document.createElement("h4");
+    title.textContent = match[1];
+    const paragraph = document.createElement("p");
+    paragraph.textContent = match[2].trim();
+    section.append(title, paragraph);
+    return section;
+  });
+  body.replaceChildren(...nodes);
 }
 
 function safeWebUrl(value) {
@@ -425,9 +454,9 @@ function setupInstallPrompt() {
 }
 
 function setupNav() {
-  const links = Array.from(document.querySelectorAll(".nav-link"));
+  const links = Array.from(document.querySelectorAll(".nav-link, .mobile-nav-link"));
   links.forEach((link) => link.addEventListener("click", () => {
-    links.forEach((item) => item.classList.toggle("selected", item === link));
+    links.forEach((item) => item.classList.toggle("selected", item.getAttribute("href") === link.getAttribute("href")));
   }));
 }
 

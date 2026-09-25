@@ -13,7 +13,8 @@ $targetImage = Join-Path $reportDirectory 'latest.png'
 if (-not (Test-Path -LiteralPath $ReportPath -PathType Leaf)) {
   throw "Report file not found: $ReportPath"
 }
-$report = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
+$reportJson = Get-Content -LiteralPath $ReportPath -Raw
+$report = $reportJson | ConvertFrom-Json
 if (-not $report.snapshotAt -or -not $report.status -or -not $report.summary) {
   throw 'Report JSON must include snapshotAt, status, and summary.'
 }
@@ -21,16 +22,21 @@ if ($ImagePath -and -not (Test-Path -LiteralPath $ImagePath -PathType Leaf)) {
   throw "Image file not found: $ImagePath"
 }
 
-$timestamp = [DateTimeOffset]::Parse([string]$report.snapshotAt).ToUniversalTime().ToString('yyyyMMdd-HHmmss')
+$snapshotMatch = [regex]::Match($reportJson, '"snapshotAt"\s*:\s*"([^"]+)"')
+if (-not $snapshotMatch.Success) {
+  throw 'Report snapshotAt must be an ISO 8601 string.'
+}
+$timestamp = [DateTimeOffset]::Parse($snapshotMatch.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture).ToUniversalTime().ToString('yyyyMMdd-HHmmss')
 if ($ImagePath) {
   New-Item -ItemType Directory -Force -Path $archiveDirectory | Out-Null
   $archiveName = 'analysis-' + $timestamp + '.png'
   Copy-Item -LiteralPath $ImagePath -Destination $targetImage -Force
   Copy-Item -LiteralPath $ImagePath -Destination (Join-Path $archiveDirectory $archiveName) -Force
-  $report.imageUrl = 'https://basssg.github.io/XAUChatGPTChat/reports/archive/' + $archiveName
+  $imageUrl = 'https://basssg.github.io/XAUChatGPTChat/reports/archive/' + $archiveName
 } else {
-  $report.imageUrl = $null
+  $imageUrl = $null
 }
+$report | Add-Member -MemberType NoteProperty -Name imageUrl -Value $imageUrl -Force
 
 $report | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $targetReport -Encoding utf8
 Set-Location -LiteralPath $repoRoot

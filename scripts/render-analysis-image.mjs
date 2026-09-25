@@ -65,7 +65,7 @@ function fieldCard(x, label, value) {
   const width = 250;
   const y = 302;
   const lines = wrap(value, 18, 4);
-  const text = lines.map((line, index) => lineText(x + 19, y + 88 + index * 25, line, 17, "#e9eee7", 600)).join("");
+  const text = lines.map((line, index) => lineText(x + 19, y + 76 + index * 22, line, 16, "#e9eee7", 600)).join("");
   return '<rect x="' + x + '" y="' + y + '" width="' + width + '" height="165" rx="12" fill="#111d21" stroke="#2b3a3e"/>' +
     lineText(x + 19, y + 32, label, 10, "#91a1a2", 500, "Arial, sans-serif") + text;
 }
@@ -76,7 +76,7 @@ const snapshot = report.snapshotAt
   ? new Intl.DateTimeFormat("th-TH", { timeZone: "Asia/Bangkok", dateStyle: "medium", timeStyle: "short", hour12: false }).format(new Date(report.snapshotAt)) + " ICT"
   : "TIME NOT PROVIDED";
 const summaryLines = wrap(report.summary || report.headline || "No summary provided.", 89, 2);
-const summaryText = summaryLines.map((line, index) => lineText(88, 218 + index * 28, line, 20, "#e8ede6", 500)).join("");
+const summaryText = summaryLines.map((line, index) => lineText(88, 232 + index * 24, line, 18, "#e8ede6", 500)).join("");
 const contextLines = wrap(report.newsRisk || report.risk || report.context || "Review the full report for session and event risk.", 142, 2);
 const contextText = contextLines.map((line, index) => lineText(88, 570 + index * 22, line, 14, "#c0cbc4", 400)).join("");
 const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "PEPPERSTONE:XAUUSD · TradingView");

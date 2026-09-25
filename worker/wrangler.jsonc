@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xauchatgptchat-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-25",
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "APP_ORIGIN": "https://basssg.github.io",
+    "APP_URL": "https://basssg.github.io/XAUChatGPTChat/",
+    "VAPID_SUBJECT": "https://github.com/BassSG/XAUChatGPTChat",
+    "VAPID_PUBLIC_KEY": "BDOgPtpoeyi1_rS3zNoBDM8gyxRFt5q56ZmnvRJHCQyrnsZN6zqBwYl3jwsnl1rhngMaseAH3t4I93SIvVUsje4"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "xau-chatgptchat-db",
+      "database_id": "e40ea575-489b-43c5-a776-a923cebf8010",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

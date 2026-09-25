@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#081014" />
+    <meta name="description" content="XAU/USD Trading Desk — Pepperstone market analysis, chart, and mobile alerts." />
+    <link rel="manifest" href="/XAUChatGPTChat/manifest.webmanifest" />
+    <link rel="icon" href="/XAUChatGPTChat/icons/gold-mark.svg" type="image/svg+xml" />
+    <title>XAU Desk — Gold market brief</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#overview" aria-label="XAU Desk home">
+          <span class="brand-mark">Au</span>
+          <span class="brand-name">XAU<span>DESK</span></span>
+        </a>
+        <div class="sidebar-label">WORKSPACE</div>
+        <div class="market-select"><span class="gold-dot"></span><span><strong>Gold Spot</strong><small>XAU / USD</small></span><span class="chevron">⌄</span></div>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a class="nav-link selected" href="#overview"><span>◫</span> Overview</a>
+          <a class="nav-link" href="#analysis"><span>◈</span> Analysis</a>
+          <a class="nav-link" href="#chart"><span>⌁</span> Price chart</a>
+          <a class="nav-link" href="#history"><span>◷</span> Review log</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <a class="external-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span>▦</span> Economic calendar <span class="external-arrow">↗</span></a>
+          <div class="side-note"><span class="pulse-dot"></span><span>Desk status<strong id="connection-label">Connecting…</strong></span></div>
+          <div class="sidebar-foot">PERSONAL MARKET DESK<br />BANGKOK · UTC+7</div>
+        </div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark">Au</span><span class="brand-name">XAU<span>DESK</span></span></div>
+          <div class="breadcrumb"><span>MARKETS</span><b>/</b><strong>GOLD SPOT</strong></div>
+          <div class="top-actions">
+            <span class="timezone-chip"><span class="tiny-clock">◷</span><span id="local-clock">--:-- ICT</span></span>
+            <button id="install-button" class="button button-quiet install-button" hidden>Install app</button>
+          </div>
+        </header>
+        <section id="overview" class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="live-dot"></span> TRADING DESK <span class="eyebrow-divider">·</span> PEPPERSTONE</div>
+            <h1>Gold, with a clearer view.</h1>
+            <p>Live market context, a structured XAU/USD plan, and your desk brief in one place.</p>
+          </div>
+          <div class="hero-meta"><span class="meta-label">LATEST SNAPSHOT</span><strong id="snapshot-time">Waiting for first brief</strong><span id="snapshot-source">Analysis source: Codex desk schedule</span></div>
+        </section>
+        <section class="summary-strip" aria-label="Trading desk details">
+          <div class="summary-item"><span class="summary-icon">◎</span><span><small>INSTRUMENT</small><strong>XAU / USD</strong></span></div>
+          <div class="summary-item"><span class="summary-icon">◷</span><span><small>REPORT WINDOWS</small><strong>09:00 · 14:30 · 19:00</strong></span></div>
+          <div class="summary-item"><span class="summary-icon">⌖</span><span><small>TIMEZONE</small><strong>Asia / Bangkok</strong></span></div>
+          <div class="summary-item"><span class="summary-icon">▤</span><span><small>PRICE FEED</small><strong>TradingView · Pepperstone</strong></span></div>
+        </section>
+        <div class="section-heading"><div><span class="section-kicker">TODAY AT A GLANCE</span><h2>Market workspace</h2></div><span class="secure-label"><span>●</span> Read-only analysis</span></div>
+        <div class="dashboard-grid">
+          <section id="analysis" class="panel analysis-panel">
+            <div class="panel-header">
+              <div><span class="panel-kicker">LATEST DESK BRIEF</span><h3 id="report-title">Waiting for scheduled analysis</h3></div>
+              <span id="bias-pill" class="bias-pill neutral">WAIT</span>
+            </div>
+            <div id="report-empty" class="empty-state">
+              <div class="empty-mark">Au</div>
+              <strong>Your next brief will appear here</strong>
+              <p>Scheduled for weekdays at 09:00, 14:30, and 19:00 Thailand time. The report will include the market plan and its summary image.</p>
+              <span class="empty-source">PRICE SOURCE · PEPPERSTONE XAU/USD</span>
+            </div>
+            <div id="report-content" class="report-content" hidden>
+              <p id="report-summary" class="report-summary"></p>
+              <div class="plan-grid">
+                <div class="plan-cell"><small>BIAS</small><strong id="report-bias">—</strong></div>
+                <div class="plan-cell"><small>CONDITIONAL ZONE</small><strong id="report-entry">—</strong></div>
+                <div class="plan-cell"><small>TRIGGER</small><strong id="report-trigger">—</strong></div>
+                <div class="plan-cell"><small>INVALIDATION</small><strong id="report-invalidation">—</strong></div>
+              </div>
+              <div class="analysis-body" id="report-body"></div>
+              <a id="report-image-link" class="report-image-link" href="#" target="_blank" rel="noreferrer" hidden><img id="report-image" alt="XAU/USD market analysis map" /><span>Open analysis image ↗</span></a>
+              <div class="source-row"><span>DATA AND SOURCES</span><span id="report-sources">—</span></div>
+            </div>
+            <div class="panel-footer"><span class="disclaimer-dot">i</span><span>Scenario planning only. This desk does not place orders or provide guaranteed outcomes.</span></div>
+          </section>
+          <section id="notifications" class="panel notify-panel">
+            <div class="panel-header">
+              <div><span class="panel-kicker">STAY IN THE LOOP</span><h3>Mobile notifications</h3></div>
+              <span id="notify-indicator" class="notify-indicator">OFF</span>
+            </div>
+            <p class="panel-description">Get a compact text alert when a new desk brief is published. Tap it to open the full analysis and chart.</p>
+            <div class="notification-preview">
+              <span class="preview-icon">Au</span>
+              <span><small>XAU DESK · JUST NOW</small><strong>New gold market brief</strong><em>Summary and key levels are ready to review.</em></span>
+            </div>
+            <button id="subscribe-button" class="button button-primary full-width">Enable notifications</button>
+            <button id="test-button" class="button button-secondary full-width" disabled>Send a test alert</button>
+            <button id="unsubscribe-button" class="text-button" hidden>Turn notifications off</button>
+            <p id="notify-help" class="small-help">On iPhone, add this app to your Home Screen first, then allow notifications.</p>
+          </section>
+          <section id="chart" class="panel chart-panel">
+            <div class="panel-header chart-header">
+              <div><span class="panel-kicker">PRICE ACTION</span><h3>XAU/USD · Pepperstone</h3></div>
+              <a class="chart-external" href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">Open TradingView ↗</a>
+            </div>
+            <div id="tradingview-chart" class="chart-frame"><div class="chart-loading"><span class="spinner"></span> Loading Pepperstone chart…</div></div>
+            <div class="chart-caption"><span><span class="green-dot"></span> TradingView market chart</span><span>15-minute view · Asia/Bangkok</span></div>
+          </section>
+          <section class="panel context-panel">
+            <div class="panel-header"><div><span class="panel-kicker">SESSION CONTEXT</span><h3>What moves gold</h3></div><span class="context-icon">◉</span></div>
+            <div class="context-list">
+              <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span class="context-icon-small">▦</span><span><strong>USD news calendar</strong><small>Check releases and Thailand-time schedule</small></span><b>↗</b></a>
+              <a href="https://www.traderider.com/gold/spdrgoldspot-lasted/" target="_blank" rel="noreferrer"><span class="context-icon-small">◉</span><span><strong>SPDR gold holdings</strong><small>Holdings data as supporting context</small></span><b>↗</b></a>
+              <div class="context-footnote">News and fund holdings provide context; the report identifies the source and data time it used.</div>
+            </div>
+          </section>
+          <section id="history" class="panel history-panel">
+            <div class="panel-header"><div><span class="panel-kicker">DECISION HISTORY</span><h3>Recent desk briefs</h3></div><span class="history-count" id="history-count">0 reports</span></div>
+            <div id="history-list" class="history-list"><div class="history-empty">Reports will be listed here after the first scheduled analysis.</div></div>
+            <div class="history-note">Historical notes are for review and learning. They are not a record of trades placed in your account.</div>
+          </section>
+        </div>
+        <footer class="footer"><span>XAU DESK · PERSONAL MARKET WORKSPACE</span><span>Built for clear decisions, not automatic execution.</span></footer>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
+

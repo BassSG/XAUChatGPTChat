@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="30" fill="#081014"/>
+  <circle cx="64" cy="64" r="47" fill="#101e22" stroke="#cda45c" stroke-width="3"/>
+  <path d="M30 76 47 54l13 12 23-29 16 15" fill="none" stroke="#e8bd69" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="99" cy="52" r="5" fill="#54c58a"/>
+  <text x="64" y="99" text-anchor="middle" fill="#f6eddb" font-family="Arial,sans-serif" font-size="17" font-weight="700">XAU</text>
+</svg>

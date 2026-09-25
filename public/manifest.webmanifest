@@ -1,0 +1,15 @@
+{
+  "name": "XAU Desk — Gold market brief",
+  "short_name": "XAU Desk",
+  "description": "Pepperstone XAU/USD analysis and mobile desk alerts.",
+  "id": "/XAUChatGPTChat/",
+  "start_url": "/XAUChatGPTChat/",
+  "scope": "/XAUChatGPTChat/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#081014",
+  "theme_color": "#081014",
+  "icons": [
+    { "src": "/XAUChatGPTChat/icons/gold-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

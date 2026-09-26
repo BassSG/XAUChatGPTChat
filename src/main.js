@@ -21,20 +21,8 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 3600);
 }
 
-function updateClock() {
-  const now = new Date();
-  const formatter = new Intl.DateTimeFormat("th-TH", {
-    timeZone: "Asia/Bangkok",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false
-  });
-  byId("local-clock").textContent = formatter.format(now) + " ICT";
-}
-
 function formatDate(value) {
-  if (!value) return "Awaiting first brief";
+  if (!value) return "กำลังรอรายงาน";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
   return new Intl.DateTimeFormat("th-TH", {
@@ -42,7 +30,74 @@ function formatDate(value) {
     dateStyle: "medium",
     timeStyle: "short",
     hour12: false
-  }).format(date) + " ICT";
+  }).format(date);
+}
+
+function textValue(value, fallback = "—") {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean).join(" · ") || fallback;
+  return String(value ?? "").trim() || fallback;
+}
+
+function freshnessLabel(report) {
+  const age = Date.now() - Date.parse(report.snapshotAt);
+  if (!Number.isFinite(age) || age < -300000) return { text: "เวลาข้อมูลไม่ชัดเจน", type: "warning" };
+  const quality = String(report.dataQuality?.status || "").toUpperCase();
+  if (quality === "UNAVAILABLE") return { text: "ข้อมูลราคาหลักไม่พร้อม", type: "warning" };
+  if (age >= 24 * 60 * 60 * 1000) return { text: "รายงานย้อนหลัง · ตรวจราคาใหม่", type: "warning" };
+  if (quality === "PARTIAL") return { text: "ข้อมูลบางส่วนไม่ครบ", type: "warning" };
+  if (age >= 4 * 60 * 60 * 1000) return { text: "ควรตรวจราคาใหม่", type: "warning" };
+  return { text: "รายงานรอบล่าสุด", type: "current" };
+}
+
+function renderSources(container, sources) {
+  const list = Array.isArray(sources) ? sources : (sources ? [sources] : []);
+  const nodes = list.map((source) => {
+    const label = typeof source === "string" ? source : (source.name || source.url || "แหล่งข้อมูล");
+    const url = safeWebUrl(typeof source === "string" ? source : source.url);
+    const node = document.createElement(url ? "a" : "span");
+    node.textContent = label;
+    if (url) { node.href = url; node.target = "_blank"; node.rel = "noreferrer"; }
+    return node;
+  });
+  container.replaceChildren(...nodes);
+}
+
+function renderNews(report) {
+  const events = Array.isArray(report.newsEvents) ? report.newsEvents.slice(0, 5) : [];
+  const hasNews = Boolean(report.newsRisk || events.length || report.contextSignals);
+  byId("news-empty").hidden = hasNews;
+  byId("news-content").hidden = !hasNews;
+  if (!hasNews) return;
+  byId("news-risk").textContent = report.newsRisk || "ตรวจข่าวก่อนใช้แผน";
+  byId("news-context").textContent = report.contextSignals || "";
+  byId("news-context").hidden = !report.contextSignals;
+  const cards = events.map((event) => {
+    const card = document.createElement("article");
+    card.className = "news-event";
+    const head = document.createElement("div");
+    head.className = "news-event-head";
+    const title = document.createElement("strong");
+    title.textContent = textValue(event.title, "ข่าว USD");
+    const state = document.createElement("span");
+    const announced = event.state === "RELEASED";
+    state.className = "news-state " + (announced ? "released" : "upcoming");
+    state.textContent = announced ? "ประกาศแล้ว" : event.state === "UNVERIFIED" ? "รอยืนยัน" : "รอประกาศ";
+    head.append(title, state);
+    const detail = document.createElement("p");
+    const time = event.at ? formatDate(event.at) : "ยังไม่ยืนยันเวลา";
+    const figures = announced ? [event.actual && "จริง " + event.actual, event.forecast && "คาด " + event.forecast, event.previous && "ก่อน " + event.previous].filter(Boolean).join(" · ") : "";
+    detail.textContent = [time, figures, event.impact].filter(Boolean).join("\n");
+    card.append(head, detail);
+    const linkUrl = safeWebUrl(event.sourceUrl);
+    if (linkUrl) {
+      const link = document.createElement("a");
+      link.href = linkUrl; link.target = "_blank"; link.rel = "noreferrer";
+      link.textContent = "ดูต้นทาง ↗";
+      card.append(link);
+    }
+    return card;
+  });
+  byId("news-list").replaceChildren(...cards);
 }
 
 function normalizeStatus(status) {
@@ -62,17 +117,38 @@ function renderReport(report) {
   byId("bias-pill").className = "bias-pill " + status.className;
   byId("analysis").classList.remove("status-neutral", "status-buy", "status-sell");
   byId("analysis").classList.add("status-" + status.className);
-  byId("report-title").textContent = report.headline || "XAU/USD desk brief";
+  byId("report-title").textContent = report.headline || "รายงาน XAU/USD";
   byId("report-summary").textContent = report.summary || "";
   byId("report-bias").textContent = report.bias || report.status || "WAIT";
-  byId("report-entry").textContent = report.entryZone || report.entry || "No active entry zone";
-  byId("report-trigger").textContent = report.trigger || "Wait for a confirmed candle close";
-  byId("report-invalidation").textContent = report.invalidation || report.stop || "See the full analysis";
+  byId("report-entry").textContent = report.entryZone || report.entry || "ยังไม่มีโซนเข้า";
+  byId("report-trigger").textContent = report.trigger || "รอแท่งปิดยืนยัน";
+  byId("report-invalidation").textContent = report.invalidation || report.stop || "ดูบทวิเคราะห์เต็ม";
+  byId("report-stop").textContent = report.stop || "ดูบทวิเคราะห์เต็ม";
+  byId("report-targets").textContent = textValue(report.targets, "รอระบุเป้าหมาย");
+  byId("report-rr").textContent = report.riskReward || "";
+  const freshness = freshnessLabel(report);
+  byId("report-freshness").textContent = freshness.text;
+  byId("report-freshness").className = "freshness-badge " + freshness.type;
+  byId("report-plan-state").hidden = !report.planState;
+  byId("report-plan-state").textContent = textValue(report.planState, "");
+  byId("report-plan-state").title = report.planId || "";
+  byId("report-validity").hidden = !report.validUntil;
+  byId("report-validity").textContent = report.validUntil ? "ใช้ได้ถึง: " + (/^\d{4}-/.test(report.validUntil) ? formatDate(report.validUntil) : report.validUntil) : "";
+  byId("report-change-card").hidden = !report.changeSinceLast;
+  byId("report-change").textContent = textValue(report.changeSinceLast);
+  byId("report-wait-card").hidden = !report.waitFor;
+  byId("report-wait").textContent = textValue(report.waitFor);
+  byId("prior-review-card").hidden = !report.priorReview;
+  byId("prior-review-outcome").textContent = report.priorReview ? textValue(report.priorReview.outcome) : "";
+  byId("prior-review-evidence").textContent = report.priorReview ? textValue(report.priorReview.evidence, "") : "";
+  byId("weekly-review-card").hidden = !report.weeklyReview;
+  byId("weekly-review-summary").textContent = report.weeklyReview ? textValue(report.weeklyReview.summary) : "";
+  byId("weekly-review-lesson").textContent = report.weeklyReview ? textValue(report.weeklyReview.lesson, "") : "";
   renderAnalysisBody(report.body || report.analysis || "");
-  const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "TradingView · Pepperstone");
-  byId("report-sources").textContent = sources;
+  renderNews(report);
+  renderSources(byId("report-sources"), report.sources);
   byId("snapshot-time").textContent = formatDate(report.snapshotAt);
-  byId("snapshot-source").textContent = "แหล่งข้อมูลอยู่ในรายงานฉบับเต็ม";
+  byId("snapshot-source").textContent = report.dataQuality?.detail || "เวลาและแหล่งข้อมูลอยู่ในรายงานฉบับเต็ม";
   const imageUrl = report.imageUrl || (report.image ? (BASE_URL + "reports/latest.png") : "");
   const imageLink = byId("report-image-link");
   if (imageUrl) {
@@ -132,9 +208,9 @@ function historyBody(value) {
 }
 
 function safeWebUrl(value) {
-  if (!value) return "";
+  if (!value || !/^https?:\/\//i.test(String(value))) return "";
   try {
-    const url = new URL(value, window.location.href);
+    const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
   } catch {
     return "";
@@ -146,29 +222,38 @@ function historyField(label, value) {
     escapeHTML(value || "—") + '</strong></div>';
 }
 
+function historySources(sources) {
+  const list = Array.isArray(sources) ? sources : (sources ? [sources] : []);
+  return list.map((source) => {
+    const label = typeof source === "string" ? source : (source.name || source.url || "แหล่งข้อมูล");
+    const url = safeWebUrl(typeof source === "string" ? source : source.url);
+    return url ? '<a href="' + escapeHTML(url) + '" target="_blank" rel="noreferrer">' + escapeHTML(label) + '</a>' : '<span>' + escapeHTML(label) + '</span>';
+  }).join(" · ");
+}
+
 function renderHistory() {
   const list = byId("history-list");
   byId("history-loading").hidden = !historyLoading;
   if (!historyReports.length) {
-    list.innerHTML = '<div class="history-empty">Reports will be listed here after the first scheduled analysis.</div>';
-    byId("history-count").textContent = "0 reports";
+    list.innerHTML = '<div class="history-empty">รายงานที่เผยแพร่จะแสดงที่นี่</div>';
+    byId("history-count").textContent = "0 รายงาน";
     byId("history-more").hidden = true;
     byId("history-more").disabled = historyLoading;
     return;
   }
   const count = historyTotal === null
-    ? historyReports.length + " reports"
-    : historyReports.length + " of " + historyTotal + " reports";
+    ? historyReports.length + " รายงาน"
+    : historyReports.length + " จาก " + historyTotal + " รายงาน";
   byId("history-count").textContent = count;
   byId("history-more").hidden = !historyHasMore;
   byId("history-more").disabled = historyLoading;
   byId("history-loading").hidden = !historyLoading;
   list.innerHTML = historyReports.map((report) => {
     const status = normalizeStatus(report.status || report.bias);
-    const title = report.headline || report.summary || "XAU/USD desk brief";
+    const title = report.headline || report.summary || "รายงาน XAU/USD";
     const summary = report.summary || "";
     const body = report.body || report.analysis || "";
-    const sources = Array.isArray(report.sources) ? report.sources.join(" · ") : (report.sources || "");
+    const sources = historySources(report.sources);
     const imageUrl = safeWebUrl(report.imageUrl);
     return '<details class="history-entry"><summary class="history-row">' +
       '<span class="history-time">' + escapeHTML(formatDate(report.snapshotAt)) + '</span>' +
@@ -178,14 +263,17 @@ function renderHistory() {
       '<div class="history-detail">' +
       (summary ? '<p class="history-detail-summary">' + escapeHTML(summary) + '</p>' : '') +
       '<div class="history-plan-grid">' +
-      historyField("BIAS", report.bias || report.status) +
-      historyField("CONDITIONAL ZONE", report.entryZone || report.entry) +
-      historyField("TRIGGER", report.trigger) +
-      historyField("INVALIDATION", report.invalidation || report.stop) +
+      historyField("มุมมอง", report.bias || report.status) +
+      historyField("โซนที่เฝ้า", report.entryZone || report.entry) +
+      historyField("เงื่อนไขยืนยัน", report.trigger) +
+      historyField("จุดยกเลิกแผน", report.invalidation || report.stop) +
+      historyField("Stop ตามโครงสร้าง", report.stop) +
+      historyField("เป้าหมาย / R:R", textValue(report.targets) + (report.riskReward ? " · " + report.riskReward : "")) +
       '</div>' +
+      (report.changeSinceLast ? '<p class="history-change"><strong>เปลี่ยนจากรอบก่อน: </strong>' + escapeHTML(report.changeSinceLast) + '</p>' : '') +
       (body ? '<div class="history-body">' + historyBody(body) + '</div>' : '') +
-      (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="XAU/USD historical analysis image" /><span>Open analysis image ↗</span></a>' : '') +
-      (sources ? '<div class="history-sources"><strong>DATA AND SOURCES</strong> ' + escapeHTML(sources) + '</div>' : '') +
+      (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="ภาพสรุปแผน XAU/USD" /><span>เปิดภาพสรุป ↗</span></a>' : '') +
+      (sources ? '<div class="history-sources"><strong>แหล่งข้อมูล</strong> ' + sources + '</div>' : '') +
       '</div></details>';
   }).join("");
 }
@@ -228,7 +316,7 @@ async function loadReports() {
   }
 
   const label = byId("connection-label");
-  label.textContent = workerOnline ? "API connected" : (API_BASE ? "API unavailable" : "Backend setup required");
+  label.textContent = workerOnline ? "เชื่อมต่อแล้ว" : (API_BASE ? "เชื่อมต่อไม่ได้" : "โหมดดูรายงานในเครื่อง");
   label.style.color = workerOnline ? "#70d49f" : "#d9b56a";
 }
 
@@ -479,11 +567,29 @@ function setupNav() {
   }));
 }
 
+function setupTextSize() {
+  const sizes = ["normal", "large", "largest"];
+  const labels = ["ปกติ", "ใหญ่", "ใหญ่มาก"];
+  const button = byId("text-size-button");
+  let saved = "normal";
+  try { saved = localStorage.getItem("xau-desk-text-size") || "normal"; } catch { /* Storage may be disabled. */ }
+  let index = Math.max(0, sizes.indexOf(saved));
+  const apply = () => {
+    document.documentElement.dataset.textSize = sizes[index];
+    button.textContent = "ตัวอักษร: " + labels[index];
+  };
+  apply();
+  button.addEventListener("click", () => {
+    index = (index + 1) % sizes.length;
+    apply();
+    try { localStorage.setItem("xau-desk-text-size", sizes[index]); } catch { /* Storage may be disabled. */ }
+  });
+}
+
 async function init() {
-  updateClock();
-  window.setInterval(updateClock, 1000);
   mountTradingView();
   setupInstallPrompt();
+  setupTextSize();
   setupNav();
   byId("subscribe-button").addEventListener("click", subscribeForPush);
   byId("test-button").addEventListener("click", sendTestAlert);

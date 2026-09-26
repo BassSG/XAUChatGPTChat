@@ -66,22 +66,11 @@ function reportView(row) {
 }
 
 function notificationText(report, summary) {
-  const textValue = (value, fallback) => {
-    if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean).join(" / ") || fallback;
-    if (typeof value === "string" || typeof value === "number") return String(value).trim() || fallback;
-    return fallback;
-  };
-  const targets = report.targets || report.takeProfit || report.target || [report.tp1, report.tp2].filter(Boolean);
-  const lines = [
-    "สรุป: " + textValue(summary || report.headline, "มีบทวิเคราะห์ XAU/USD ใหม่"),
-    "ฝั่ง: " + textValue(report.bias || report.direction || report.status, "WAIT"),
-    "จุดรอ/เข้า: " + textValue(report.entryZone || report.entry, "รอดูรายงานเต็ม"),
-    "รอสัญญาณ: " + textValue(report.trigger, "รอดูรายงานเต็ม"),
-    "TP: " + textValue(targets, "ดูเป้าหมายในรายงานเต็ม"),
-    "ยกเลิกแผน/SL: " + textValue(report.invalidation || report.stop, "ดูจุดยกเลิกในรายงานเต็ม")
-  ];
-  if (report.newsRisk) lines.push("ข่าวเสี่ยง: " + textValue(report.newsRisk, ""));
-  return lines.join("\n").slice(0, 900);
+  const short = (value, limit) => String(value || "").replace(/\s+/g, " ").trim().slice(0, limit);
+  const lines = [short(summary || report.headline || "มีบทวิเคราะห์ XAU/USD ใหม่", 280)];
+  if (report.waitFor) lines.push("รอ: " + short(report.waitFor, 135));
+  if (report.newsRisk) lines.push("ข่าว: " + short(report.newsRisk, 130));
+  return lines.join("\n").slice(0, 560);
 }
 
 function vapidConfig(env) {
@@ -244,6 +233,11 @@ async function route(request, env, url) {
       }
     }
     delete body.imageBase64;
+    const duplicate = await env.DB.prepare(
+      "SELECT id, report_json FROM reports WHERE snapshot_at = ? ORDER BY created_at DESC LIMIT 5"
+    ).bind(snapshotAt).all();
+    const existing = (duplicate.results || []).find((row) => row.report_json === JSON.stringify(body));
+    if (existing) return json({ ok: true, duplicate: true, reportId: existing.id, notifications: { skipped: true } });
     const id = crypto.randomUUID();
     const createdAt = new Date().toISOString();
     await env.DB.prepare(

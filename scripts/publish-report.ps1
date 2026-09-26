@@ -21,6 +21,12 @@ if (-not $report.snapshotAt -or -not $report.status -or -not $report.summary) {
 if ($ImagePath -and -not (Test-Path -LiteralPath $ImagePath -PathType Leaf)) {
   throw "Image file not found: $ImagePath"
 }
+if ($ImagePath) {
+  node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath --image $ImagePath
+} else {
+  node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath
+}
+if ($LASTEXITCODE -ne 0) { throw 'Report validation failed; no files were published.' }
 
 $snapshotMatch = [regex]::Match($reportJson, '"snapshotAt"\s*:\s*"([^"]+)"')
 if (-not $snapshotMatch.Success) {

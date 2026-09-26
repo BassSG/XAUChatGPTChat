@@ -4,140 +4,145 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#081014" />
-    <meta name="description" content="XAU/USD Trading Desk — Pepperstone market analysis, chart, and mobile alerts." />
+    <meta name="description" content="XAU Desk: แผน XAU/USD ข่าวสำคัญ ภาพสรุป และการแจ้งเตือน" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="XAU Desk" />
-    <link rel="manifest" href="/XAUChatGPTChat/manifest.webmanifest" />
-    <link rel="icon" href="/XAUChatGPTChat/icons/xau-desk-192.png" type="image/png" sizes="192x192" />
-    <link rel="apple-touch-icon" href="/XAUChatGPTChat/icons/apple-touch-icon-180.png" sizes="180x180" />
-    <title>XAU Desk — Gold market brief</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/xau-desk-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180.png" sizes="180x180" />
+    <title>XAU Desk — แผนและข่าวทองคำ</title>
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar">
         <a class="brand" href="#overview" aria-label="XAU Desk home">
-          <img class="brand-mark" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" />
+          <img class="brand-mark" src="/icons/xau-desk-192.png" alt="" />
           <span class="brand-name">XAU<span>DESK</span></span>
         </a>
-        <div class="sidebar-label">WORKSPACE</div>
+        <div class="sidebar-label">โต๊ะวิเคราะห์</div>
         <div class="market-select"><span class="gold-dot"></span><span><strong>Gold Spot</strong><small>XAU / USD</small></span><span class="chevron">⌄</span></div>
         <nav class="side-nav" aria-label="Main navigation">
-          <a class="nav-link selected" href="#overview"><span>◫</span> Overview</a>
-          <a class="nav-link" href="#analysis"><span>◈</span> Analysis</a>
-          <a class="nav-link" href="#chart"><span>⌁</span> Price chart</a>
-          <a class="nav-link" href="#history"><span>◷</span> Review log</a>
+          <a class="nav-link selected" href="#overview"><span>◫</span> ภาพรวม</a>
+          <a class="nav-link" href="#analysis"><span>◈</span> แผนล่าสุด</a>
+          <a class="nav-link" href="#news"><span>▦</span> ข่าวสำคัญ</a>
+          <a class="nav-link" href="#chart"><span>⌁</span> กราฟราคา</a>
+          <a class="nav-link" href="#history"><span>◷</span> แผนย้อนหลัง</a>
         </nav>
         <div class="sidebar-bottom">
-          <a class="external-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span>▦</span> Economic calendar <span class="external-arrow">↗</span></a>
-          <div class="side-note"><span class="pulse-dot"></span><span>Desk status<strong id="connection-label">Connecting…</strong></span></div>
-          <div class="sidebar-foot">PERSONAL MARKET DESK<br />BANGKOK · UTC+7</div>
+          <a class="external-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span>▦</span> ปฏิทินเศรษฐกิจ <span class="external-arrow">↗</span></a>
+          <div class="side-note"><span class="pulse-dot"></span><span>สถานะแอป<strong id="connection-label">กำลังเชื่อมต่อ…</strong></span></div>
+          <div class="sidebar-foot">XAU DESK</div>
         </div>
       </aside>
       <main class="main-content">
         <header class="topbar">
-          <div class="mobile-brand"><img class="brand-mark" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" /><span class="brand-name">XAU<span>DESK</span></span></div>
-          <div class="breadcrumb"><span>MARKETS</span><b>/</b><strong>GOLD SPOT</strong></div>
+          <div class="mobile-brand"><img class="brand-mark" src="/icons/xau-desk-192.png" alt="" /><span class="brand-name">XAU<span>DESK</span></span></div>
+          <div class="breadcrumb"><span>ตลาด</span><b>/</b><strong>ทองคำ</strong></div>
           <div class="top-actions">
-            <span class="timezone-chip"><span class="tiny-clock">◷</span><span id="local-clock">--:-- ICT</span></span>
-            <button id="install-button" class="button button-quiet install-button">Install app</button>
+            <button id="text-size-button" class="button button-quiet text-size-button" aria-label="ปรับขนาดตัวอักษร">ตัวอักษร: ปกติ</button>
+            <button id="install-button" class="button button-quiet install-button">ติดตั้งแอป</button>
           </div>
         </header>
         <section id="overview" class="hero">
           <div class="hero-copy">
-            <div class="eyebrow"><span class="live-dot"></span> TRADING DESK <span class="eyebrow-divider">·</span> PEPPERSTONE</div>
-            <h1>Gold, with a clearer view.</h1>
-            <p>Live market context, a structured XAU/USD plan, and your desk brief in one place.</p>
+            <div class="eyebrow"><span class="live-dot"></span> XAU/USD · แผนการเทรด</div>
+            <h1>ดูแผนล่าสุดให้ชัด ก่อนตัดสินใจ</h1>
+            <p>สถานะ แผน ข่าว และผลทบทวน อยู่ในหน้าเดียว</p>
           </div>
-          <div class="hero-meta"><span class="meta-label">LATEST SNAPSHOT</span><strong id="snapshot-time">Waiting for first brief</strong><span id="snapshot-source">Analysis source: Codex desk schedule</span></div>
         </section>
-        <section class="summary-strip" aria-label="Trading desk details">
-          <div class="summary-item"><span class="summary-icon">◎</span><span><small>INSTRUMENT</small><strong>XAU / USD</strong></span></div>
-          <div class="summary-item"><span class="summary-icon">◷</span><span><small>REPORT WINDOWS</small><strong>09:00 · 14:30 · 19:00</strong></span></div>
-          <div class="summary-item"><span class="summary-icon">⌖</span><span><small>TIMEZONE</small><strong>Asia / Bangkok</strong></span></div>
-          <div class="summary-item"><span class="summary-icon">▤</span><span><small>PRICE FEED</small><strong>TradingView · Pepperstone</strong></span></div>
-        </section>
-        <div class="section-heading"><div><span class="section-kicker">TODAY AT A GLANCE</span><h2>Market workspace</h2></div><span class="secure-label"><span>●</span> Read-only analysis</span></div>
+        <div class="section-heading"><div><span class="section-kicker">ภาพรวมรอบล่าสุด</span><h2>แผนและข่าวที่ต้องดู</h2></div><span class="secure-label"><span>●</span> วิเคราะห์เพื่อวางแผน</span></div>
         <div class="dashboard-grid">
           <section id="analysis" class="panel analysis-panel">
             <div class="panel-header">
-              <div><span class="panel-kicker">LATEST DESK BRIEF</span><h3 id="report-title">Waiting for scheduled analysis</h3></div>
+              <div><span class="panel-kicker">แผนล่าสุด</span><h3 id="report-title">กำลังรอรายงานตามเวลา</h3></div>
               <span id="bias-pill" class="bias-pill neutral">WAIT</span>
             </div>
             <div id="report-empty" class="empty-state">
               <div class="empty-mark">Au</div>
-              <strong>Your next brief will appear here</strong>
-              <p>Scheduled for weekdays at 09:00, 14:30, and 19:00 Thailand time. The report will include the market plan and its summary image.</p>
-              <span class="empty-source">PRICE SOURCE · PEPPERSTONE XAU/USD</span>
+              <strong>รายงานรอบถัดไปจะแสดงตรงนี้</strong>
+              <p>ระบบสรุปแผน ข่าว และภาพประกอบทุกวันจันทร์–ศุกร์ ตามเวลาที่ตั้งไว้</p>
+              <span class="empty-source">XAU/USD</span>
             </div>
             <div id="report-content" class="report-content" hidden>
               <p id="report-summary" class="report-summary"></p>
+              <div class="report-badges"><span id="report-freshness" class="freshness-badge">—</span><span id="report-plan-state" class="plan-state-badge" hidden></span><span id="report-validity" class="plan-state-badge" hidden></span></div>
+              <div id="report-change-card" class="change-card" hidden><small>เปลี่ยนจากรอบก่อน</small><strong id="report-change">—</strong></div>
+              <div id="report-wait-card" class="wait-card" hidden><small>กำลังรออะไร</small><strong id="report-wait">—</strong></div>
               <div class="plan-grid">
-                <div class="plan-cell"><small>BIAS</small><strong id="report-bias">—</strong></div>
-                <div class="plan-cell"><small>CONDITIONAL ZONE</small><strong id="report-entry">—</strong></div>
-                <div class="plan-cell"><small>TRIGGER</small><strong id="report-trigger">—</strong></div>
-                <div class="plan-cell"><small>INVALIDATION</small><strong id="report-invalidation">—</strong></div>
+                <div class="plan-cell"><small>มุมมอง</small><strong id="report-bias">—</strong></div>
+                <div class="plan-cell"><small>โซนที่เฝ้า</small><strong id="report-entry">—</strong></div>
+                <div class="plan-cell"><small>เงื่อนไขยืนยัน</small><strong id="report-trigger">—</strong></div>
+                <div class="plan-cell"><small>จุดยกเลิกแผน</small><strong id="report-invalidation">—</strong></div>
+                <div class="plan-cell"><small>Stop ตามโครงสร้าง</small><strong id="report-stop">—</strong></div>
+                <div class="plan-cell"><small>เป้าหมาย / R:R</small><strong id="report-targets">—</strong><span id="report-rr" class="plan-note"></span></div>
               </div>
-              <div class="analysis-body" id="report-body"></div>
-              <a id="report-image-link" class="report-image-link" href="#" target="_blank" rel="noreferrer" hidden><img id="report-image" alt="XAU/USD market analysis map" /><span>Open analysis image ↗</span></a>
-              <div class="source-row"><span>DATA AND SOURCES</span><span id="report-sources">—</span></div>
+              <div id="prior-review-card" class="review-card" hidden><small>ผลทบทวนแผนก่อน</small><strong id="prior-review-outcome">—</strong><p id="prior-review-evidence"></p></div>
+              <div id="weekly-review-card" class="review-card weekly" hidden><small>ทบทวนสัปดาห์</small><strong id="weekly-review-summary">—</strong><p id="weekly-review-lesson"></p></div>
+              <a id="report-image-link" class="report-image-link" href="#" target="_blank" rel="noreferrer" hidden><img id="report-image" alt="แผนผังระดับราคา XAU/USD" /><span>เปิดภาพสรุปขนาดใหญ่ ↗</span></a>
+              <details class="full-analysis"><summary>อ่านบทวิเคราะห์ฉบับเต็ม</summary><div class="analysis-body" id="report-body"></div></details>
+              <details class="source-details"><summary>ดูเวลาและแหล่งข้อมูล</summary><div class="source-audit"><strong id="snapshot-time">—</strong><span id="snapshot-source">—</span></div><div class="source-row"><span>แหล่งข้อมูล</span><span id="report-sources">—</span></div></details>
             </div>
-            <div class="panel-footer"><span class="disclaimer-dot">i</span><span>Scenario planning only. This desk does not place orders or provide guaranteed outcomes.</span></div>
+            <div class="panel-footer"><span class="disclaimer-dot">i</span><span>ข้อมูลสำหรับวางแผน ระบบไม่ส่งคำสั่งซื้อขายและไม่รับประกันผลลัพธ์</span></div>
+          </section>
+          <section id="news" class="panel news-panel">
+            <div class="panel-header"><div><span class="panel-kicker">ข่าวและความเสี่ยง</span><h3>ข่าวที่เกี่ยวกับแผน</h3></div><span class="news-icon">▦</span></div>
+            <div id="news-empty" class="news-empty">รายงานรอบถัดไปจะแสดงข่าวสำคัญที่ตรวจสอบได้ พร้อมสถานะก่อนหรือหลังประกาศ</div>
+            <div id="news-content" hidden><p id="news-risk" class="news-risk"></p><div id="news-list" class="news-list"></div><p id="news-context" class="news-context"></p></div>
           </section>
           <section id="notifications" class="panel notify-panel">
             <div class="panel-header">
-              <div><span class="panel-kicker">STAY IN THE LOOP</span><h3>Mobile notifications</h3></div>
+              <div><span class="panel-kicker">ติดตามรายงาน</span><h3>การแจ้งเตือน</h3></div>
               <span id="notify-indicator" class="notify-indicator">OFF</span>
             </div>
-            <p class="panel-description">Get an alert when a new desk brief is published, then tap it to open the full analysis and chart. This dashboard does not receive general chat messages.</p>
+            <p class="panel-description">รับสรุปสั้นเมื่อมีรายงานใหม่ แล้วแตะเพื่ออ่านแผนและข่าวฉบับเต็ม</p>
             <div class="notification-preview">
-              <img class="preview-icon" src="/XAUChatGPTChat/icons/xau-desk-192.png" alt="" />
-              <span><small>XAU DESK · JUST NOW</small><strong>WAIT · Conditional plan</strong><em>Side · Entry zone · Trigger · TP · Invalidation</em></span>
+              <img class="preview-icon" src="/icons/xau-desk-192.png" alt="" />
+              <span><small>XAU DESK</small><strong>WAIT · รอเงื่อนไขยืนยัน</strong><em>สรุปสั้น · สิ่งที่รอ · ข่าวที่ต้องระวัง</em></span>
             </div>
-            <button id="subscribe-button" class="button button-primary full-width">Enable notifications</button>
-            <button id="test-button" class="button button-secondary full-width" disabled>Send a test alert</button>
-            <button id="unsubscribe-button" class="text-button" hidden>Turn notifications off</button>
-            <p id="notify-help" class="small-help">On iPhone or iPad, install this web app from Safari first; push alerts require iOS/iPadOS 16.4 or later.</p>
+            <button id="subscribe-button" class="button button-primary full-width">เปิดการแจ้งเตือน</button>
+            <button id="test-button" class="button button-secondary full-width" disabled>ส่งแจ้งเตือนทดสอบ</button>
+            <button id="unsubscribe-button" class="text-button" hidden>ปิดการแจ้งเตือน</button>
+            <p id="notify-help" class="small-help">บน iPhone และ iPad ให้เพิ่มเว็บนี้ไปยังหน้าจอโฮมจาก Safari ก่อนเปิดการแจ้งเตือน</p>
             <details id="install-help" class="install-help">
-              <summary>Install on a phone or tablet</summary>
+              <summary>วิธีติดตั้งบนมือถือหรือแท็บเล็ต</summary>
               <div class="install-steps">
-                <p><strong>iPhone or iPad:</strong> Open this page in Safari, tap Share, choose Add to Home Screen, turn on Open as Web App, then tap Add.</p>
-                <p><strong>Android:</strong> In Chrome, open the browser menu and choose Install app or Add to Home screen.</p>
-                <p>After installation, open XAU Desk from its new Home Screen icon for the app-style view.</p>
+                <p><strong>iPhone หรือ iPad:</strong> เปิดหน้านี้ใน Safari แตะ Share แล้วเลือก Add to Home Screen จากนั้นเปิดแอปจากไอคอนใหม่</p>
+                <p><strong>Android:</strong> เปิดเมนู Chrome แล้วเลือก Install app หรือ Add to Home screen</p>
               </div>
             </details>
           </section>
           <section id="chart" class="panel chart-panel">
             <div class="panel-header chart-header">
-              <div><span class="panel-kicker">PRICE ACTION</span><h3>XAU/USD · Pepperstone</h3></div>
-              <a class="chart-external" href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">Open TradingView ↗</a>
+              <div><span class="panel-kicker">กราฟราคา</span><h3>XAU/USD · Pepperstone</h3></div>
+              <a class="chart-external" href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">เปิดกราฟ ↗</a>
             </div>
             <div id="tradingview-chart" class="chart-frame"><div class="chart-loading"><span class="spinner"></span> Loading Pepperstone chart…</div></div>
-            <div class="chart-caption"><span><span class="green-dot"></span> TradingView market chart</span><span>15-minute view · Asia/Bangkok</span></div>
+            <div class="chart-caption"><span><span class="green-dot"></span> กราฟจาก TradingView</span><span>กรอบ 15 นาที</span></div>
           </section>
           <section class="panel context-panel">
-            <div class="panel-header"><div><span class="panel-kicker">SESSION CONTEXT</span><h3>What moves gold</h3></div><span class="context-icon">◉</span></div>
+            <div class="panel-header"><div><span class="panel-kicker">ข้อมูลประกอบ</span><h3>แหล่งติดตามเพิ่มเติม</h3></div><span class="context-icon">◉</span></div>
             <div class="context-list">
-              <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span class="context-icon-small">▦</span><span><strong>USD news calendar</strong><small>Check releases and Thailand-time schedule</small></span><b>↗</b></a>
-              <a href="https://www.traderider.com/gold/spdrgoldspot-lasted/" target="_blank" rel="noreferrer"><span class="context-icon-small">◉</span><span><strong>SPDR gold holdings</strong><small>Holdings data as supporting context</small></span><b>↗</b></a>
-              <div class="context-footnote">News and fund holdings provide context; the report identifies the source and data time it used.</div>
+              <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span class="context-icon-small">▦</span><span><strong>ปฏิทินข่าว USD</strong><small>ดูรายการข่าวและเวลาเผยแพร่</small></span><b>↗</b></a>
+              <a href="https://www.spdrgoldshares.com/usa/gld/" target="_blank" rel="noreferrer"><span class="context-icon-small">◉</span><span><strong>SPDR Gold Shares</strong><small>ข้อมูลการถือครองทองประกอบภาพรวม</small></span><b>↗</b></a>
+              <div class="context-footnote">วันที่และแหล่งข้อมูลที่ใช้จริงอยู่ในรายงานแต่ละรอบ</div>
             </div>
           </section>
           <section id="history" class="panel history-panel">
-            <div class="panel-header"><div><span class="panel-kicker">DECISION HISTORY</span><h3>Recent desk briefs</h3></div><span class="history-count" id="history-count">0 reports</span></div>
-            <div id="history-list" class="history-list"><div class="history-empty">Reports will be listed here after the first scheduled analysis.</div></div>
-            <div class="history-controls"><button id="history-more" class="button button-secondary" hidden>Load older briefs</button><span id="history-loading" class="history-loading" hidden>Loading older briefs…</span></div>
-            <div class="history-note">Published briefs stay in the archive, newest first. The latest brief remains at the top of the Analysis panel. Historical notes are not a record of trades placed in your account.</div>
+            <div class="panel-header"><div><span class="panel-kicker">ทบทวนแผน</span><h3>รายงานย้อนหลัง</h3></div><span class="history-count" id="history-count">0 รายงาน</span></div>
+            <div id="history-list" class="history-list"><div class="history-empty">รายงานที่เผยแพร่จะแสดงที่นี่</div></div>
+            <div class="history-controls"><button id="history-more" class="button button-secondary" hidden>โหลดรายงานเก่า</button><span id="history-loading" class="history-loading" hidden>กำลังโหลด…</span></div>
+            <div class="history-note">รายงานเก่าเป็นบันทึกแผนและการทบทวน ไม่ใช่ประวัติคำสั่งซื้อขายในบัญชีของคุณ</div>
           </section>
         </div>
-        <footer class="footer"><span>XAU DESK · PERSONAL MARKET WORKSPACE</span><span>Built for clear decisions, not automatic execution.</span></footer>
+        <footer class="footer"><span>XAU DESK</span><span>ข้อมูลเพื่อวางแผน ไม่ใช่ระบบส่งคำสั่งซื้อขาย</span></footer>
       </main>
     </div>
     <nav class="mobile-bottom-nav" aria-label="Quick navigation">
-      <a class="mobile-nav-link selected" href="#overview"><span aria-hidden="true">⌂</span><small>Home</small></a>
-      <a class="mobile-nav-link" href="#analysis"><span aria-hidden="true">◈</span><small>Plan</small></a>
-      <a class="mobile-nav-link" href="#chart"><span aria-hidden="true">⌁</span><small>Chart</small></a>
-      <a class="mobile-nav-link" href="#history"><span aria-hidden="true">◷</span><small>History</small></a>
+      <a class="mobile-nav-link selected" href="#overview"><span aria-hidden="true">⌂</span><small>หน้าแรก</small></a>
+      <a class="mobile-nav-link" href="#analysis"><span aria-hidden="true">◈</span><small>แผน</small></a>
+      <a class="mobile-nav-link" href="#news"><span aria-hidden="true">▦</span><small>ข่าว</small></a>
+      <a class="mobile-nav-link" href="#history"><span aria-hidden="true">◷</span><small>ย้อนหลัง</small></a>
     </nav>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script type="module" src="./src/main.js"></script>

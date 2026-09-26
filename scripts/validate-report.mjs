@@ -17,8 +17,9 @@ if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?\+07:00$/.test(report.snapsh
 }
 if (!["WAIT", "WATCH BUY", "WATCH SELL"].includes(report.status)) throw new Error("Invalid status.");
 if (typeof report.summary !== "string" || [...report.summary].length > 500 || !report.summary.trim()) throw new Error("summary must contain 1–500 characters.");
-if (/pepperstone|Asia\/Bangkok|UTC\+?7|\bICT\b|เวลาไทย/i.test(report.summary)) {
-  throw new Error("Keep provider and timezone details out of the short summary.");
+if ([report.headline, report.summary, report.waitFor, report.newsRisk].some((value) =>
+  /pepperstone|Asia\/Bangkok|UTC\+?7|\bICT\b|เวลาไทย/i.test(String(value || "")))) {
+  throw new Error("Keep provider and timezone details out of headlines, summaries, and notification fields.");
 }
 if (!Array.isArray(report.targets) || !Array.isArray(report.sources)) throw new Error("targets and sources must be arrays.");
 if (report.dataQuality) {

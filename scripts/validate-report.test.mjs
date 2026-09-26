@@ -55,6 +55,11 @@ test("rejects provider wording in the short summary", async () => {
   assert.notEqual((await validate(report)).status, 0);
 });
 
+test("rejects timezone wording in the notification condition", async () => {
+  const report = { ...base, waitFor: "รอแท่งปิดตามเวลา Asia/Bangkok" };
+  assert.notEqual((await validate(report)).status, 0);
+});
+
 test("renders a readable WAIT map without primary price levels", async () => {
   const folder = await mkdtemp(join(tmpdir(), "xau-map-test-"));
   try {

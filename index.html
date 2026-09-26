@@ -41,9 +41,15 @@
           <div class="breadcrumb"><span>ตลาด</span><b>/</b><strong>ทองคำ</strong></div>
           <div class="top-actions">
             <button id="text-size-button" class="button button-quiet text-size-button" aria-label="ปรับขนาดตัวอักษร">ตัวอักษร: ปกติ</button>
-            <button id="install-button" class="button button-quiet install-button">ติดตั้งแอป</button>
           </div>
         </header>
+        <nav class="tablet-nav" aria-label="นำทางบนแท็บเล็ต">
+          <a class="tablet-nav-link selected" href="#overview">ภาพรวม</a>
+          <a class="tablet-nav-link" href="#analysis">แผน</a>
+          <a class="tablet-nav-link" href="#news">ข่าว</a>
+          <a class="tablet-nav-link" href="#chart">กราฟ</a>
+          <a class="tablet-nav-link" href="#history">ย้อนหลัง</a>
+        </nav>
         <section id="overview" class="hero">
           <div class="hero-copy">
             <div class="eyebrow"><span class="live-dot"></span> XAU/USD · แผนการเทรด</div>
@@ -65,8 +71,9 @@
               <span class="empty-source">XAU/USD</span>
             </div>
             <div id="report-content" class="report-content" hidden>
+              <div id="report-state" class="report-state" role="status"><strong id="report-state-title">กำลังตรวจสถานะแผน</strong><p id="report-state-detail"></p><div class="report-badges"><span id="report-freshness" class="freshness-badge">—</span><span id="report-plan-state" class="plan-state-badge" hidden></span><span id="report-validity" class="plan-state-badge" hidden></span></div></div>
               <p id="report-summary" class="report-summary"></p>
-              <div class="report-badges"><span id="report-freshness" class="freshness-badge">—</span><span id="report-plan-state" class="plan-state-badge" hidden></span><span id="report-validity" class="plan-state-badge" hidden></span></div>
+              <a id="news-brief" class="news-brief" href="#news" hidden><span class="news-brief-label">ข่าวที่กระทบแผน</span><strong id="news-brief-text"></strong><span id="news-brief-event" class="news-brief-event" hidden></span><span class="news-brief-link">อ่านข่าวทั้งหมด ↓</span></a>
               <div id="report-change-card" class="change-card" hidden><small>เปลี่ยนจากรอบก่อน</small><strong id="report-change">—</strong></div>
               <div id="report-wait-card" class="wait-card" hidden><small>กำลังรออะไร</small><strong id="report-wait">—</strong></div>
               <div class="plan-grid">
@@ -85,17 +92,24 @@
             </div>
             <div class="panel-footer"><span class="disclaimer-dot">i</span><span>ข้อมูลสำหรับวางแผน ระบบไม่ส่งคำสั่งซื้อขายและไม่รับประกันผลลัพธ์</span></div>
           </section>
+          <aside class="desk-rail" aria-label="ข่าวและข้อมูลประกอบ">
           <section id="news" class="panel news-panel">
             <div class="panel-header"><div><span class="panel-kicker">ข่าวและความเสี่ยง</span><h3>ข่าวที่เกี่ยวกับแผน</h3></div><span class="news-icon">▦</span></div>
             <div id="news-empty" class="news-empty">รายงานรอบถัดไปจะแสดงข่าวสำคัญที่ตรวจสอบได้ พร้อมสถานะก่อนหรือหลังประกาศ</div>
             <div id="news-content" hidden><p id="news-risk" class="news-risk"></p><div id="news-list" class="news-list"></div><p id="news-context" class="news-context"></p></div>
           </section>
-          <section id="notifications" class="panel notify-panel">
-            <div class="panel-header">
-              <div><span class="panel-kicker">ติดตามรายงาน</span><h3>การแจ้งเตือน</h3></div>
-              <span id="notify-indicator" class="notify-indicator">OFF</span>
+          <section class="panel context-panel">
+            <div class="panel-header"><div><span class="panel-kicker">ข้อมูลประกอบ</span><h3>แหล่งติดตามเพิ่มเติม</h3></div><span class="context-icon">◉</span></div>
+            <div class="context-list">
+              <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span class="context-icon-small">▦</span><span><strong>ปฏิทินข่าว USD</strong><small>ดูรายการข่าวและเวลาเผยแพร่</small></span><b>↗</b></a>
+              <a href="https://www.spdrgoldshares.com/usa/gld/" target="_blank" rel="noreferrer"><span class="context-icon-small">◉</span><span><strong>SPDR Gold Shares</strong><small>ข้อมูลการถือครองทองประกอบภาพรวม</small></span><b>↗</b></a>
+              <div class="context-footnote">วันที่และแหล่งข้อมูลที่ใช้จริงอยู่ในรายงานแต่ละรอบ</div>
             </div>
+          </section>
+          <section id="notifications" class="panel notify-panel">
+            <details class="settings-details"><summary class="settings-summary"><span>ตั้งค่าแอปและการแจ้งเตือน</span><span id="notify-indicator" class="notify-indicator">OFF</span></summary>
             <p class="panel-description">รับสรุปสั้นเมื่อมีรายงานใหม่ แล้วแตะเพื่ออ่านแผนและข่าวฉบับเต็ม</p>
+            <button id="install-button" class="button button-secondary full-width">ติดตั้งแอป</button>
             <div class="notification-preview">
               <img class="preview-icon" src="/icons/xau-desk-192.png" alt="" />
               <span><small>XAU DESK</small><strong>WAIT · รอเงื่อนไขยืนยัน</strong><em>สรุปสั้น · สิ่งที่รอ · ข่าวที่ต้องระวัง</em></span>
@@ -111,7 +125,9 @@
                 <p><strong>Android:</strong> เปิดเมนู Chrome แล้วเลือก Install app หรือ Add to Home screen</p>
               </div>
             </details>
+            </details>
           </section>
+          </aside>
           <section id="chart" class="panel chart-panel">
             <div class="panel-header chart-header">
               <div><span class="panel-kicker">กราฟราคา</span><h3>XAU/USD</h3></div>
@@ -120,16 +136,9 @@
             <div id="tradingview-chart" class="chart-frame"><div class="chart-loading"><span class="spinner"></span> กำลังโหลดกราฟ…</div></div>
             <div class="chart-caption"><span><span class="green-dot"></span> กราฟจาก TradingView</span><span>กรอบ 15 นาที</span></div>
           </section>
-          <section class="panel context-panel">
-            <div class="panel-header"><div><span class="panel-kicker">ข้อมูลประกอบ</span><h3>แหล่งติดตามเพิ่มเติม</h3></div><span class="context-icon">◉</span></div>
-            <div class="context-list">
-              <a href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span class="context-icon-small">▦</span><span><strong>ปฏิทินข่าว USD</strong><small>ดูรายการข่าวและเวลาเผยแพร่</small></span><b>↗</b></a>
-              <a href="https://www.spdrgoldshares.com/usa/gld/" target="_blank" rel="noreferrer"><span class="context-icon-small">◉</span><span><strong>SPDR Gold Shares</strong><small>ข้อมูลการถือครองทองประกอบภาพรวม</small></span><b>↗</b></a>
-              <div class="context-footnote">วันที่และแหล่งข้อมูลที่ใช้จริงอยู่ในรายงานแต่ละรอบ</div>
-            </div>
-          </section>
           <section id="history" class="panel history-panel">
             <div class="panel-header"><div><span class="panel-kicker">ทบทวนแผน</span><h3>รายงานย้อนหลัง</h3></div><span class="history-count" id="history-count">0 รายงาน</span></div>
+            <div class="history-filters"><label>วันที่ <input id="history-date" type="date" /></label><label>สถานะ <select id="history-status"><option value="all">ทั้งหมด</option><option value="neutral">WAIT</option><option value="buy">เฝ้าซื้อ</option><option value="sell">เฝ้าขาย</option></select></label><button id="history-clear" class="button button-quiet" type="button">ล้างตัวกรอง</button></div>
             <div id="history-list" class="history-list"><div class="history-empty">รายงานที่เผยแพร่จะแสดงที่นี่</div></div>
             <div class="history-controls"><button id="history-more" class="button button-secondary" hidden>โหลดรายงานเก่า</button><span id="history-loading" class="history-loading" hidden>กำลังโหลด…</span></div>
             <div class="history-note">รายงานเก่าเป็นบันทึกแผนและการทบทวน ไม่ใช่ประวัติคำสั่งซื้อขายในบัญชีของคุณ</div>

@@ -1,4 +1,5 @@
 import "./style.css";
+import { reportState, newsEventState } from "./report-state.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -43,10 +44,20 @@ function freshnessLabel(report) {
   if (!Number.isFinite(age) || age < -300000) return { text: "เวลาข้อมูลไม่ชัดเจน", type: "warning" };
   const quality = String(report.dataQuality?.status || "").toUpperCase();
   if (quality === "UNAVAILABLE") return { text: "ข้อมูลราคาหลักไม่พร้อม", type: "warning" };
-  if (age >= 24 * 60 * 60 * 1000) return { text: "รายงานย้อนหลัง · ตรวจราคาใหม่", type: "warning" };
+  if (age >= 24 * 60 * 60 * 1000) return { text: "ข้อมูลเก่ากว่า 24 ชม.", type: "warning" };
   if (quality === "PARTIAL") return { text: "ข้อมูลบางส่วนไม่ครบ", type: "warning" };
-  if (age >= 4 * 60 * 60 * 1000) return { text: "ควรตรวจราคาใหม่", type: "warning" };
-  return { text: "รายงานรอบล่าสุด", type: "current" };
+  if (age >= 4 * 60 * 60 * 1000) return { text: "ข้อมูลเก่ากว่า 4 ชม.", type: "warning" };
+  return { text: "ข้อมูลรอบล่าสุด", type: "current" };
+}
+
+function updateReportState(report) {
+  const state = reportState(report);
+  byId("report-state").className = "report-state " + state.tone;
+  byId("report-state-title").textContent = state.title;
+  byId("report-state-detail").textContent = state.detail;
+  const freshness = freshnessLabel(report);
+  byId("report-freshness").textContent = freshness.text;
+  byId("report-freshness").className = "freshness-badge " + freshness.type;
 }
 
 function renderSources(container, sources) {
@@ -67,6 +78,11 @@ function renderNews(report) {
   const hasNews = Boolean(report.newsRisk || events.length || report.contextSignals);
   byId("news-empty").hidden = hasNews;
   byId("news-content").hidden = !hasNews;
+  byId("news-brief").hidden = !report.newsRisk && !events.length;
+  byId("news-brief-text").textContent = report.newsRisk || (events[0]?.title || "ตรวจข่าวก่อนใช้แผน");
+  const briefEvent = events.find((event) => event.state !== "RELEASED") || events[0];
+  byId("news-brief-event").hidden = !briefEvent;
+  byId("news-brief-event").textContent = briefEvent ? [briefEvent.title, newsEventState(briefEvent).text, briefEvent.at && formatDate(briefEvent.at)].filter(Boolean).join(" · ") : "";
   if (!hasNews) return;
   byId("news-risk").textContent = report.newsRisk || "ตรวจข่าวก่อนใช้แผน";
   byId("news-context").textContent = report.contextSignals || "";
@@ -80,8 +96,9 @@ function renderNews(report) {
     title.textContent = textValue(event.title, "ข่าว USD");
     const state = document.createElement("span");
     const announced = event.state === "RELEASED";
-    state.className = "news-state " + (announced ? "released" : "upcoming");
-    state.textContent = announced ? "ประกาศแล้ว" : event.state === "UNVERIFIED" ? "รอยืนยัน" : "รอประกาศ";
+    const eventState = newsEventState(event);
+    state.className = "news-state " + eventState.className;
+    state.textContent = eventState.text;
     head.append(title, state);
     const detail = document.createElement("p");
     const time = event.at ? formatDate(event.at) : "ยังไม่ยืนยันเวลา";
@@ -126,9 +143,7 @@ function renderReport(report) {
   byId("report-stop").textContent = report.stop || "ดูบทวิเคราะห์เต็ม";
   byId("report-targets").textContent = textValue(report.targets, "รอระบุเป้าหมาย");
   byId("report-rr").textContent = report.riskReward || "";
-  const freshness = freshnessLabel(report);
-  byId("report-freshness").textContent = freshness.text;
-  byId("report-freshness").className = "freshness-badge " + freshness.type;
+  updateReportState(report);
   byId("report-plan-state").hidden = !report.planState;
   byId("report-plan-state").textContent = textValue(report.planState, "");
   byId("report-plan-state").title = report.planId || "";
@@ -233,6 +248,7 @@ function historySources(sources) {
 
 function renderHistory() {
   const list = byId("history-list");
+  const openKeys = new Set(Array.from(list.querySelectorAll(".history-entry[open]")).map((node) => node.dataset.key));
   byId("history-loading").hidden = !historyLoading;
   if (!historyReports.length) {
     list.innerHTML = '<div class="history-empty">รายงานที่เผยแพร่จะแสดงที่นี่</div>';
@@ -241,24 +257,38 @@ function renderHistory() {
     byId("history-more").disabled = historyLoading;
     return;
   }
-  const count = historyTotal === null
-    ? historyReports.length + " รายงาน"
-    : historyReports.length + " จาก " + historyTotal + " รายงาน";
+  const selectedDate = byId("history-date").value;
+  const selectedStatus = byId("history-status").value;
+  const filtered = historyReports.filter((report) =>
+    (!selectedDate || String(report.snapshotAt || "").slice(0, 10) === selectedDate) &&
+    (selectedStatus === "all" || normalizeStatus(report.status || report.bias).className === selectedStatus)
+  );
+  const count = selectedDate || selectedStatus !== "all"
+    ? filtered.length + " จาก " + historyReports.length + " รายงานที่โหลด"
+    : historyTotal === null ? historyReports.length + " รายงาน" : historyReports.length + " จาก " + historyTotal + " รายงาน";
   byId("history-count").textContent = count;
   byId("history-more").hidden = !historyHasMore;
   byId("history-more").disabled = historyLoading;
   byId("history-loading").hidden = !historyLoading;
-  list.innerHTML = historyReports.map((report) => {
+  const reviewByPlan = new Map();
+  historyReports.forEach((item) => {
+    if (item.priorReview?.planId && !reviewByPlan.has(item.priorReview.planId)) reviewByPlan.set(item.priorReview.planId, item);
+  });
+  list.innerHTML = filtered.map((report) => {
     const status = normalizeStatus(report.status || report.bias);
     const title = report.headline || report.summary || "รายงาน XAU/USD";
     const summary = report.summary || "";
     const body = report.body || report.analysis || "";
     const sources = historySources(report.sources);
     const imageUrl = safeWebUrl(report.imageUrl);
-    return '<details class="history-entry"><summary class="history-row">' +
+    const reviewReport = reviewByPlan.get(report.planId);
+    const reviewedLater = reviewReport && Date.parse(reviewReport.snapshotAt) > Date.parse(report.snapshotAt);
+    const outcome = reviewedLater ? textValue(reviewReport.priorReview.outcome, "") : "";
+    const key = report.id || [report.snapshotAt, report.createdAt, report.headline].join("|");
+    return '<details class="history-entry" data-key="' + escapeHTML(key) + '"><summary class="history-row">' +
       '<span class="history-time">' + escapeHTML(formatDate(report.snapshotAt)) + '</span>' +
       '<span class="history-tag ' + status.className + '">' + escapeHTML(status.label) + '</span>' +
-      '<span class="history-summary">' + escapeHTML(title) + '</span>' +
+      '<span class="history-summary">' + escapeHTML(title) + (outcome ? '<small class="history-outcome">ผลตรวจ: ' + escapeHTML(outcome) + '</small>' : '') + '</span>' +
       '<span class="history-arrow" aria-hidden="true">›</span></summary>' +
       '<div class="history-detail">' +
       (summary ? '<p class="history-detail-summary">' + escapeHTML(summary) + '</p>' : '') +
@@ -271,11 +301,13 @@ function renderHistory() {
       historyField("เป้าหมาย / R:R", textValue(report.targets) + (report.riskReward ? " · " + report.riskReward : "")) +
       '</div>' +
       (report.changeSinceLast ? '<p class="history-change"><strong>เปลี่ยนจากรอบก่อน: </strong>' + escapeHTML(report.changeSinceLast) + '</p>' : '') +
+      (report.priorReview ? '<p class="history-change"><strong>ทบทวนแผนก่อน: </strong>' + escapeHTML(textValue(report.priorReview.outcome)) + ' · ' + escapeHTML(textValue(report.priorReview.evidence, "")) + '</p>' : '') +
       (body ? '<div class="history-body">' + historyBody(body) + '</div>' : '') +
       (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="ภาพสรุปแผน XAU/USD" /><span>เปิดภาพสรุป ↗</span></a>' : '') +
       (sources ? '<div class="history-sources"><strong>แหล่งข้อมูล</strong> ' + sources + '</div>' : '') +
       '</div></details>';
-  }).join("");
+  }).join("") || '<div class="history-empty">ไม่พบรายงานในตัวกรองนี้</div>';
+  list.querySelectorAll(".history-entry").forEach((node) => { if (openKeys.has(node.dataset.key)) node.open = true; });
 }
 
 function escapeHTML(value) {
@@ -308,7 +340,7 @@ async function loadReports() {
       const response = await fetch(BASE_URL + "reports/latest.json", { cache: "no-store" });
       if (response.ok) {
         const report = await response.json();
-        if (renderReport(report)) workerOnline = workerOnline || Boolean(API_BASE);
+        renderReport(report);
       }
     } catch {
       // The report panel keeps its clear first-run state.
@@ -316,7 +348,7 @@ async function loadReports() {
   }
 
   const label = byId("connection-label");
-  label.textContent = workerOnline ? "เชื่อมต่อแล้ว" : (API_BASE ? "เชื่อมต่อไม่ได้" : "โหมดดูรายงานในเครื่อง");
+  label.textContent = workerOnline ? "เชื่อมต่อแล้ว" : currentReport ? "อ่านรายงานที่บันทึกไว้" : (API_BASE ? "เชื่อมต่อไม่ได้" : "โหมดดูรายงานในเครื่อง");
   label.style.color = workerOnline ? "#70d49f" : "#d9b56a";
 }
 
@@ -561,10 +593,19 @@ function setupInstallPrompt() {
 }
 
 function setupNav() {
-  const links = Array.from(document.querySelectorAll(".nav-link, .mobile-nav-link"));
-  links.forEach((link) => link.addEventListener("click", () => {
-    links.forEach((item) => item.classList.toggle("selected", item.getAttribute("href") === link.getAttribute("href")));
-  }));
+  const links = Array.from(document.querySelectorAll(".nav-link, .tablet-nav-link, .mobile-nav-link"));
+  const sections = ["overview", "analysis", "news", "chart", "history"].map(byId);
+  const sync = () => {
+    const visible = sections.reduce((active, section) => section.getBoundingClientRect().top <= 160 ? section.id : active, "overview");
+    links.forEach((link) => {
+      const selected = link.getAttribute("href") === "#" + visible;
+      link.classList.toggle("selected", selected);
+      if (selected) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+  window.addEventListener("scroll", sync, { passive: true });
+  sync();
 }
 
 function setupTextSize() {
@@ -595,16 +636,20 @@ async function init() {
   byId("test-button").addEventListener("click", sendTestAlert);
   byId("unsubscribe-button").addEventListener("click", unsubscribePush);
   byId("history-more").addEventListener("click", loadOlderHistory);
+  byId("history-date").addEventListener("input", renderHistory);
+  byId("history-status").addEventListener("change", renderHistory);
+  byId("history-clear").addEventListener("click", () => { byId("history-date").value = ""; byId("history-status").value = "all"; renderHistory(); });
   await loadReports();
   if ("serviceWorker" in navigator) {
     try {
       await navigator.serviceWorker.register(BASE_URL + "service-worker.js", { scope: BASE_URL });
       await updateNotificationState();
     } catch {
-      byId("connection-label").textContent = "PWA worker unavailable";
+      showToast("ระบบแจ้งเตือนของอุปกรณ์ยังไม่พร้อม");
     }
   }
   window.setInterval(loadReports, 120000);
+  window.setInterval(() => { if (currentReport) { updateReportState(currentReport); renderNews(currentReport); } }, 60000);
 }
 
 init();

@@ -412,7 +412,7 @@ function mountTradingView() {
     support_host: "https://www.tradingview.com"
   });
   script.onerror = () => {
-    frame.innerHTML = '<div class="chart-loading">Chart unavailable — <a href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">open TradingView ↗</a></div>';
+    frame.innerHTML = '<div class="chart-loading">โหลดกราฟไม่ได้ — <a href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">เปิดกราฟโดยตรง ↗</a></div>';
   };
   frame.querySelector(".tradingview-widget-container").appendChild(script);
 }

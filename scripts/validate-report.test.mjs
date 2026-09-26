@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 
 const base = {
   snapshotAt: "2026-09-28T19:00:00+07:00",
@@ -52,4 +53,21 @@ test("rejects a detailed watch status when the primary price feed is unavailable
 test("rejects provider wording in the short summary", async () => {
   const report = { ...base, summary: "WAIT — Pepperstone quote pending" };
   assert.notEqual((await validate(report)).status, 0);
+});
+
+test("renders a readable WAIT map without primary price levels", async () => {
+  const folder = await mkdtemp(join(tmpdir(), "xau-map-test-"));
+  try {
+    const input = join(folder, "report.json");
+    const output = join(folder, "map.png");
+    const report = { ...base, dataQuality: { status: "UNAVAILABLE", detail: "ยังตรวจแหล่งราคาหลักไม่ได้" }, waitFor: "รอตรวจแท่งที่ปิดแล้ว", priceMap: { levels: [], scenarios: [] } };
+    await writeFile(input, JSON.stringify(report), "utf8");
+    const rendered = spawnSync(process.execPath, [fileURLToPath(new URL("./render-analysis-image.mjs", import.meta.url)), "--input", input, "--output", output], { encoding: "utf8" });
+    assert.equal(rendered.status, 0, rendered.stderr);
+    const image = await sharp(output).metadata();
+    assert.equal(image.format, "png");
+    assert.equal(image.width, 1200);
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
 });

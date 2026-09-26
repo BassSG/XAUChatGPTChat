@@ -93,8 +93,13 @@ function fallbackLevels() {
   if (invalid) result.push({ price: invalid, label: "ยกเลิกแผน", tone: "red" });
   return result.sort((a, b) => priceSort(b.price) - priceSort(a.price)).slice(0, 7);
 }
-const levels = Array.isArray(map.levels) && map.levels.length ? map.levels.slice(0, 7) : fallbackLevels();
-const scenarios = Array.isArray(map.scenarios) && map.scenarios.length ? map.scenarios.slice(0, 3) : [
+const unavailable = report.dataQuality?.status === "UNAVAILABLE";
+const levels = unavailable ? [] : (Array.isArray(map.levels) && map.levels.length ? map.levels.slice(0, 7) : fallbackLevels());
+const scenarios = unavailable ? [
+  { title: "สถานะ: WAIT", tone: "gold", bullets: [report.summary || "รอข้อมูลยืนยัน"] },
+  { title: "ข้อมูลที่ยังขาด", tone: "red", bullets: [report.dataQuality.detail || "ยังตรวจราคาแหล่งหลักไม่ได้"] },
+  { title: "รอตรวจใหม่", tone: "teal", bullets: [report.waitFor || "ตรวจกราฟและแท่งที่ปิดแล้วในรอบถัดไป"] }
+] : Array.isArray(map.scenarios) && map.scenarios.length ? map.scenarios.slice(0, 3) : [
   { title: "สถานะปัจจุบัน", tone: "gold", bullets: [report.summary || "รอข้อมูลยืนยัน"] },
   { title: "เงื่อนไขเฝ้าเข้า", tone: "teal", bullets: [report.entryZone, report.trigger, report.stop, (report.targets || []).join(" → ")].filter(Boolean) },
   { title: "ยกเลิก / ความเสี่ยง", tone: "red", bullets: [report.invalidation, report.riskReward, report.newsRisk].filter(Boolean) }

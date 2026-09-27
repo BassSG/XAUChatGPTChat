@@ -19,10 +19,21 @@ test("an explicit expiry and missing primary price override a recent WAIT", () =
   assert.equal(reportState({ ...report, dataQuality: { status: "UNAVAILABLE" } }, at("19:31")).title, "ข้อมูลราคาหลักไม่พร้อม");
 });
 
+test("a WATCH warns when its Bid/Ask snapshot is older than two minutes", () => {
+  const report = { snapshotAt, status: "WATCH BUY", evidence: { quote: { at: snapshotAt } } };
+  assert.equal(reportState(report, at("19:01")).title, "รอเงื่อนไขยืนยัน");
+  assert.equal(reportState(report, at("19:03")).title, "ต้องตรวจราคาล่าสุด");
+});
+
 test("an elapsed news time never becomes a confirmed release by itself", () => {
   const event = { at: "2026-09-25T19:30:00+07:00", state: "UPCOMING" };
   assert.equal(newsEventState(event, at("18:59")).text, "รอประกาศ");
   assert.equal(newsEventState(event, at("19:10")).text, "ใกล้ประกาศ");
   assert.equal(newsEventState(event, at("19:31")).text, "ถึงเวลาแล้ว · ยังไม่ยืนยันผล");
   assert.equal(newsEventState({ ...event, state: "RELEASED" }, at("19:31")).text, "ประกาศแล้ว");
+});
+
+test("a scheduled high-impact release marks the old report for review after its time", () => {
+  const report = { snapshotAt, status: "WAIT", newsEvents: [{ currency: "USD", impact: "HIGH", state: "UPCOMING", at: "2026-09-25T19:30:00+07:00" }] };
+  assert.equal(reportState(report, at("19:31")).title, "ข่าวถึงเวลาแล้ว ผลยังไม่ยืนยัน");
 });

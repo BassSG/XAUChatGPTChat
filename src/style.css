@@ -159,7 +159,7 @@ button { font: inherit; }
 .indicator-side { padding: 3px 6px; border-radius: 5px; color: #d1dbe2; background: #283947; font: 700 10px var(--mono); }
 .indicator-side.buy { color: #7de1bd; background: #164b3d; }
 .indicator-side.sell { color: #ffaaa9; background: #542d35; }
-.indicator-frame p { margin: 8px 0 0; color: #b9cad7; font: 12px/1.55 var(--mono); white-space: pre-line; }
+.indicator-frame p { margin: 8px 0 0; color: #b9cad7; font: 14px/1.55 var(--mono); white-space: pre-line; }
 .indicator-card .indicator-note { margin-bottom: 0; color: #91a7b8; font-size: 13px; }
 .report-image-link img { display: block; width: 100%; height: auto; background: #081014; }
 .report-image-link span { display: block; padding: 11px 13px; font: 12px var(--mono); color: #dfbd7b; border-top: 1px solid #263438; }

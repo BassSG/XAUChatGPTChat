@@ -2,12 +2,14 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
 import { validateCandleDataset, validateChartPlan } from "../src/chart-data.js";
+import { validatePublicationEvidence } from "../src/report-accuracy.js";
 
 const args = process.argv.slice(2);
 const valueFor = (flag) => args[args.indexOf(flag) + 1];
 const reportPath = args.includes("--input") ? valueFor("--input") : "";
 const imagePath = args.includes("--image") ? valueFor("--image") : "";
 const chartDataDirectory = args.includes("--chart-data-dir") ? valueFor("--chart-data-dir") : "";
+const publishing = args.includes("--publish");
 if (!reportPath) throw new Error("Usage: node validate-report.mjs --input report.json [--image report.png]");
 
 const report = JSON.parse(await readFile(reportPath, "utf8"));
@@ -34,8 +36,12 @@ if (report.newsEvents) {
   for (const event of report.newsEvents) {
     if (!event.title || !["UPCOMING", "RELEASED", "UNVERIFIED"].includes(event.state)) throw new Error("Invalid news event.");
     if (event.at && (!/^\d{4}-\d{2}-\d{2}T.*\+07:00$/.test(event.at) || !Number.isFinite(Date.parse(event.at)))) throw new Error("News event time must use +07:00.");
-    if (event.actual && event.state !== "RELEASED") throw new Error("Actual requires RELEASED state.");
-    if (event.actual && (!event.at || Date.parse(event.at) > Date.parse(report.snapshotAt))) throw new Error("Actual cannot precede the release time.");
+    if (Object.hasOwn(event, "actual")) {
+      if (event.actual === null || event.actual === "") throw new Error("Actual must contain a published value.");
+      if (event.state !== "RELEASED") throw new Error("Actual requires RELEASED state.");
+      if (!event.at || Date.parse(event.at) > Date.parse(report.snapshotAt)) throw new Error("Actual cannot precede the release time.");
+      if (publishing && !/^https:\/\//.test(event.sourceUrl || "")) throw new Error("Published Actual needs a source URL.");
+    }
   }
 }
 if (report.indicatorContext) {
@@ -57,12 +63,17 @@ if (report.indicatorContext) {
       for (const key of ["buyScore", "sellScore"]) {
         if (frame[key] !== undefined && (!Number.isFinite(frame[key]) || frame[key] < 0 || frame[key] > 100)) throw new Error(`Invalid EBW ${key}.`);
       }
+      for (const key of ["rsi", "stochK", "stochD"]) {
+        if (frame[key] !== undefined && (!Number.isFinite(frame[key]) || frame[key] < 0 || frame[key] > 100)) throw new Error(`Invalid EBW ${key}; use actual 0–100 values.`);
+      }
+      if (frame.netR !== undefined && frame.costConfigured !== true) throw new Error("EBW netR requires configured costs.");
       for (const key of ["support", "resistance", "entry", "stop", "target", "netR"]) {
         if (frame[key] !== undefined && frame[key] !== null && !Number.isFinite(frame[key])) throw new Error(`Invalid EBW ${key}.`);
       }
     }
   }
 }
+if (publishing) validatePublicationEvidence(report);
 if (report.priceMap) {
   if (!Array.isArray(report.priceMap.levels) || report.priceMap.levels.length > 7) throw new Error("priceMap must have up to seven levels.");
   if (!Array.isArray(report.priceMap.scenarios) || report.priceMap.scenarios.length > 3) throw new Error("priceMap must have up to three scenarios.");

@@ -19,7 +19,7 @@ export function validateChartPlan(report) {
   if (plan.mode !== "SNAPSHOT") throw new Error("รายงานจริงต้องใช้ chartPlan.mode เป็น SNAPSHOT");
   if (!plan.snapshotKey || !/^[a-zA-Z0-9][a-zA-Z0-9._-]{5,80}$/.test(plan.snapshotKey)) throw new Error("snapshotKey ไม่ถูกต้อง");
   if (plan.symbol !== "PEPPERSTONE:XAUUSD") throw new Error("กราฟแผนรองรับเฉพาะ PEPPERSTONE:XAUUSD");
-  if (plan.asOf !== report.snapshotAt) throw new Error("chartPlan.asOf ต้องตรงกับ snapshotAt ของรายงาน");
+  if (isoTime(plan.asOf, "chartPlan.asOf") !== isoTime(report.snapshotAt, "snapshotAt")) throw new Error("chartPlan.asOf ต้องตรงกับ snapshotAt ของรายงาน");
   if (report.planId && plan.planId !== report.planId) throw new Error("chartPlan.planId ต้องตรงกับ planId ของรายงาน");
   if (!SIDES.has(plan.side)) throw new Error("chartPlan.side ไม่ถูกต้อง");
 
@@ -33,6 +33,15 @@ export function validateChartPlan(report) {
   if (plan.stop.kind === "FIXED_VERIFIED" && !finite(plan.stop.price)) throw new Error("Stop ที่ยืนยันแล้วต้องมีราคา");
   if (!Array.isArray(plan.targets) || plan.targets.some((target) => !target?.label || !finite(target.price))) {
     throw new Error("targets ต้องเป็นรายการ label/price ที่ถูกต้อง");
+  }
+  if (plan.side !== "NONE" && plan.entryZone && plan.stop.kind === "FIXED_VERIFIED") {
+    const direction = plan.side === "BUY" ? 1 : -1;
+    if (direction * (plan.entryZone.low - plan.stop.price) <= 0 || direction * (plan.entryZone.high - plan.stop.price) <= 0) {
+      throw new Error("Stop อยู่ผิดด้านของโซนเข้า");
+    }
+    if (plan.targets.some((target) => direction * (target.price - plan.entryZone.low) <= 0 || direction * (target.price - plan.entryZone.high) <= 0)) {
+      throw new Error("เป้าหมายอยู่ผิดด้านของโซนเข้า");
+    }
   }
 
   const datasets = plan.datasets && typeof plan.datasets === "object" ? plan.datasets : {};

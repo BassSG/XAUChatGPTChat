@@ -1,6 +1,7 @@
 import "./style.css";
 import { reportState, newsEventState } from "./report-state.js";
 import { createPlanChart } from "./plan-chart.js";
+import { chooseLatestReport } from "./report-selection.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -154,10 +155,13 @@ function renderIndicatorContext(report) {
     head.append(timeframe, side);
     const lines = [
       Number.isFinite(frame.buyScore) || Number.isFinite(frame.sellScore) ? "Edge B/S " + textValue(frame.buyScore) + "/" + textValue(frame.sellScore) : "",
+      [frame.rsi, frame.stochK, frame.stochD].some(Number.isFinite) ? "RSI " + textValue(frame.rsi) + " · Stoch K/D จริง " + textValue(frame.stochK) + "/" + textValue(frame.stochD) : "",
+      frame.closedAt ? "แท่งปิด " + formatDate(frame.closedAt) : "",
       frame.phase ? "Phase: " + frame.phase : "",
       frame.state ? "State: " + frame.state : "",
       Number.isFinite(frame.support) || Number.isFinite(frame.resistance) ? "S/R " + textValue(frame.support) + " / " + textValue(frame.resistance) : "",
-      frame.finalSignal ? "Signal: " + frame.finalSignal : ""
+      frame.finalSignal ? "Signal: " + frame.finalSignal : "",
+      frame.costConfigured === false ? "ยังไม่ได้ตั้งต้นทุน จึงไม่ใช้ Net R" : ""
     ].filter(Boolean);
     const detail = document.createElement("p");
     detail.textContent = lines.join("\n") || "ยังไม่มีค่าที่ตรวจสอบได้";
@@ -366,6 +370,9 @@ function escapeHTML(value) {
 
 async function loadReports() {
   let workerOnline = false;
+  let workerReport = null;
+  let pagesReport = null;
+  const pagesPromise = fetch(BASE_URL + "reports/latest.json", { cache: "no-store" }).catch(() => null);
   if (API_BASE) {
     const [latestResult, historyResult] = await Promise.allSettled([
       fetch(API_BASE + "/api/reports/latest", { cache: "no-store" }),
@@ -375,7 +382,7 @@ async function loadReports() {
       try {
         const payload = await latestResult.value.json();
         workerOnline = true;
-        if (payload.report) renderReport(payload.report);
+        workerReport = payload.report || null;
       } catch {
         // The archive and existing report remain available if the latest payload is malformed.
       }
@@ -383,17 +390,14 @@ async function loadReports() {
     if (historyResult.status === "fulfilled" && historyResult.value) workerOnline = true;
   }
 
-  if (!currentReport) {
-    try {
-      const response = await fetch(BASE_URL + "reports/latest.json", { cache: "no-store" });
-      if (response.ok) {
-        const report = await response.json();
-        renderReport(report);
-      }
-    } catch {
-      // The report panel keeps its clear first-run state.
-    }
+  try {
+    const response = await pagesPromise;
+    if (response?.ok) pagesReport = await response.json();
+  } catch {
+    // Keep the latest valid report already on screen.
   }
+  const selected = chooseLatestReport({ worker: workerReport, pages: pagesReport, current: currentReport });
+  if (selected && selected !== currentReport) renderReport(selected);
 
   const label = byId("connection-label");
   label.textContent = workerOnline ? "เชื่อมต่อแล้ว" : currentReport ? "อ่านรายงานที่บันทึกไว้" : (API_BASE ? "เชื่อมต่อไม่ได้" : "โหมดดูรายงานในเครื่อง");

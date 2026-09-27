@@ -25,12 +25,13 @@ const base = {
   dataQuality: { status: "PARTIAL", detail: "ข้อมูลบางส่วนไม่ครบ" }
 };
 
-async function validate(report, chartDatasets = null) {
+async function validate(report, chartDatasets = null, publishing = false) {
   const folder = await mkdtemp(join(tmpdir(), "xau-report-test-"));
   try {
     const path = join(folder, "report.json");
     await writeFile(path, JSON.stringify(report), "utf8");
     const args = [fileURLToPath(new URL("./validate-report.mjs", import.meta.url)), "--input", path];
+    if (publishing) args.push("--publish");
     if (chartDatasets) {
       const chartDirectory = join(folder, "chart-data");
       await mkdir(chartDirectory);
@@ -43,12 +44,37 @@ async function validate(report, chartDatasets = null) {
   }
 }
 
+test("publisher requires a new report's structured evidence but still reads historical reports", async () => {
+  assert.equal((await validate(base)).status, 0);
+  assert.notEqual((await validate(base, null, true)).status, 0);
+});
+
+test("publisher accepts an evidence-limited new WAIT without fabricated levels", async () => {
+  const stamp = new Date(Date.now() - 30_000);
+  const snapshotAt = new Date(stamp.getTime() + 7 * 3600_000).toISOString().replace("Z", "+07:00");
+  const report = {
+    ...base, schemaVersion: 2, snapshotAt, planId: "TEST-WAIT", waitFor: "รอข้อมูลราคาหลัก", sources: ["TradingView PEPPERSTONE:XAUUSD"],
+    dataQuality: { status: "UNAVAILABLE", priceSource: "PEPPERSTONE:XAUUSD" },
+    evidence: { symbol: "PEPPERSTONE:XAUUSD", chartUrl: "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD", observedAt: snapshotAt, marketState: "UNAVAILABLE", bars: {}, newsCheck: { status: "UNAVAILABLE", checkedAt: snapshotAt } },
+    indicatorContext: { status: "UNAVAILABLE", name: "EBW V10.4.4", symbol: "PEPPERSTONE:XAUUSD", summary: "ยังตรวจไม่ได้", frames: [] },
+    planLevels: null
+  };
+  assert.equal((await validate(report, null, true)).status, 0);
+  report.entryZone = "4,284–4,285";
+  assert.notEqual((await validate(report, null, true)).status, 0);
+});
+
 test("accepts an evidence-limited WAIT report", async () => {
   assert.equal((await validate(base)).status, 0);
 });
 
 test("rejects a future Actual result", async () => {
   const report = { ...base, newsEvents: [{ title: "USD release", at: "2026-09-28T19:30:00+07:00", state: "RELEASED", actual: "1.0%" }] };
+  assert.notEqual((await validate(report)).status, 0);
+});
+
+test("rejects numeric zero Actual before its release", async () => {
+  const report = { ...base, newsEvents: [{ title: "USD release", at: "2026-09-28T19:30:00+07:00", state: "UPCOMING", actual: 0 }] };
   assert.notEqual((await validate(report)).status, 0);
 });
 

@@ -30,18 +30,26 @@ if ($ChartDataDirectory -and -not (Test-Path -LiteralPath $ChartDataDirectory -P
 }
 if ($ImagePath) {
   if ($ChartDataDirectory) {
-    node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath --image $ImagePath --chart-data-dir $ChartDataDirectory
+    node (Join-Path $PSScriptRoot 'validate-report.mjs') --publish --input $ReportPath --image $ImagePath --chart-data-dir $ChartDataDirectory
   } else {
-    node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath --image $ImagePath
+    node (Join-Path $PSScriptRoot 'validate-report.mjs') --publish --input $ReportPath --image $ImagePath
   }
 } else {
   if ($ChartDataDirectory) {
-    node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath --chart-data-dir $ChartDataDirectory
+    node (Join-Path $PSScriptRoot 'validate-report.mjs') --publish --input $ReportPath --chart-data-dir $ChartDataDirectory
   } else {
-    node (Join-Path $PSScriptRoot 'validate-report.mjs') --input $ReportPath
+    node (Join-Path $PSScriptRoot 'validate-report.mjs') --publish --input $ReportPath
   }
 }
 if ($LASTEXITCODE -ne 0) { throw 'Report validation failed; no files were published.' }
+
+if ($report.schemaVersion -eq 2) {
+  $taskRoot = Split-Path -Parent (Split-Path -Parent $repoRoot)
+  $journalPath = Join-Path (Join-Path $taskRoot 'outputs') 'XAUUSD_Trading_Desk_Journal.md'
+  if (-not (Test-Path -LiteralPath $journalPath -PathType Leaf)) { throw 'Trading desk journal is missing; update it before publication.' }
+  $journalText = [System.IO.File]::ReadAllText($journalPath, [System.Text.Encoding]::UTF8)
+  if (-not $journalText.Contains([string]$report.planId)) { throw 'The new plan ID is missing from the journal; update it before publication.' }
+}
 
 $snapshotMatch = [regex]::Match($reportJson, '"snapshotAt"\s*:\s*"([^"]+)"')
 if (-not $snapshotMatch.Success) {
@@ -57,6 +65,10 @@ if ($ImagePath) {
 } else {
   $imageUrl = $null
 }
+$reportHash = (Get-FileHash -LiteralPath $ReportPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$imageHash = if ($ImagePath) { (Get-FileHash -LiteralPath $ImagePath -Algorithm SHA256).Hash.ToLowerInvariant() } else { 'none' }
+$revision = $reportHash.Substring(0, 16) + '-' + $(if ($ImagePath) { $imageHash.Substring(0, 16) } else { $imageHash })
+$report | Add-Member -MemberType NoteProperty -Name revision -Value $revision -Force
 $report | Add-Member -MemberType NoteProperty -Name imageUrl -Value $imageUrl -Force
 
 $chartTargetDirectory = $null

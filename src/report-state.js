@@ -4,6 +4,12 @@ export function reportState(report, now = Date.now()) {
   const planState = String(report.planState || "");
   if (!Number.isFinite(age) || age < -300000) return { title: "เวลารายงานไม่ชัดเจน", detail: "ตรวจวันเวลาและข้อมูลราคาก่อนใช้แผน", tone: "warning" };
   if (report.dataQuality?.status === "UNAVAILABLE") return { title: "ข้อมูลราคาหลักไม่พร้อม", detail: "รายงานนี้ไม่มีราคาหลักที่ตรวจสอบได้ จึงไม่มีจุดเข้าแบบละเอียด", tone: "warning" };
+  if ((report.newsEvents || []).some((event) => event.currency === "USD" && event.impact === "HIGH" && event.state !== "RELEASED" && Number.isFinite(Date.parse(event.at)) && now >= Date.parse(event.at) && now - Date.parse(event.at) <= 24 * 60 * 60 * 1000)) {
+    return { title: "ข่าวถึงเวลาแล้ว ผลยังไม่ยืนยัน", detail: "ตรวจผลข่าวและราคาหลังข่าวก่อนใช้แผนเดิม", tone: "warning" };
+  }
+  if (report.status !== "WAIT" && report.evidence?.quote?.at && now - Date.parse(report.evidence.quote.at) > 2 * 60 * 1000) {
+    return { title: "ต้องตรวจราคาล่าสุด", detail: "Bid/Ask และ spread ในแผนเป็นข้อมูล ณ รอบวิเคราะห์ ให้ตรวจกราฟใหม่ก่อนใช้", tone: "warning" };
+  }
   if (/ยกเลิก/.test(planState)) return { title: "แผนถูกยกเลิก", detail: "ดูหลักฐานและเงื่อนไขในรายงานฉบับเต็มก่อนวางแผนใหม่", tone: "warning" };
   if (/หมดอายุ/.test(planState)) return { title: "แผนหมดอายุ", detail: "ต้องตรวจโครงสร้างราคาใหม่ก่อนวางแผน", tone: "warning" };
   if (Number.isFinite(expiry) && now > expiry) return { title: "แผนพ้นเวลาที่ระบุ", detail: "เงื่อนไขและระดับราคาในรายงานนี้ต้องตรวจใหม่", tone: "warning" };

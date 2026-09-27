@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs",
+    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs scripts/chart-data.test.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "devDependencies": {
@@ -15,5 +15,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "lightweight-charts": "5.2.1"
   }
 }

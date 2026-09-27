@@ -128,9 +128,56 @@
             </details>
           </section>
           </aside>
-          <section id="chart" class="panel chart-panel">
+          <section id="chart" class="panel plan-chart-panel" aria-labelledby="plan-chart-title">
             <div class="panel-header chart-header">
-              <div><span class="panel-kicker">กราฟราคา</span><h3>XAU/USD</h3></div>
+              <div><span class="panel-kicker">กราฟแผนรอบนี้</span><h3 id="plan-chart-title">XAU/USD · แผนบนกราฟ</h3></div>
+              <div class="plan-chart-header-actions"><button id="plan-chart-latest" class="button button-quiet" type="button" hidden>กลับรอบล่าสุด</button><span id="plan-chart-status" class="plan-chart-status">WAIT</span></div>
+            </div>
+            <div class="plan-chart-headline">
+              <div><strong id="plan-chart-wait">รอชุดแท่งราคาที่ตรวจสอบได้</strong><span id="plan-chart-asof">ยังไม่มีข้อมูลกราฟของรายงาน</span></div>
+              <div class="plan-chart-legend" aria-label="คำอธิบายสี"><span class="entry">โซนเข้า</span><span class="stop">Stop</span><span class="target">เป้าหมาย</span></div>
+            </div>
+            <div id="plan-chart-workspace" class="plan-chart-workspace">
+              <div class="plan-chart-main">
+                <div class="plan-chart-toolbar" aria-label="เลือกกรอบเวลา">
+                  <div class="timeframe-buttons">
+                    <button type="button" data-chart-frame="M5" disabled>M5</button>
+                    <button type="button" data-chart-frame="M15" disabled>M15</button>
+                    <button type="button" data-chart-frame="H1" disabled>H1</button>
+                  </div>
+                  <button id="plan-chart-fullscreen" class="chart-tool-button" type="button">⛶ ขยายกราฟ</button>
+                </div>
+                <div class="plan-chart-stage">
+                  <div id="plan-chart-loading" class="plan-chart-message" hidden><span class="spinner"></span><span id="plan-chart-loading-detail">กำลังตรวจชุดแท่งราคา…</span></div>
+                  <div id="plan-chart-canvas" class="plan-chart-canvas" hidden></div>
+                  <div id="plan-chart-fallback" class="plan-chart-message">
+                    <span class="fallback-mark" aria-hidden="true">◇</span>
+                    <strong>กราฟแผนยังไม่พร้อมในรายงานรอบนี้</strong>
+                    <p id="plan-chart-fallback-detail">ใช้ข้อความและภาพแผนผังระดับราคาของรายงานได้ตามปกติ</p>
+                  </div>
+                </div>
+                <div class="plan-chart-controls">
+                  <label><input id="toggle-entry" type="checkbox" checked /> <span>โซนเข้า</span></label>
+                  <label><input id="toggle-stop" type="checkbox" checked /> <span>Stop</span></label>
+                  <label><input id="toggle-targets" type="checkbox" checked /> <span>เป้าหมาย</span></label>
+                  <span id="plan-chart-frame-note" class="plan-chart-frame-note">ข้อมูล snapshot ไม่ใช่ราคาวิ่งสด</span>
+                </div>
+              </div>
+              <aside id="plan-chart-summary" class="plan-chart-summary" hidden>
+                <div class="chart-plan-card primary"><small>แผนตามเงื่อนไข</small><strong id="plan-chart-side">รอประเมินทิศทาง</strong></div>
+                <div class="chart-level-card entry"><small>โซนที่เฝ้า</small><strong id="plan-chart-entry">—</strong></div>
+                <div class="chart-plan-card trigger"><small>เงื่อนไขยืนยัน</small><strong id="plan-chart-trigger">—</strong></div>
+                <div class="chart-level-card stop"><small>Stop</small><strong id="plan-chart-stop">—</strong></div>
+                <div class="chart-level-card target"><small>เป้าหมาย</small><strong id="plan-chart-targets">—</strong></div>
+                <div class="chart-plan-card invalidation"><small>ยกเลิกแผนเมื่อ</small><strong id="plan-chart-invalidation">—</strong></div>
+              </aside>
+            </div>
+            <details class="plan-chart-source"><summary>ตรวจแหล่งและเวลาของกราฟ</summary><p id="plan-chart-source-detail">ข้อมูลกราฟต้องมาจากชุดแท่งของรายงานรอบเดียวกัน</p><p>กราฟสร้างด้วย <a href="https://www.tradingview.com/" target="_blank" rel="noreferrer">Lightweight Charts™ โดย TradingView</a></p></details>
+            <div class="plan-chart-notice">กราฟนี้แสดงข้อมูล ณ รอบวิเคราะห์ ไม่ใช่ราคาวิ่งสด และการแตะระดับไม่ใช่การยืนยันสัญญาณ</div>
+          </section>
+          <section id="market-chart" class="panel chart-panel">
+            <div class="panel-header chart-header">
+              <div><span class="panel-kicker">กราฟตลาด</span><h3>XAU/USD</h3></div>
               <a class="chart-external" href="https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD" target="_blank" rel="noreferrer">เปิดกราฟ ↗</a>
             </div>
             <div id="tradingview-chart" class="chart-frame"><div class="chart-loading"><span class="spinner"></span> กำลังโหลดกราฟ…</div></div>

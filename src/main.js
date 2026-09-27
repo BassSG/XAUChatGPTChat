@@ -1,5 +1,6 @@
 import "./style.css";
 import { reportState, newsEventState } from "./report-state.js";
+import { createPlanChart } from "./plan-chart.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -12,6 +13,8 @@ let historyTotal = null;
 let historyCursor = null;
 let historyHasMore = false;
 let historyLoading = false;
+let planChart = null;
+let selectedChartReportKey = null;
 const HISTORY_PAGE_SIZE = 30;
 
 function showToast(message) {
@@ -173,6 +176,7 @@ function renderReport(report) {
   } else {
     imageLink.hidden = true;
   }
+  if (!selectedChartReportKey) planChart?.render(report);
   return true;
 }
 
@@ -303,6 +307,7 @@ function renderHistory() {
       (report.changeSinceLast ? '<p class="history-change"><strong>เปลี่ยนจากรอบก่อน: </strong>' + escapeHTML(report.changeSinceLast) + '</p>' : '') +
       (report.priorReview ? '<p class="history-change"><strong>ทบทวนแผนก่อน: </strong>' + escapeHTML(textValue(report.priorReview.outcome)) + ' · ' + escapeHTML(textValue(report.priorReview.evidence, "")) + '</p>' : '') +
       (body ? '<div class="history-body">' + historyBody(body) + '</div>' : '') +
+      (report.chartPlan ? '<button class="button button-secondary history-chart-button" type="button" data-chart-report-key="' + escapeHTML(key) + '">เปิดกราฟแผนของรอบนี้</button>' : '') +
       (imageUrl ? '<a class="history-image-link" href="' + escapeHTML(imageUrl) + '" target="_blank" rel="noreferrer"><img loading="lazy" src="' + escapeHTML(imageUrl) + '" alt="ภาพสรุปแผน XAU/USD" /><span>เปิดภาพสรุป ↗</span></a>' : '') +
       (sources ? '<div class="history-sources"><strong>แหล่งข้อมูล</strong> ' + sources + '</div>' : '') +
       '</div></details>';
@@ -629,6 +634,7 @@ function setupTextSize() {
 
 async function init() {
   mountTradingView();
+  planChart = createPlanChart({ baseUrl: new URL(BASE_URL, window.location.origin).href, formatDate });
   setupInstallPrompt();
   setupTextSize();
   setupNav();
@@ -639,6 +645,21 @@ async function init() {
   byId("history-date").addEventListener("input", renderHistory);
   byId("history-status").addEventListener("change", renderHistory);
   byId("history-clear").addEventListener("click", () => { byId("history-date").value = ""; byId("history-status").value = "all"; renderHistory(); });
+  byId("history-list").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-chart-report-key]");
+    if (!button) return;
+    const report = historyReports.find((item) => String(item.id || [item.snapshotAt, item.createdAt, item.headline].join("|")) === button.dataset.chartReportKey);
+    if (!report) return;
+    selectedChartReportKey = button.dataset.chartReportKey;
+    byId("plan-chart-latest").hidden = false;
+    planChart.render(report);
+    byId("chart").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  byId("plan-chart-latest").addEventListener("click", () => {
+    selectedChartReportKey = null;
+    byId("plan-chart-latest").hidden = true;
+    if (currentReport) planChart.render(currentReport);
+  });
   await loadReports();
   if ("serviceWorker" in navigator) {
     try {

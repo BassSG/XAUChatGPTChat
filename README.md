@@ -5,6 +5,7 @@ A Thai-language XAU/USD market workspace built as a PWA. GitHub Pages hosts the 
 ## Included
 
 - Pepperstone XAU/USD TradingView chart and links to Forex Factory and SPDR holdings.
+- An optional snapshot plan chart with verified closed candles, entry zone, structural stop state, and targets. Reports without a publishable OHLC dataset use an explicit fallback.
 - Scheduled-report view and a review log.
 - PWA installation and per-device notification opt-in.
 - Cloudflare Worker API and D1 storage for subscriptions and report history.
@@ -37,4 +38,10 @@ Write a report JSON, render a number-accurate image from that same JSON, then pu
     node scripts/render-analysis-image.mjs --input C:\path\to\latest.json --output C:\path\to\latest.png
     .\scripts\publish-report.ps1 -ReportPath C:\path\to\latest.json -ImagePath C:\path\to\latest.png
 
-The report JSON needs snapshotAt, status, and summary. Optional fields include headline, bias, entryZone, trigger, invalidation, stop, targets, riskReward, newsRisk, body, and sources. The publish script adds a dated image URL and commits the report to GitHub. GitHub Pages deploys the report and image first; its workflow then stores the analysis in the Worker and sends push alerts. This repository is public, so reports must not contain personal details or secrets.
+The report validator requires `snapshotAt`, `status`, `headline`, `summary`, `bias`, `entryZone`, `trigger`, `invalidation`, `stop`, `targets`, `riskReward`, `newsRisk`, `body`, and `sources`. Structured plan review, news, data-quality, price-map, and snapshot-chart fields are documented in `SCHEDULE_WORKFLOW.md`.
+
+If a report includes `chartPlan`, provide a directory containing its verified `M5.json`, `M15.json`, and/or `H1.json` files and publish with:
+
+    .\scripts\publish-report.ps1 -ReportPath C:\path\to\latest.json -ImagePath C:\path\to\latest.png -ChartDataDirectory C:\path\to\chart-data
+
+The publish script adds a dated image URL and stores each snapshot dataset under its immutable `snapshotKey`. GitHub Pages deploys the report and assets first; its workflow then stores the analysis in the Worker and sends push alerts. This repository is public, so reports and chart data must not contain personal details or secrets.

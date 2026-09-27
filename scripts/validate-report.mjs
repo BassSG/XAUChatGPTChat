@@ -1,10 +1,13 @@
 import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import sharp from "sharp";
+import { validateCandleDataset, validateChartPlan } from "../src/chart-data.js";
 
 const args = process.argv.slice(2);
 const valueFor = (flag) => args[args.indexOf(flag) + 1];
 const reportPath = args.includes("--input") ? valueFor("--input") : "";
 const imagePath = args.includes("--image") ? valueFor("--image") : "";
+const chartDataDirectory = args.includes("--chart-data-dir") ? valueFor("--chart-data-dir") : "";
 if (!reportPath) throw new Error("Usage: node validate-report.mjs --input report.json [--image report.png]");
 
 const report = JSON.parse(await readFile(reportPath, "utf8"));
@@ -39,6 +42,20 @@ if (report.priceMap) {
   if (!Array.isArray(report.priceMap.levels) || report.priceMap.levels.length > 7) throw new Error("priceMap must have up to seven levels.");
   if (!Array.isArray(report.priceMap.scenarios) || report.priceMap.scenarios.length > 3) throw new Error("priceMap must have up to three scenarios.");
   if (report.dataQuality?.status === "UNAVAILABLE" && report.priceMap.levels.length) throw new Error("Unavailable primary price data cannot support numbered map levels.");
+}
+if (report.chartPlan) {
+  const result = validateChartPlan(report);
+  if (!result.available) throw new Error(result.reason);
+  for (const frame of result.frames) {
+    const meta = result.plan.datasets[frame];
+    const expectedUrl = `reports/chart-data/${result.plan.snapshotKey}/${frame}.json`;
+    if (String(meta.url).replace(/^\.\//, "") !== expectedUrl) throw new Error(`${frame}.url ต้องเป็น ${expectedUrl}`);
+    if (chartDataDirectory) {
+      const dataset = JSON.parse(await readFile(join(chartDataDirectory, `${frame}.json`), "utf8"));
+      validateCandleDataset(dataset, { timeframe: frame, snapshotAt: report.snapshotAt, expectedCount: meta.count });
+      if (dataset.capturedAt !== meta.capturedAt || dataset.lastClosedAt !== meta.lastClosedAt) throw new Error(`${frame} metadata ไม่ตรงกับรายงาน`);
+    }
+  }
 }
 if (imagePath) {
   const image = await sharp(await readFile(imagePath)).metadata();

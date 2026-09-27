@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -25,12 +25,19 @@ const base = {
   dataQuality: { status: "PARTIAL", detail: "ข้อมูลบางส่วนไม่ครบ" }
 };
 
-async function validate(report) {
+async function validate(report, chartDatasets = null) {
   const folder = await mkdtemp(join(tmpdir(), "xau-report-test-"));
   try {
     const path = join(folder, "report.json");
     await writeFile(path, JSON.stringify(report), "utf8");
-    return spawnSync(process.execPath, [fileURLToPath(new URL("./validate-report.mjs", import.meta.url)), "--input", path], { encoding: "utf8" });
+    const args = [fileURLToPath(new URL("./validate-report.mjs", import.meta.url)), "--input", path];
+    if (chartDatasets) {
+      const chartDirectory = join(folder, "chart-data");
+      await mkdir(chartDirectory);
+      for (const [frame, dataset] of Object.entries(chartDatasets)) await writeFile(join(chartDirectory, `${frame}.json`), JSON.stringify(dataset), "utf8");
+      args.push("--chart-data-dir", chartDirectory);
+    }
+    return spawnSync(process.execPath, args, { encoding: "utf8" });
   } finally {
     await rm(folder, { recursive: true, force: true });
   }
@@ -58,6 +65,36 @@ test("rejects provider wording in the short summary", async () => {
 test("rejects timezone wording in the notification condition", async () => {
   const report = { ...base, waitFor: "รอแท่งปิดตามเวลา Asia/Bangkok" };
   assert.notEqual((await validate(report)).status, 0);
+});
+
+test("validates a chart plan together with its immutable candle asset", async () => {
+  const snapshotAt = base.snapshotAt;
+  const report = {
+    ...base,
+    planId: "20260928-1900-A",
+    chartPlan: {
+      version: 1,
+      mode: "SNAPSHOT",
+      snapshotKey: "20260928-120000-a1",
+      planId: "20260928-1900-A",
+      symbol: "PEPPERSTONE:XAUUSD",
+      asOf: snapshotAt,
+      side: "NONE",
+      entryZone: null,
+      stop: { kind: "STRUCTURAL_PENDING", price: null, note: "รอโครงสร้าง" },
+      targets: [],
+      datasets: { M5: { url: "reports/chart-data/20260928-120000-a1/M5.json", source: "PEPPERSTONE:XAUUSD", capturedAt: snapshotAt, lastClosedAt: "2026-09-28T12:00:00.000Z", count: 2 } }
+    }
+  };
+  const candles = {
+    symbol: "PEPPERSTONE:XAUUSD", timeframe: "M5", capturedAt: snapshotAt, asOf: snapshotAt, lastClosedAt: "2026-09-28T12:00:00.000Z",
+    candles: [{ time: 1790596200, open: 4290, high: 4294, low: 4288, close: 4292 }, { time: 1790596500, open: 4292, high: 4295, low: 4291, close: 4294 }]
+  };
+  const result = await validate(report, { M5: candles });
+  assert.equal(result.status, 0, result.stderr);
+  const mismatch = structuredClone(candles);
+  mismatch.lastClosedAt = "2026-09-28T11:55:00.000Z";
+  assert.notEqual((await validate(report, { M5: mismatch })).status, 0);
 });
 
 test("renders a readable WAIT map without primary price levels", async () => {

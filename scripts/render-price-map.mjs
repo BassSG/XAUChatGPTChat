@@ -14,6 +14,7 @@ if (!inputPath || !outputPath) {
 }
 const report = JSON.parse(await readFile(inputPath, "utf8"));
 const map = report.priceMap || {};
+const indicatorSummary = report.indicatorContext?.summary ? "EBW: " + report.indicatorContext.summary : "";
 
 const escapeXml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[character]
@@ -168,8 +169,8 @@ scenarios.forEach((scenario, index) => {
     svg.push(block(x + 58, yy, bullet, 23, "#e9f0f3", 500, 43, 2, 29));
   });
 });
-svg.push(text(72, 1274, "ข่าวและความเสี่ยง", 24, "#f1c36f", 700));
-svg.push(block(72, 1310, map.context || report.newsRisk || "ดูรายละเอียดข่าวในรายงานฉบับเต็ม", 22, "#dbe5eb", 500, 88, 2, 29));
+svg.push(text(72, 1274, indicatorSummary ? "EBW และข่าวที่ต้องระวัง" : "ข่าวและความเสี่ยง", 24, "#f1c36f", 700));
+svg.push(block(72, 1310, [indicatorSummary, map.context || report.newsRisk].filter(Boolean).join(" | ") || "ดูรายละเอียดในรายงานฉบับเต็ม", 22, "#dbe5eb", 500, 88, 2, 29));
 svg.push("</svg>");
 await sharp(Buffer.from(svg.join(""))).png({ compressionLevel: 9 }).toFile(path.resolve(outputPath));
 process.stdout.write("Rendered XAU Desk price map.\n");

@@ -33,6 +33,15 @@
                         "priceSource":  "TradingView PEPPERSTONE:XAUUSD",
                         "priceAt":  "ราคาปิดล่าสุดของวันศุกร์ 25 ก.ย. 2026"
                     },
+    "indicatorContext":  {
+                              "status":  "UNAVAILABLE",
+                              "name":  "EBW V10.4.4",
+                              "symbol":  "PEPPERSTONE:XAUUSD",
+                              "summary":  "รายงานรอบนี้ยังไม่ได้ตรวจค่า EBW จากแท่งปิด จึงไม่นำอินดิเคเตอร์มาใช้ยืนยันแผน",
+                              "frames":  [
+
+                                         ]
+                          },
     "newsEvents":  [
                        {
                            "title":  "FOMC Member Bowman Speaks",

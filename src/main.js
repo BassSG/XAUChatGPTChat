@@ -127,6 +127,47 @@ function normalizeStatus(status) {
   return { label: "WAIT", className: "neutral" };
 }
 
+function indicatorStatus(value) {
+  const status = String(value || "UNAVAILABLE").toUpperCase();
+  if (status === "OK") return { text: "ตรวจครบ", className: "ok" };
+  if (status === "PARTIAL") return { text: "ข้อมูลบางส่วน", className: "partial" };
+  return { text: "ยังไม่มีข้อมูล", className: "unavailable" };
+}
+
+function renderIndicatorContext(report) {
+  const context = report.indicatorContext;
+  const state = indicatorStatus(context?.status);
+  byId("indicator-status").textContent = state.text;
+  byId("indicator-status").className = "indicator-status " + state.className;
+  byId("indicator-summary").textContent = context?.summary || "รายงานรอบนี้ยังไม่มีค่า EBW ที่ตรวจสอบจากแท่งปิดแล้ว";
+  const frames = Array.isArray(context?.frames) ? context.frames.slice(0, 3) : [];
+  const nodes = frames.map((frame) => {
+    const card = document.createElement("article");
+    card.className = "indicator-frame";
+    const head = document.createElement("div");
+    const timeframe = document.createElement("strong");
+    timeframe.textContent = textValue(frame.timeframe, "—");
+    const side = document.createElement("span");
+    const sideValue = String(frame.side || "UNAVAILABLE").toUpperCase();
+    side.className = "indicator-side " + (sideValue === "BUY" ? "buy" : sideValue === "SELL" ? "sell" : "neutral");
+    side.textContent = sideValue === "NO TRADE" ? "NO TRADE" : sideValue;
+    head.append(timeframe, side);
+    const lines = [
+      Number.isFinite(frame.buyScore) || Number.isFinite(frame.sellScore) ? "Edge B/S " + textValue(frame.buyScore) + "/" + textValue(frame.sellScore) : "",
+      frame.phase ? "Phase: " + frame.phase : "",
+      frame.state ? "State: " + frame.state : "",
+      Number.isFinite(frame.support) || Number.isFinite(frame.resistance) ? "S/R " + textValue(frame.support) + " / " + textValue(frame.resistance) : "",
+      frame.finalSignal ? "Signal: " + frame.finalSignal : ""
+    ].filter(Boolean);
+    const detail = document.createElement("p");
+    detail.textContent = lines.join("\n") || "ยังไม่มีค่าที่ตรวจสอบได้";
+    card.append(head, detail);
+    return card;
+  });
+  byId("indicator-frames").replaceChildren(...nodes);
+  byId("indicator-frames").hidden = nodes.length === 0;
+}
+
 function renderReport(report) {
   if (!report || !report.snapshotAt) return false;
   currentReport = report;
@@ -162,6 +203,7 @@ function renderReport(report) {
   byId("weekly-review-card").hidden = !report.weeklyReview;
   byId("weekly-review-summary").textContent = report.weeklyReview ? textValue(report.weeklyReview.summary) : "";
   byId("weekly-review-lesson").textContent = report.weeklyReview ? textValue(report.weeklyReview.lesson, "") : "";
+  renderIndicatorContext(report);
   renderAnalysisBody(report.body || report.analysis || "");
   renderNews(report);
   renderSources(byId("report-sources"), report.sources);
@@ -187,6 +229,7 @@ const ANALYSIS_SECTIONS = [
   { pattern: /^(?:เปลี่ยนมุมมอง|ยกเลิก|เงื่อนไขยกเลิก)/, title: "เงื่อนไขยกเลิก", style: "invalidation" },
   { pattern: /^(?:ข่าว|ปฏิทิน|ความเสี่ยงก่อนข่าว)/, title: "ข่าวและความเสี่ยง", style: "news-context" },
   { pattern: /^(?:บริบท|DXY)/, title: "บริบทเพิ่มเติม", style: "context" },
+  { pattern: /^(?:อินดิเคเตอร์|EBW)/i, title: "อินดิเคเตอร์ EBW", style: "indicator" },
   { pattern: /^(?:ทบทวน|ผลตรวจ)/, title: "ทบทวนแผนก่อน", style: "review" },
   { pattern: /^ข้อสรุป/, title: "ข้อสรุป", style: "conclusion" }
 ];

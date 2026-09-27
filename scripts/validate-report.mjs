@@ -38,6 +38,31 @@ if (report.newsEvents) {
     if (event.actual && (!event.at || Date.parse(event.at) > Date.parse(report.snapshotAt))) throw new Error("Actual cannot precede the release time.");
   }
 }
+if (report.indicatorContext) {
+  const indicator = report.indicatorContext;
+  if (!["OK", "PARTIAL", "UNAVAILABLE"].includes(indicator.status)) throw new Error("Invalid indicatorContext.status.");
+  if (!/^EBW\b/i.test(indicator.name || "")) throw new Error("indicatorContext.name must identify EBW.");
+  if (indicator.symbol !== "PEPPERSTONE:XAUUSD") throw new Error("EBW indicator must use PEPPERSTONE:XAUUSD.");
+  if (indicator.status !== "UNAVAILABLE" && !indicator.observedAt) throw new Error("Verified EBW context requires observedAt.");
+  if (indicator.observedAt && (!/^\d{4}-\d{2}-\d{2}T.*\+07:00$/.test(indicator.observedAt) || !Number.isFinite(Date.parse(indicator.observedAt)))) throw new Error("indicatorContext.observedAt must use +07:00.");
+  if (indicator.observedAt && Date.parse(indicator.observedAt) > Date.parse(report.snapshotAt)) throw new Error("EBW observation cannot be later than the report snapshot.");
+  if (indicator.frames) {
+    if (!Array.isArray(indicator.frames) || indicator.frames.length > 3) throw new Error("indicatorContext.frames must contain at most three items.");
+    if (indicator.status === "UNAVAILABLE" && indicator.frames.length) throw new Error("Unavailable EBW context cannot contain timeframe values.");
+    const seen = new Set();
+    for (const frame of indicator.frames) {
+      if (!["M5", "M15", "H1"].includes(frame.timeframe) || seen.has(frame.timeframe)) throw new Error("Invalid or duplicate EBW timeframe.");
+      seen.add(frame.timeframe);
+      if (frame.side && !["BUY", "SELL", "NEUTRAL", "NO TRADE", "UNAVAILABLE"].includes(String(frame.side).toUpperCase())) throw new Error("Invalid EBW side.");
+      for (const key of ["buyScore", "sellScore"]) {
+        if (frame[key] !== undefined && (!Number.isFinite(frame[key]) || frame[key] < 0 || frame[key] > 100)) throw new Error(`Invalid EBW ${key}.`);
+      }
+      for (const key of ["support", "resistance", "entry", "stop", "target", "netR"]) {
+        if (frame[key] !== undefined && frame[key] !== null && !Number.isFinite(frame[key])) throw new Error(`Invalid EBW ${key}.`);
+      }
+    }
+  }
+}
 if (report.priceMap) {
   if (!Array.isArray(report.priceMap.levels) || report.priceMap.levels.length > 7) throw new Error("priceMap must have up to seven levels.");
   if (!Array.isArray(report.priceMap.scenarios) || report.priceMap.scenarios.length > 3) throw new Error("priceMap must have up to three scenarios.");

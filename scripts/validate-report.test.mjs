@@ -67,6 +67,30 @@ test("rejects timezone wording in the notification condition", async () => {
   assert.notEqual((await validate(report)).status, 0);
 });
 
+test("accepts verified EBW context for the three analysis timeframes", async () => {
+  const report = {
+    ...base,
+    indicatorContext: {
+      status: "OK",
+      name: "EBW V10.4.4",
+      symbol: "PEPPERSTONE:XAUUSD",
+      observedAt: "2026-09-28T18:59:00+07:00",
+      summary: "M5 เป็นกลาง ขณะที่ M15 และ H1 ยังไม่ยืนยันฝั่งซื้อ",
+      frames: [
+        { timeframe: "M5", side: "NEUTRAL", buyScore: 51, sellScore: 49, phase: "Recovery" },
+        { timeframe: "M15", side: "NO TRADE", support: 4280.5, resistance: 4289.2 },
+        { timeframe: "H1", side: "SELL", finalSignal: "ไม่มีสัญญาณใหม่" }
+      ]
+    }
+  };
+  assert.equal((await validate(report)).status, 0);
+});
+
+test("rejects EBW context from another price symbol", async () => {
+  const report = { ...base, indicatorContext: { status: "PARTIAL", name: "EBW V10.4.4", symbol: "OANDA:XAUUSD", summary: "ทดสอบ", frames: [] } };
+  assert.notEqual((await validate(report)).status, 0);
+});
+
 test("validates a chart plan together with its immutable candle asset", async () => {
   const snapshotAt = base.snapshotAt;
   const report = {

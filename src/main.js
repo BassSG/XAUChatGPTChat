@@ -4,7 +4,7 @@ import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
 import { loadReportSources } from "./report-loader.js";
 import { scenarioHtml } from "./scenario-plan.js";
-import { setupMobileDesk, refreshMobileDesk } from "./mobile-desk.js";
+import { setupMobileDesk, refreshMobileDesk, mobileRoute } from "./mobile-desk.js";
 import "./mobile-desk.css";
 
 const BASE_URL = import.meta.env.BASE_URL;
@@ -476,6 +476,9 @@ async function loadOlderHistory() {
 
 function mountTradingView() {
   const frame = byId("tradingview-chart");
+  if (frame.dataset.mounted) return;
+  if (window.matchMedia('(max-width: 650px)').matches && mobileRoute(location.hash).view !== 'live') return;
+  frame.dataset.mounted = 'true';
   frame.innerHTML = '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:calc(100% - 30px);width:100%"></div><div class="tradingview-widget-copyright"></div></div>';
   const script = document.createElement("script");
   script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -684,6 +687,7 @@ async function init() {
   setupInstallPrompt();
   setupTextSize();
   setupNav();
+  window.addEventListener('xau:route', mountTradingView);
   setupMobileDesk();
   byId("subscribe-button").addEventListener("click", subscribeForPush);
   byId("test-button").addEventListener("click", sendTestAlert);

@@ -61,7 +61,7 @@
   .mobile-app .analysis-body .analysis-section { margin: 10px 0; }
   .mobile-app .analysis-body .analysis-section summary { font-size: 16px; line-height: 1.6; }
   .mobile-app .analysis-body .analysis-section p { padding: 0 14px 14px; }
-  .mobile-app .dashboard-grid { gap: 12px; }
+  .mobile-app .dashboard-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 12px; }
   .mobile-app .mobile-empty { border: 1px dashed #47616b; padding: 22px; border-radius: 16px; color: #bfd0cf; line-height: 1.8; }
   .mobile-app a:focus-visible, .mobile-app button:focus-visible, .mobile-app summary:focus-visible { outline: 2px solid #f1ca83; outline-offset: 3px; }
 }

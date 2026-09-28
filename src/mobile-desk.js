@@ -58,12 +58,24 @@ export function setupMobileDesk() {
     full: '.full-analysis, .source-details, #report-validity'
   };
   // Keep financial details available, but only expand the chosen topic on a phone.
-  document.querySelectorAll('.plan-cell').forEach((cell, i) => {
-    const details = document.createElement('details'); details.className = 'mobile-condition';
-    const summary = document.createElement('summary'); summary.textContent = cell.querySelector('small').textContent;
-    cell.querySelector('small').remove(); details.append(summary, ...cell.childNodes); cell.append(details);
-    details.open = !media.matches || i === 1 || i === 2;
+  const syncConditionals = () => document.querySelectorAll('.plan-cell').forEach((cell, i) => {
+    let details = cell.querySelector(':scope > .mobile-condition');
+    if (media.matches && !details) {
+      const label = cell.querySelector(':scope > small');
+      if (!label) return;
+      details = document.createElement('details'); details.className = 'mobile-condition';
+      const summary = document.createElement('summary'); summary.textContent = label.textContent;
+      label.remove(); details.append(summary, ...cell.childNodes); cell.append(details);
+    } else if (!media.matches && details) {
+      const summary = details.querySelector(':scope > summary');
+      const label = document.createElement('small'); label.textContent = summary.textContent;
+      const children = [...details.childNodes].filter(node => node !== summary);
+      details.replaceWith(label, ...children);
+      details = null;
+    }
+    if (details) details.open = !media.matches || i === 1 || i === 2;
   });
+  syncConditionals();
   document.querySelectorAll('.full-analysis').forEach(el => { el.open = !media.matches; });
   applyRoute = (resetScroll = true) => {
     const { page, view } = mobileRoute(location.hash);
@@ -95,11 +107,13 @@ export function setupMobileDesk() {
       if (view === 'full') document.querySelector('.full-analysis').open = true;
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
+    window.dispatchEvent(new CustomEvent('xau:route', { detail: { page, view } }));
   };
   window.addEventListener('hashchange', () => applyRoute());
   window.addEventListener('load', () => { if (media.matches) window.scrollTo({ top: 0, behavior: 'instant' }); }, { once: true });
   media.addEventListener('change', () => {
-    document.querySelectorAll('.mobile-condition, .full-analysis, #report-body .analysis-section').forEach(el => { el.open = !media.matches; });
+    syncConditionals();
+    document.querySelectorAll('.full-analysis, #report-body .analysis-section').forEach(el => { el.open = !media.matches; });
     applyRoute();
   });
   // Native hash navigation cannot find every subview ID and can jump below its tabs.

@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { spawn } from 'node:child_process';
 import { mkdir, readFile, writeFile, open, unlink } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,6 +12,23 @@ const file = join(directory, 'connector.json');
 const lock = join(directory, 'connector.lock');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 let config, active, previousOpen = false, preflight = false, pairingExpiresAt = 0;
+let approvalPending = false;
+async function approveConnection(request) {
+  if (!/^\d{6}$/.test(request.number)) return;
+  approvalPending = true;
+  try {
+    const approve = await new Promise(resolve => {
+      const child = spawn('powershell.exe', ['-NoProfile', '-STA', '-File', join(root, 'scripts', 'approve-device.ps1'), '-Number', request.number], { windowsHide: true, stdio: ['ignore','pipe','ignore'] });
+      let result = '';
+      const timeout = setTimeout(() => child.kill(), Math.max(1000, request.expiresAt - Date.now()));
+      child.stdout.on('data', data => { result += data.toString(); });
+      child.on('error', () => { clearTimeout(timeout); resolve(false); });
+      child.on('close', code => { clearTimeout(timeout); resolve(code === 0 && result.trim() === 'APPROVE'); });
+    });
+    await apiCall('/agent/connect/decide', { id: request.id, approve });
+  } catch { console.log('Connection request expired or could not be confirmed.'); }
+  finally { approvalPending = false; }
+}
 await mkdir(directory, { recursive: true });
 try {
   const oldPid = Number(await readFile(lock, 'utf8'));
@@ -83,6 +101,10 @@ try {
       // A crash during a task requires review in Codex; never start that request twice.
       const ready = isOpen && preflight && (!config.activeJob || Boolean(active));
       const beat = await apiCall('/agent/heartbeat', { codexOpen: ready });
+      if (!beat.paired && !approvalPending) {
+        const pending = await apiCall('/agent/connect/pending', {});
+        if (pending.request) void approveConnection(pending.request);
+      }
       if (beat.paired) {
         await unlink(join(directory, 'pairing.html')).catch(() => {});
         await unlink(join(directory, 'pairing.md')).catch(() => {});

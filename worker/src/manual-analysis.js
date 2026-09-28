@@ -40,6 +40,22 @@ export async function handleManualAnalysis(request, env) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return error('INVALID_JSON', 'รูปแบบคำขอไม่ถูกต้อง');
   const row = await readState(env);
 
+  if (path === '/connect/start' || path === '/connect/status') {
+    if (request.headers.get('Origin') !== env.APP_ORIGIN) return error('ORIGIN', 'ต้นทางไม่ถูกต้อง', 403);
+    if (!/^[a-f0-9]{64}$/.test(body.key || '')) return error('INVALID_KEY', 'คำขอเชื่อมต่อไม่ถูกต้อง');
+    const keyHash = await hash(body.key);
+    if (path === '/connect/status') {
+      if (row.connect_hash !== keyHash) return error('NOT_FOUND', 'ไม่พบคำขอเชื่อมต่อ', 404);
+      const status = row.connect_status === 'approved' && row.browser_token_hash === keyHash ? 'approved' : now >= row.connect_expires || row.connect_status === 'approved' ? 'expired' : row.connect_status;
+      return reply({ status, number: row.connect_number, expiresAt: row.connect_expires });
+    }
+    const id = crypto.randomUUID();
+    const number = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
+    const accepted = await env.DB.prepare("UPDATE manual_analysis_state SET connect_id=?, connect_hash=?, connect_number=?, connect_status='pending', connect_expires=?, connect_requested=? WHERE id=1 AND browser_token_hash IS NULL AND device_token_hash IS NOT NULL AND agent_last_seen_at_ms>=? AND COALESCE(connect_requested,0)<=? AND (COALESCE(connect_status,'')!='pending' OR connect_expires<=?) RETURNING id")
+      .bind(id, keyHash, number, now + 180000, now, now - HEARTBEAT_MS, now - 60000, now).first();
+    return accepted ? reply({ status: 'pending', number, expiresAt: now + 180000 }, 202) : error('UNAVAILABLE', 'คอมออฟไลน์ จับคู่แล้ว หรือมีคำขอรออยู่ กรุณาตรวจคอมแล้วลองอีกครั้ง', 409);
+  }
+
   if (path === '/agent/pairing') {
     if (await hash(bearer(request)) !== await hash(env.MANUAL_ANALYSIS_BOOTSTRAP_TOKEN)) return error('UNAUTHORIZED', 'ไม่มีสิทธิ์เชื่อมต่อคอม', 401);
     if (row?.browser_token_hash) return error('ALREADY_PAIRED', 'คอมจับคู่แล้ว', 409);
@@ -60,6 +76,15 @@ export async function handleManualAnalysis(request, env) {
   }
   if (path.startsWith('/agent/')) {
     if (!await authenticate(request, row, 'device')) return error('UNAUTHORIZED', 'ตัวช่วยยังไม่ได้จับคู่', 401);
+    if (path === '/agent/connect/pending') {
+      return reply({ request: !row.browser_token_hash && row.connect_status === 'pending' && row.connect_expires > now ? { id: row.connect_id, number: row.connect_number, expiresAt: row.connect_expires } : null });
+    }
+    if (path === '/agent/connect/decide') {
+      if (typeof body.approve !== 'boolean') return error('INVALID_DECISION', 'ผลยืนยันไม่ถูกต้อง');
+      const changed = await env.DB.prepare("UPDATE manual_analysis_state SET connect_status=?, browser_token_hash=CASE WHEN ?=1 THEN connect_hash ELSE browser_token_hash END, pairing_code_hash=CASE WHEN ?=1 THEN NULL ELSE pairing_code_hash END WHERE id=1 AND connect_id=? AND connect_status='pending' AND connect_expires>? AND browser_token_hash IS NULL RETURNING id")
+        .bind(body.approve ? 'approved' : 'rejected', body.approve ? 1 : 0, body.approve ? 1 : 0, body.id || '', now).first();
+      return changed ? reply({ ok: true }) : error('EXPIRED', 'คำขอหมดอายุหรือถูกดำเนินการแล้ว', 409);
+    }
     if (path === '/agent/heartbeat') {
       await env.DB.prepare('UPDATE manual_analysis_state SET agent_last_seen_at_ms=?, codex_open=? WHERE id=1 AND device_token_hash=?')
         .bind(now, body.codexOpen === true ? 1 : 0, row.device_token_hash).run();

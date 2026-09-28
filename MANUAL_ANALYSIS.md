@@ -31,3 +31,6 @@ To disable automatic startup, remove the **XAU Desk Connector** shortcut from th
 `node --test scripts/manual-analysis.test.mjs` uses a local Miniflare D1 database to test pairing, invalid authorization, offline and closed-app gates, eight simultaneous clicks, single job claim, busy state, and cooldown. It does not contact production or publish reports.
 
 Official protocol: https://learn.chatgpt.com/docs/app-server
+
+## Approve on PC
+In phone Settings press **ขอเชื่อมต่อกับคอม**, compare the six-digit number with the Windows dialog and click **อนุญาต** on the PC. The connector must be running. Requests expire after three minutes, only one can wait, and new requests are limited to one per minute. Closing or ignoring the dialog never approves. The phone stores its credential after local approval. This is a Windows dialog, not a Codex chat notification. The original code method remains available.

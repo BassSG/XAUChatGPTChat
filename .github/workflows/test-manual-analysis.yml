@@ -1,0 +1,27 @@
+name: Test manual analysis connector
+on:
+  push:
+    paths:
+      - 'worker/**'
+      - 'src/manual-analysis*'
+      - 'scripts/*analysis*'
+      - 'scripts/xau-desk-agent.mjs'
+      - '.github/workflows/test-manual-analysis.yml'
+  pull_request:
+    paths:
+      - 'worker/**'
+      - 'src/manual-analysis*'
+      - 'scripts/*analysis*'
+      - 'scripts/xau-desk-agent.mjs'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --prefix worker
+      - run: npm run test:manual

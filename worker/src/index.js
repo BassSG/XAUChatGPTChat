@@ -1,4 +1,5 @@
 import { sendPushNotification, rawPayload } from "@mmmike/web-push/send";
+import { handleManualAnalysis } from "./manual-analysis.js";
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" };
 
@@ -102,6 +103,7 @@ async function route(request, env, url) {
   const method = request.method;
 
   if (method === "OPTIONS") return new Response(null, { status: 204 });
+  if (path.startsWith('/api/manual-analysis/')) return handleManualAnalysis(request, env);
   if (method === "GET" && path === "/api/health") {
     return json({ ok: true, service: "xauchatgptchat-api", time: new Date().toISOString() });
   }

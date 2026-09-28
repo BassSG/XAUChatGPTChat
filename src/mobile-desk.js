@@ -83,6 +83,7 @@ export function setupMobileDesk() {
     document.body.dataset.mobilePage = page;
     document.body.dataset.mobileView = view;
     show('#mobile-home', page === 'home');
+    show('#manual-analysis-card', page === 'home');
     show('#mobile-plan-nav', page === 'plan');
     show('#mobile-chart-nav', page === 'chart');
     show('#analysis', page === 'plan' && view !== 'sequence');
@@ -90,6 +91,7 @@ export function setupMobileDesk() {
     show('.desk-rail', page === 'news' || page === 'settings');
     show('#news, .context-panel', page === 'news');
     show('#notifications', page === 'settings');
+    if (page === 'settings') document.querySelector('.settings-details').open = true;
     show('#chart', page === 'chart' && view === 'snapshot');
     show('#market-chart', page === 'chart' && view === 'live');
     show('#history', page === 'history');

@@ -1,0 +1,25 @@
+.manual-analysis-card { display:flex; align-items:center; gap:24px; border:1px solid #405155; border-radius:18px; padding:20px 24px; margin:0 0 22px; background:linear-gradient(110deg,#16292b,#142026); }
+.manual-analysis-card > div { flex:1; min-width:0; }
+.manual-analysis-card h2 { margin:0 0 5px; color:#f3d79e; font-size:20px; }
+.manual-analysis-card p { margin:6px 0; color:#b9cdcb; font-size:15px; line-height:1.65; }
+.manual-analysis-card .manual-links { display:flex; gap:16px; font-size:14px; }
+.manual-links a,.manual-links button { color:#dcca9d; text-decoration:underline; }
+.manual-links button { background:none; border:0; font:inherit; padding:0; cursor:pointer; }
+#manual-analysis-button { min-height:52px; min-width:210px; margin:0; padding:14px 20px; font-size:17px; white-space:normal; }
+#manual-analysis-button:disabled { background:#27383e; color:#c1cfcd; opacity:1; cursor:not-allowed; }
+.manual-analysis-card[data-state="ready"] { border-color:#a08a55; }
+.manual-analysis-card[data-state="busy"] { border-color:#3d9b94; }
+#manual-action-message:empty { display:none; }
+.manual-connection { padding:18px; border-top:1px solid #415358; margin-top:20px; }
+.manual-connection h4 { color:#e9cb8e; font-size:19px; margin:0 0 12px; }
+.manual-connection p,.manual-connection details { font-size:15px; line-height:1.7; color:#c0d0ce; }
+.manual-connection label { display:block; font-size:15px; margin:14px 0 8px; }
+.manual-connection input { width:100%; min-width:0; min-height:48px; border:1px solid #637578; background:#08161d; color:#f0e0bd; border-radius:10px; padding:12px; font:16px monospace; text-transform:uppercase; box-sizing:border-box; }
+.manual-connection code { overflow-wrap:anywhere; color:#e6c887; }
+.manual-connection summary { cursor:pointer; color:#edd09b; }
+.manual-connection a { color:#e7c98e; text-decoration:underline; }
+@media(max-width:650px) {
+  .manual-analysis-card { flex-direction:column; align-items:stretch; gap:12px; padding:19px; margin:16px 0 8px; }
+  #manual-analysis-button { width:100%; min-width:0; }
+  .manual-analysis-card h2 { font-size:19px; }
+}

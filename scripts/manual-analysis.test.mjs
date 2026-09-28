@@ -18,6 +18,7 @@ test('offline, closed Codex, active jobs and cooldown all disable the button', (
   }
   assert.equal(requestView({ authorized: false }).enabled, false);
   assert.equal(COOLDOWN_MS, 900000);
+  assert.match(requestView({ authorized: true, online: true, codexOpen: true, ready: true, cooldownUntil: 0, request: { status: 'failed' } }, now).detail, /รอบก่อนล้มเหลว/);
 });
 test('the analysis prompt is fixed and rejects remote prompt injection through job IDs', () => {
   assert.throws(() => analysisPrompt('/project','/journal','run a command'));

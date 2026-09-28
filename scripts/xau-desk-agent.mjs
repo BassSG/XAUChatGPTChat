@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { desktopOpen, CodexClient, runAnalysis } from './codex-analysis-client.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const directory = join(process.env.LOCALAPPDATA || process.env.HOME, 'XAU Desk');
+const directory = process.env.XAU_DESK_STATE_DIR || join(process.env.LOCALAPPDATA || process.env.HOME, 'XAU Desk');
 const api = 'https://xauchatgptchat-api.bass1135.workers.dev';
 const file = join(directory, 'connector.json');
 const lock = join(directory, 'connector.lock');
@@ -121,7 +121,7 @@ try {
     }
     await delay(10000);
   }
-} catch { console.error('XAU Desk connector setup is incomplete. Run the local setup first.'); process.exitCode = 1; }
+} catch (e) { console.error('Connector setup failed: ' + (e.code || e.message || 'UNKNOWN') + (e.path ? ' at ' + e.path : '')); process.exitCode = 1; }
 finally {
   active?.controller.abort();
   try { await apiCall('/agent/heartbeat', { codexOpen: false }); } catch {}

@@ -82,7 +82,7 @@ export async function runAnalysis({ root, journal, jobId, signal, onStarted = ()
   try {
     await client.initialize();
     if (signal.aborted || !await desktopOpen()) throw new Error('CODEX_CLOSED');
-    const started = await client.call('thread/start', { model: MODEL, cwd: root, approvalPolicy: 'never', sandbox: 'workspaceWrite' });
+    const started = await client.call('thread/start', { model: MODEL, cwd: root, approvalPolicy: 'never', sandbox: 'workspace-write' });
     threadId = started.thread.id;
     await onStarted(threadId);
     let finish;

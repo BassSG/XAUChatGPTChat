@@ -136,6 +136,15 @@
           </section>
           <section id="notifications" class="panel notify-panel">
             <details class="settings-details"><summary class="settings-summary"><span>ตั้งค่าแอปและการแจ้งเตือน</span><span id="notify-indicator" class="notify-indicator">OFF</span></summary>
+            <section class="manual-connection" aria-labelledby="manual-connection-title">
+              <h4 id="manual-connection-title">เชื่อมต่อคอมเพื่อวิเคราะห์ทันที</h4>
+              <p id="manual-connection-state" role="status">กำลังตรวจการเชื่อมต่อ</p>
+              <p>เปิด Codex บนคอมไว้ แล้วกดวิเคราะห์จากอุปกรณ์ที่จับคู่ได้หนึ่งครั้งทุก 15 นาที หากงานเดิมยังไม่เสร็จ ระบบจะรอให้จบก่อนรับงานใหม่</p>
+              <form id="manual-pair-form"><label for="manual-pair-code">รหัสจับคู่ครั้งเดียวจากคอม</label><input id="manual-pair-code" name="pairing-code" type="text" maxlength="30" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" required /><button id="manual-pair-submit" class="button button-primary full-width" type="submit">จับคู่อุปกรณ์นี้</button></form>
+              <p id="manual-pair-message" role="status" aria-live="polite"></p>
+              <button id="manual-unpair" class="text-button" type="button" hidden>ยกเลิกการจับคู่อุปกรณ์นี้</button>
+              <details><summary>วิธีเชื่อมต่อครั้งแรก</summary><p>ใช้รหัสที่แสดงในหน้าจับคู่ XAU Desk บนคอม กรอกในช่องด้านบน รหัสหมดอายุภายใน 15 นาที และจับคู่ได้ครั้งเดียว</p><p>หากต้องเปิดตัวช่วยใหม่ ให้เปิดไฟล์ <code>scripts/start-xau-desk-agent.cmd</code> ในโปรเจกต์ XAU Desk บนคอม แล้วเปิดหน้าจับคู่ในโฟลเดอร์ <code>%LOCALAPPDATA%/XAU Desk</code></p><p>ใช้เบราว์เซอร์หรือแอปที่จับคู่ไว้ในการกดวิเคราะห์ ตัวช่วยจะตรวจ Codex ก่อนรับงานทุกครั้ง สถานะอาจใช้เวลาประมาณ 30 วินาทีในการอัปเดต</p></details>
+            </section>
             <p class="panel-description">รับสรุปสั้นเมื่อมีรายงานใหม่ แล้วแตะเพื่ออ่านแผนและข่าวฉบับเต็ม</p>
             <button id="install-button" class="button button-secondary full-width">ติดตั้งแอป</button>
             <div class="notification-preview">
@@ -153,15 +162,7 @@
                 <p><strong>Android:</strong> เปิดเมนู Chrome แล้วเลือก Install app หรือ Add to Home screen</p>
               </div>
             </details>
-            <section class="manual-connection" aria-labelledby="manual-connection-title">
-              <h4 id="manual-connection-title">เชื่อมต่อคอมเพื่อวิเคราะห์ทันที</h4>
-              <p id="manual-connection-state" role="status">กำลังตรวจการเชื่อมต่อ</p>
-              <p>เปิด Codex บนคอมไว้ แล้วกดวิเคราะห์จากอุปกรณ์ที่จับคู่ได้หนึ่งครั้งทุก 15 นาที หากงานเดิมยังไม่เสร็จ ระบบจะรอให้จบก่อนรับงานใหม่</p>
-              <form id="manual-pair-form"><label for="manual-pair-code">รหัสจับคู่ครั้งเดียวจากคอม</label><input id="manual-pair-code" name="pairing-code" type="text" maxlength="30" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" required /><button id="manual-pair-submit" class="button button-primary full-width" type="submit">จับคู่อุปกรณ์นี้</button></form>
-              <p id="manual-pair-message" role="status" aria-live="polite"></p>
-              <button id="manual-unpair" class="text-button" type="button" hidden>ยกเลิกการจับคู่อุปกรณ์นี้</button>
-              <details><summary>วิธีเชื่อมต่อครั้งแรก</summary><p>ใช้รหัสที่แสดงในหน้าจับคู่ XAU Desk บนคอม กรอกในช่องด้านบน รหัสหมดอายุภายใน 15 นาที และจับคู่ได้ครั้งเดียว</p><p>หากต้องเปิดตัวช่วยใหม่ ให้เปิดไฟล์ <code>scripts/start-xau-desk-agent.cmd</code> ในโปรเจกต์ XAU Desk บนคอม แล้วเปิดหน้าจับคู่ในโฟลเดอร์ <code>%LOCALAPPDATA%/XAU Desk</code></p><p>ใช้เบราว์เซอร์หรือแอปที่จับคู่ไว้ในการกดวิเคราะห์ ตัวช่วยจะตรวจ Codex ก่อนรับงานทุกครั้ง สถานะอาจใช้เวลาประมาณ 30 วินาทีในการอัปเดต</p></details>
-            </section>
+
             </details>
           </section>
           </aside>

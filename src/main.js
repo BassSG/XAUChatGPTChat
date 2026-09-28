@@ -4,6 +4,8 @@ import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
 import { loadReportSources } from "./report-loader.js";
 import { scenarioHtml } from "./scenario-plan.js";
+import { setupMobileDesk, refreshMobileDesk } from "./mobile-desk.js";
+import "./mobile-desk.css";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -233,6 +235,7 @@ function renderReport(report) {
     imageLink.hidden = true;
   }
   if (!selectedChartReportKey) planChart?.render(report);
+  refreshMobileDesk();
   return true;
 }
 
@@ -264,10 +267,12 @@ function analysisBlocks(value) {
 
 function renderAnalysisBody(value) {
   const nodes = analysisBlocks(value).map((block) => {
-    const section = document.createElement("section");
+    const section = document.createElement("details");
     section.className = "analysis-section " + block.style;
-    const title = document.createElement("h4");
-    title.textContent = block.title;
+    section.open = !window.matchMedia('(max-width: 650px)').matches;
+    const title = document.createElement("summary");
+    const firstLine = block.text.split('\n')[0];
+    title.textContent = block.title === 'รายละเอียด' ? (firstLine.length <= 90 ? firstLine : 'เงื่อนไขและข้อควรระวัง') : block.title;
     const paragraph = document.createElement("p");
     paragraph.textContent = block.text;
     section.append(title, paragraph);
@@ -641,6 +646,7 @@ function setupNav() {
   const links = Array.from(document.querySelectorAll(".nav-link, .tablet-nav-link, .mobile-nav-link"));
   const sections = ["overview", "analysis", "news", "chart", "history"].map(byId);
   const sync = () => {
+    if (window.matchMedia('(max-width: 650px)').matches) return;
     const visible = sections.reduce((active, section) => section.getBoundingClientRect().top <= 160 ? section.id : active, "overview");
     links.forEach((link) => {
       const selected = link.getAttribute("href") === "#" + visible;
@@ -678,6 +684,7 @@ async function init() {
   setupInstallPrompt();
   setupTextSize();
   setupNav();
+  setupMobileDesk();
   byId("subscribe-button").addEventListener("click", subscribeForPush);
   byId("test-button").addEventListener("click", sendTestAlert);
   byId("unsubscribe-button").addEventListener("click", unsubscribePush);
@@ -693,7 +700,8 @@ async function init() {
     selectedChartReportKey = button.dataset.chartReportKey;
     byId("plan-chart-latest").hidden = false;
     planChart.render(report);
-    byId("chart").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.matchMedia('(max-width: 650px)').matches) location.hash = '#chart';
+    else byId("chart").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   byId("plan-chart-latest").addEventListener("click", () => {
     selectedChartReportKey = null;
@@ -710,7 +718,7 @@ async function init() {
     }
   }
   window.setInterval(loadReports, 120000);
-  window.setInterval(() => { if (currentReport) { updateReportState(currentReport); renderNews(currentReport); } }, 60000);
+  window.setInterval(() => { if (currentReport) { updateReportState(currentReport); renderNews(currentReport); refreshMobileDesk(); } }, 60000);
 }
 
 init();

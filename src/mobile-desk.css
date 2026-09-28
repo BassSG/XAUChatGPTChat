@@ -1,0 +1,67 @@
+.mobile-only { display: none; }
+.mobile-condition summary { display: block; color: #bbceca; font-size: var(--read-label); margin-bottom: 8px; }
+.analysis-section > summary { color: #e4c78f; font-size: var(--read-small); font-weight: 700; cursor: pointer; }
+.mobile-condition > strong { display: block; }
+@media (max-width: 650px) {
+  html { scroll-behavior: auto; }
+  .mobile-app .mobile-only { display: block; }
+  .mobile-app .mobile-route-hidden, .mobile-app .mobile-side-hidden { display: none !important; }
+  .mobile-app .hero, .mobile-app .section-heading, .mobile-app .footer { display: none; }
+  .mobile-app .topbar { position: sticky; top: 0; height: 64px; z-index: 25; background: #081014f5; backdrop-filter: blur(18px); }
+  .mobile-app .main-content { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  .mobile-page-heading { padding: 22px 2px 12px; }
+  .mobile-page-heading small { color: #d5b46f; font-size: 11px; letter-spacing: 2px; }
+  .mobile-page-heading h1 { margin: 5px 0 0; font-size: 26px; letter-spacing: -.6px; }
+  .mobile-app .mobile-settings { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #33444a; border-radius: 12px; font-size: 22px; color: #d4dbd5; }
+  .mobile-app .mobile-bottom-nav { grid-template-columns: repeat(5,minmax(0,1fr)); border-top-color: #4a402d; }
+  .mobile-app .mobile-nav-link small { font-size: 11px; }
+  .mobile-app .mobile-nav-link.selected { background: linear-gradient(180deg,#e4b76625,#e4b76608); box-shadow: inset 0 2px #e4b766; color: #ffe0a1; }
+  .mobile-app .mobile-subnav { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 12px; margin-bottom: 8px; scrollbar-width: none; }
+  .mobile-subnav a { flex: 0 0 auto; display: grid; place-items: center; min-height: 44px; border: 1px solid #34444a; border-radius: 30px; padding: 9px 16px; color: #a9bdbd; font-size: 15px; font-weight: 600; }
+  .mobile-subnav a.selected { color: #16201e; background: #e7c689; border-color: #f6d9a0; box-shadow: 0 4px 16px #e4b76615; }
+  .mobile-home-lead { border: 1px solid #6c5633; border-radius: 20px; padding: 22px; background: radial-gradient(ellipse at top right,#c9984330,transparent 70%),#111e23; box-shadow: 0 16px 36px #0004; }
+  .mobile-home-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .mobile-home-top small { font-size: 13px; color: #bbccc7; }
+  .mobile-home-lead h2 { font-size: 23px; line-height: 1.5; margin: 18px 0 10px; }
+  .mobile-home-lead p { font-size: var(--read-small); line-height: 1.75; color: #c7d5d3; }
+  .mobile-home-lead .home-state { color: #eed3a0; margin-bottom: 0; }
+  .mobile-primary-link { display: flex; justify-content: space-between; align-items: center; min-height: 50px; border-radius: 12px; padding: 13px 16px; background: #e7c689; color: #132027; font-weight: 700; margin-top: 20px; }
+  .mobile-home-shortcuts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 14px 0; }
+  .mobile-home-shortcuts a { padding: 17px 14px; border: 1px solid #34454a; border-radius: 15px; background: #142227; font-size: 16px; font-weight: 600; }
+  .mobile-home-shortcuts small { display: block; color: #92aaa9; font-size: 12px; margin-top: 7px; }
+  .mobile-home-news { display: block; border: 1px solid #365365; border-radius: 16px; padding: 18px; background: #13252e; }
+  .mobile-home-news strong { color: #9ed7e6; }
+  .mobile-home-news p { color: #cbdbde; font-size: var(--read-small); line-height: 1.7; margin-bottom: 0; }
+  .home-wait { border-top: 1px solid #5a4b33; margin-top: 16px; padding-top: 14px; }
+  .home-wait small { color: #f0ca7e; }
+  .home-wait p { margin: 5px 0; }
+  .mobile-app .mobile-condition summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; color: #dcc48f; font-size: 16px; font-weight: 600; cursor: pointer; list-style: none; }
+  .mobile-condition summary::-webkit-details-marker { display: none; }
+  .mobile-condition summary::after { content: '+'; font-size: 22px; }
+  .mobile-condition[open] summary::after { content: '−'; }
+  .mobile-condition[open] summary { margin-bottom: 10px; }
+  .mobile-app .plan-grid { display: grid; grid-template-columns: minmax(0,1fr); }
+  .mobile-app .plan-cell { min-height: 0; padding: 12px 16px; }
+  .mobile-app #analysis .panel-footer { font-size: 12px; }
+  .mobile-app #analysis #report-state { margin: 0 0 14px; padding: 10px 13px; }
+  .mobile-app #analysis #report-state-detail, .mobile-app #analysis .report-badges { display: none; }
+  .mobile-app #analysis #report-state-title { font-size: 15px; }
+  .mobile-app[data-mobile-view="full"] #analysis .report-badges { display: flex; }
+  .mobile-app #analysis .panel-header h3 { font-size: 18px; }
+  .mobile-app #mobile-side-picker { display: flex; gap: 8px; grid-column: 1/-1; }
+  #mobile-side-picker button { border: 1px solid #34535a; background: #122128; border-radius: 12px; padding: 12px 22px; color: #c6d7d6; font: 600 16px var(--sans); min-height: 46px; }
+  #mobile-side-picker button[aria-pressed="true"][data-side="BUY"] { color: #91ead8; border-color: #49d6c9; background: #173732; }
+  #mobile-side-picker button[aria-pressed="true"][data-side="SELL"] { color: #ffc0c3; border-color: #ff808b; background: #3c222a; }
+  .mobile-app #scenario-plan .panel-description { font-size: 14px; }
+  .mobile-app #scenario-plan .sequence-note { font-size: 13px; }
+  .mobile-app #scenario-plan .sequence-card h4 { font-size: 18px; }
+  .mobile-app #plan-fallback-image-link img { max-height: 240px; object-fit: contain; }
+  .mobile-app #plan-chart-summary { display: none; }
+  .mobile-app #chart .plan-chart-legend { display: none; }
+  .mobile-app .analysis-body .analysis-section { margin: 10px 0; }
+  .mobile-app .analysis-body .analysis-section summary { font-size: 16px; line-height: 1.6; }
+  .mobile-app .analysis-body .analysis-section p { padding: 0 14px 14px; }
+  .mobile-app .dashboard-grid { gap: 12px; }
+  .mobile-app .mobile-empty { border: 1px dashed #47616b; padding: 22px; border-radius: 16px; color: #bfd0cf; line-height: 1.8; }
+  .mobile-app a:focus-visible, .mobile-app button:focus-visible, .mobile-app summary:focus-visible { outline: 2px solid #f1ca83; outline-offset: 3px; }
+}

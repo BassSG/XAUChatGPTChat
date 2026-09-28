@@ -41,6 +41,7 @@
           <div class="breadcrumb"><span>ตลาด</span><b>/</b><strong>ทองคำ</strong></div>
           <div class="top-actions">
             <button id="text-size-button" class="button button-quiet text-size-button" aria-label="ปรับขนาดตัวอักษร">ตัวอักษร: ปกติ</button>
+            <a href="#notifications" class="mobile-only mobile-settings" aria-label="ตั้งค่าแอป">⚙</a>
           </div>
         </header>
         <nav class="tablet-nav" aria-label="นำทางบนแท็บเล็ต">
@@ -58,7 +59,23 @@
           </div>
         </section>
         <div class="section-heading"><div><span class="section-kicker">ภาพรวมรอบล่าสุด</span><h2>แผนและข่าวที่ต้องดู</h2></div><span class="secure-label"><span>●</span> วิเคราะห์เพื่อวางแผน</span></div>
+        <div class="mobile-only mobile-page-heading"><small>XAU / USD · DESK</small><h1 id="mobile-page-title">ภาพรวมวันนี้</h1></div>
+        <section id="mobile-home" class="mobile-only" aria-label="สรุปรอบล่าสุด">
+          <div class="mobile-home-lead">
+            <div class="mobile-home-top"><small id="mobile-freshness">รอรายงาน</small><span id="mobile-status" class="bias-pill neutral">WAIT</span></div>
+            <p id="mobile-state" class="home-state"></p>
+            <h2 id="mobile-headline">กำลังรอรายงานตามเวลา</h2><p id="mobile-summary"></p>
+            <div class="home-wait"><small>สิ่งที่กำลังรอ</small><p id="mobile-wait">รายงานรอบถัดไปจะแสดงตรงนี้</p></div>
+            <a class="mobile-primary-link" href="#analysis">เปิดแผนและเงื่อนไข <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="mobile-home-shortcuts"><a href="#scenario-plan">เส้นทางราคา <small>เบรก · รีเทสต์ · ยืนยัน →</small></a><a href="#market-chart">เปิดกราฟ <small>ติดตามราคาตลาด →</small></a></div>
+          <a class="mobile-home-news" href="#news"><strong>ข่าวที่ต้องรู้ ↗</strong><p id="mobile-news">กำลังโหลดข่าวจากรายงาน</p></a>
+        </section>
+        <nav id="mobile-plan-nav" class="mobile-only mobile-subnav" aria-label="หมวดแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เส้นทางราคา</a><a href="#plan-image">ภาพสรุป</a><a href="#indicator-card">หลักฐาน</a><a href="#report-body">ฉบับเต็ม</a></nav>
+        <nav id="mobile-chart-nav" class="mobile-only mobile-subnav" aria-label="ประเภทกราฟ"><a href="#market-chart">กราฟตลาด</a><a href="#chart">กราฟตามรายงาน</a></nav>
         <div class="dashboard-grid">
+          <div id="mobile-side-picker" class="mobile-only" role="group" aria-label="เลือกฝั่งของแผน"></div>
+          <div id="mobile-sequence-empty" class="mobile-only mobile-empty" hidden>รอบนี้ยังไม่มีภาพลำดับที่ยืนยันข้อมูลได้ <a href="#analysis">อ่านเงื่อนไขของแผน →</a></div>
           <section id="analysis" class="panel analysis-panel">
             <div class="panel-header">
               <div><span class="panel-kicker">แผนล่าสุด</span><h3 id="report-title">กำลังรอรายงานตามเวลา</h3></div>
@@ -93,6 +110,7 @@
               <div id="prior-review-card" class="review-card" hidden><small>ผลทบทวนแผนก่อน</small><strong id="prior-review-outcome">—</strong><p id="prior-review-evidence"></p></div>
               <div id="weekly-review-card" class="review-card weekly" hidden><small>ทบทวนสัปดาห์</small><strong id="weekly-review-summary">—</strong><p id="weekly-review-lesson"></p></div>
               <a id="report-image-link" class="report-image-link" href="#" target="_blank" rel="noreferrer" hidden><img id="report-image" alt="แผนผังระดับราคา XAU/USD" /><span>เปิดภาพสรุปขนาดใหญ่ ↗</span></a>
+              <p id="mobile-image-empty" class="mobile-only mobile-empty" hidden>รอบนี้ยังไม่มีภาพสรุป <a href="#analysis">อ่านเงื่อนไขของแผน →</a></p>
               <details class="full-analysis" open><summary>บทวิเคราะห์ฉบับเต็ม · แตะเพื่อย่อหรือขยาย</summary><div class="analysis-body" id="report-body"></div></details>
               <details class="source-details"><summary>ดูเวลาและแหล่งข้อมูล</summary><div class="source-audit"><strong id="snapshot-time">—</strong><span id="snapshot-source">—</span></div><div class="source-row"><span>แหล่งข้อมูล</span><span id="report-sources">—</span></div></details>
             </div>
@@ -211,6 +229,7 @@
     <nav class="mobile-bottom-nav" aria-label="Quick navigation">
       <a class="mobile-nav-link selected" href="#overview"><span aria-hidden="true">⌂</span><small>หน้าแรก</small></a>
       <a class="mobile-nav-link" href="#analysis"><span aria-hidden="true">◈</span><small>แผน</small></a>
+      <a class="mobile-nav-link" href="#market-chart"><span aria-hidden="true">⌁</span><small>กราฟ</small></a>
       <a class="mobile-nav-link" href="#news"><span aria-hidden="true">▦</span><small>ข่าว</small></a>
       <a class="mobile-nav-link" href="#history"><span aria-hidden="true">◷</span><small>ย้อนหลัง</small></a>
     </nav>

@@ -20,7 +20,7 @@ export function scenarioHtml(report) {
     const source = scenarioSvg({ ...report, scenarioPlan: { ...plan, scenarios: [s] } });
     // Reuse exactly the same paths as the report image, cropping only the drawings.
     const drawing = (x, label) => source.replace(/width="1200" height="\d+" viewBox="[^"]+"/, `role="img" aria-label="${esc(label)}" width="525" height="180" viewBox="${x} 248 525 180"`);
-    return `<article class="sequence-card ${s.side === 'BUY' ? 'sequence-buy' : 'sequence-sell'}">
+    return `<article data-side="${s.side}" class="sequence-card ${s.side === 'BUY' ? 'sequence-buy' : 'sequence-sell'}">
       <h4>${i + 1}. ${s.side === 'BUY' ? 'ฉากฝั่งซื้อ' : 'ฉากฝั่งขาย'} · ${esc(s.breakFrame)} เบรก → ${esc(s.retestFrame)} รีเทสต์</h4>
       <div class="sequence-steps">
         <div><h5>① ${esc(s.breakFrame)} ปิด${s.side === 'BUY' ? 'เหนือ' : 'ต่ำกว่า'} ${s.breakPrice.toFixed(2)}</h5>${drawing(45, 'เส้นทางสมมติขั้นเบรก')}<p>${s.breakState === 'OBSERVED' ? `พบแท่งปิดตามรายงาน ${esc(s.breakClosedAt.slice(11,16))}` : 'กรอบประ = แท่งยืนยันที่รอ ยังไม่เกิด'}</p></div>

@@ -25,9 +25,26 @@ body { margin: 0; min-width: 320px; background: var(--bg); }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 [hidden] { display: none !important; }
-.scenario-panel { grid-column: 1 / -1; }
-#scenario-plan-content { overflow-x: auto; padding: 12px; }
-#scenario-plan-content svg { display: block; width: 100%; min-width: 850px; height: auto; }
+.scenario-panel { grid-column: 1 / -1; min-width: 0; max-width: 100%; }
+#scenario-plan-content { min-width: 0; padding: 12px; overflow-wrap: anywhere; }
+#scenario-plan-content svg { display: block; width: 100%; max-width: 100%; height: auto; }
+.sequence-card { border: 1px solid var(--sequence-color); border-radius: 14px; padding: 18px; margin: 16px 0; background: #102638; }
+.sequence-buy { --sequence-color: #49d6c9; }
+.sequence-sell { --sequence-color: #ff808b; }
+.sequence-card h4 { margin: 0 0 20px; color: var(--sequence-color); font-size: 22px; }
+.sequence-card h5 { margin: 0 0 12px; font-size: 19px; }
+.sequence-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.sequence-steps > div { min-width: 0; }
+.sequence-card p, .sequence-note { font-size: 18px; line-height: 1.7; }
+.sequence-steps p { color: #f6cd78; }
+.sequence-confirm { padding-top: 16px; border-top: 1px solid #385062; }
+.sequence-cancel { color: #ffbdad; }
+.sequence-note { color: #a8bdcb; }
+@media (max-width: 700px) {
+  .sequence-steps { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .sequence-card { padding: 14px; }
+  #scenario-plan-content { padding: 8px; }
+}
 .news-context { white-space: pre-line; }
 .is-fallback .plan-chart-stage { height: auto; min-height: 250px; overflow: visible; }
 .is-fallback .plan-chart-message { height: auto; padding: 20px; }

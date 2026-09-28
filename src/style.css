@@ -25,6 +25,14 @@ body { margin: 0; min-width: 320px; background: var(--bg); }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 [hidden] { display: none !important; }
+.news-context { white-space: pre-line; }
+.is-fallback .plan-chart-stage { height: auto; min-height: 250px; overflow: visible; }
+.is-fallback .plan-chart-message { height: auto; padding: 20px; }
+.is-fallback .timeframe-buttons, .is-fallback .plan-chart-controls label { display: none; }
+.plan-fallback-image-link { display: block; width: 100%; max-width: 780px; color: #f2c45e; }
+.plan-fallback-image-link img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.plan-fallback-image-link span { display: block; margin-top: 10px; }
+.plan-fallback-links { display: flex; flex-wrap: wrap; gap: 16px; color: #8ce3d8; font-size: 17px; }
 .app-shell { min-height: 100vh; }
 .sidebar {
   width: 248px; position: fixed; inset: 0 auto 0 0; z-index: 5;

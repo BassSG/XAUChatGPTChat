@@ -84,10 +84,36 @@ export function createPlanChart({ baseUrl, formatDate }) {
   };
 
   function setView(name, detail = "") {
+    document.getElementById("plan-chart-workspace").classList.toggle("is-fallback", name === "fallback");
     document.getElementById("plan-chart-loading").hidden = name !== "loading";
     document.getElementById("plan-chart-canvas").hidden = name !== "chart";
     document.getElementById("plan-chart-fallback").hidden = name !== "fallback";
     if (name === "fallback") text("plan-chart-fallback-detail", detail);
+  }
+
+  function updateFallback(report) {
+    const link = document.getElementById("plan-fallback-image-link");
+    const img = document.getElementById("plan-fallback-image");
+    document.getElementById("plan-fallback-image-error").hidden = true;
+    let imageUrl = null;
+    try {
+      const url = new URL(report?.imageUrl || (report?.image ? "reports/latest.png" : ""), baseUrl);
+      if ((report?.imageUrl || report?.image) && ["https:", "http:"].includes(url.protocol)) imageUrl = url.href;
+    } catch { /* Text remains available without a usable image. */ }
+    link.hidden = !imageUrl;
+    img.removeAttribute("src");
+    img.onerror = () => { link.hidden = true; document.getElementById("plan-fallback-image-error").hidden = false; };
+    if (imageUrl) { link.href = imageUrl; img.src = imageUrl; }
+    document.getElementById("plan-chart-summary").hidden = !report;
+    text("plan-chart-side", report?.bias || report?.summary || "รอรายงานรอบถัดไป");
+    text("plan-chart-entry", report?.entryZone || "ยังไม่มีโซนที่ยืนยันได้");
+    text("plan-chart-trigger", report?.trigger || report?.waitFor || "รอเงื่อนไขจากรายงาน");
+    text("plan-chart-stop", report?.stop || "ยังไม่มี Stop ที่ยืนยันได้");
+    text("plan-chart-targets", report?.targets?.length ? report.targets.join(" / ") : "ยังไม่กำหนดเป้า · รอหลักฐานโครงสร้าง");
+    text("plan-chart-invalidation", report?.invalidation || "ตรวจเงื่อนไขในรายงาน");
+    text("plan-chart-news", report?.newsRisk || "ยังไม่มีข่าวที่ตรวจสอบได้ในรายงาน");
+    text("plan-chart-source-detail", report?.dataQuality?.detail || "ใช้ข้อมูลจากรายงานที่เลือก");
+    text("plan-chart-frame-note", "แผนผังระดับราคา ไม่ใช่กราฟราคาจริง");
   }
 
   function clearChart() {
@@ -113,6 +139,7 @@ export function createPlanChart({ baseUrl, formatDate }) {
     text("plan-chart-stop", plan.stop.kind === "FIXED_VERIFIED" ? price(plan.stop.price) : (plan.stop.note || "รอโครงสร้างจริงและ spread"));
     text("plan-chart-targets", plan.targets.length ? plan.targets.map((target) => `${target.label} ${price(target.price)}`).join(" / ") : "ยังไม่มีเป้าหมายที่ยืนยันได้");
     text("plan-chart-invalidation", report.invalidation || "ตรวจเงื่อนไขยกเลิกในรายงาน");
+    text("plan-chart-news", report.newsRisk || "ตรวจข่าวในรายงาน");
     text("plan-chart-asof", `ข้อมูล ณ รอบวิเคราะห์ ${formatDate(report.snapshotAt)}`);
     text("plan-chart-source-detail", `${plan.symbol} · snapshot ${formatDate(plan.asOf)}`);
   }
@@ -222,6 +249,7 @@ export function createPlanChart({ baseUrl, formatDate }) {
     state.abortController?.abort();
     state.requestId += 1;
     state.report = report;
+    updateFallback(report);
     clearChart();
     document.getElementById("chart").classList.remove("buy", "sell", "neutral");
     document.getElementById("chart").classList.add((report?.status || "").includes("BUY") ? "buy" : (report?.status || "").includes("SELL") ? "sell" : "neutral");
@@ -233,7 +261,6 @@ export function createPlanChart({ baseUrl, formatDate }) {
         text("plan-chart-wait", report?.waitFor || "รอชุดแท่งราคาที่ตรวจสอบได้");
         text("plan-chart-asof", report?.snapshotAt ? `รายงาน ${formatDate(report.snapshotAt)}` : "ยังไม่มีรายงาน");
         setView("fallback", `${state.validation.reason} กราฟตลาดด้านล่างยังเปิดดูได้ตามปกติ`);
-        document.getElementById("plan-chart-summary").hidden = true;
         return;
       }
       document.getElementById("plan-chart-summary").hidden = false;
@@ -243,7 +270,6 @@ export function createPlanChart({ baseUrl, formatDate }) {
     } catch (error) {
       state.validation = null;
       updateFrameButtons([]);
-      document.getElementById("plan-chart-summary").hidden = true;
       setView("fallback", `ข้อมูลกราฟรอบนี้ไม่ผ่านการตรวจ: ${error.message}`);
     }
   }

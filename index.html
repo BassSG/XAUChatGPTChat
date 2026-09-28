@@ -93,7 +93,7 @@
               <div id="prior-review-card" class="review-card" hidden><small>ผลทบทวนแผนก่อน</small><strong id="prior-review-outcome">—</strong><p id="prior-review-evidence"></p></div>
               <div id="weekly-review-card" class="review-card weekly" hidden><small>ทบทวนสัปดาห์</small><strong id="weekly-review-summary">—</strong><p id="weekly-review-lesson"></p></div>
               <a id="report-image-link" class="report-image-link" href="#" target="_blank" rel="noreferrer" hidden><img id="report-image" alt="แผนผังระดับราคา XAU/USD" /><span>เปิดภาพสรุปขนาดใหญ่ ↗</span></a>
-              <details class="full-analysis"><summary>อ่านบทวิเคราะห์ฉบับเต็ม</summary><div class="analysis-body" id="report-body"></div></details>
+              <details class="full-analysis" open><summary>บทวิเคราะห์ฉบับเต็ม · แตะเพื่อย่อหรือขยาย</summary><div class="analysis-body" id="report-body"></div></details>
               <details class="source-details"><summary>ดูเวลาและแหล่งข้อมูล</summary><div class="source-audit"><strong id="snapshot-time">—</strong><span id="snapshot-source">—</span></div><div class="source-row"><span>แหล่งข้อมูล</span><span id="report-sources">—</span></div></details>
             </div>
             <div class="panel-footer"><span class="disclaimer-dot">i</span><span>ข้อมูลสำหรับวางแผน ระบบไม่ส่งคำสั่งซื้อขายและไม่รับประกันผลลัพธ์</span></div>
@@ -157,9 +157,11 @@
                   <div id="plan-chart-loading" class="plan-chart-message" hidden><span class="spinner"></span><span id="plan-chart-loading-detail">กำลังตรวจชุดแท่งราคา…</span></div>
                   <div id="plan-chart-canvas" class="plan-chart-canvas" hidden></div>
                   <div id="plan-chart-fallback" class="plan-chart-message">
-                    <span class="fallback-mark" aria-hidden="true">◇</span>
-                    <strong>กราฟแผนยังไม่พร้อมในรายงานรอบนี้</strong>
+                    <strong>ภาพสรุปและเงื่อนไขรอบนี้</strong>
                     <p id="plan-chart-fallback-detail">ใช้ข้อความและภาพแผนผังระดับราคาของรายงานได้ตามปกติ</p>
+                    <a id="plan-fallback-image-link" class="plan-fallback-image-link" target="_blank" rel="noreferrer" hidden><img id="plan-fallback-image" alt="แผนผังระดับราคา ไม่ใช่กราฟราคาจริง" /><span>เปิดภาพสรุปขนาดใหญ่ ↗</span></a>
+                    <p id="plan-fallback-image-error" hidden>โหลดภาพไม่สำเร็จ อ่านเงื่อนไขและข่าวด้านข้างได้ครบ</p>
+                    <div class="plan-fallback-links"><a href="#market-chart">ดูกราฟตลาด ↓</a><a href="#analysis">อ่านบทวิเคราะห์ทั้งหมด ↑</a></div>
                   </div>
                 </div>
                 <div class="plan-chart-controls">
@@ -176,6 +178,7 @@
                 <div class="chart-level-card stop"><small>Stop</small><strong id="plan-chart-stop">—</strong></div>
                 <div class="chart-level-card target"><small>เป้าหมาย</small><strong id="plan-chart-targets">—</strong></div>
                 <div class="chart-plan-card invalidation"><small>ยกเลิกแผนเมื่อ</small><strong id="plan-chart-invalidation">—</strong></div>
+                <div class="chart-plan-card"><small>ข่าวที่ต้องระวัง</small><strong id="plan-chart-news">—</strong></div>
               </aside>
             </div>
             <details class="plan-chart-source"><summary>ตรวจแหล่งและเวลาของกราฟ</summary><p id="plan-chart-source-detail">ข้อมูลกราฟต้องมาจากชุดแท่งของรายงานรอบเดียวกัน</p><p>กราฟสร้างด้วย <a href="https://www.tradingview.com/" target="_blank" rel="noreferrer">Lightweight Charts™ โดย TradingView</a></p></details>

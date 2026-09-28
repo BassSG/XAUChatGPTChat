@@ -20,6 +20,12 @@ This file is the shared contract for the weekday 09:00, 14:30, and 19:00 Codex s
 
 ## Report and app data
 
+### WAIT still delivers a useful report
+
+WAIT is a trading decision, never a reason to stop collecting or publishing information. Every run must publish the full available market view, verified observations, what changed, important news, conditional buy/sell reasoning, the precise missing confirmation, and a readable image from the same JSON. Do not end with only WAIT or repeat "unavailable" in place of the information that was actually obtained. Explain technical retrieval failures briefly in dataQuality; keep the main Thai narrative focused on what the user can observe next. A missing optional chart dataset or EBW reading must not suppress the report, PNG, news, journal, or notification.
+
+For direct TradingView readings, the default Data Window often shows the developing candle. Select an earlier completed candle using the visible chart/Data Window and verify its opening time plus timeframe duration against the observation time. Try a fresh read or reload after a stalled UI operation. Preserve any frames successfully verified, even when another frame fails. Do not infer a candle's OHLC from pixels, label an open candle closed, or change the saved layout. If the attempt still fails, explain the missing frame and continue the full WAIT report. Reading a few verified bars for evidence does not require creating or publishing an entire chart dataset.
+
 Write plain, natural Thai. The headline and summary should say the current status, why, and the one next condition. Keep summary at most 500 characters. Do not include the broker name, timezone wording, or snapshot time in the headline or summary; these remain in the full body, sources, and journal. Use the broker name and precise timestamps there for auditability. Mobile notification text is generated from these short fields and should remain concise.
 
 Create one UTF-8 JSON report in the machine's temporary folder. The existing required fields remain: `snapshotAt`, `status` (`WAIT`, `WATCH BUY`, `WATCH SELL`), `headline`, `summary`, `bias`, `entryZone`, `trigger`, `invalidation`, `stop`, `targets` (array), `riskReward`, `newsRisk`, `body`, and `sources` (array). Add these fields:

@@ -2,6 +2,7 @@ import "./style.css";
 import { reportState, newsEventState } from "./report-state.js";
 import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
+import { loadReportSources } from "./report-loader.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -89,7 +90,7 @@ function renderNews(report) {
   byId("news-brief-event").textContent = briefEvent ? [briefEvent.title, newsEventState(briefEvent).text, briefEvent.at && formatDate(briefEvent.at)].filter(Boolean).join(" · ") : "";
   if (!hasNews) return;
   byId("news-risk").textContent = report.newsRisk || "ตรวจข่าวก่อนใช้แผน";
-  byId("news-context").textContent = report.contextSignals || "";
+  byId("news-context").textContent = Array.isArray(report.contextSignals) ? report.contextSignals.join("\n\n") : (report.contextSignals || "");
   byId("news-context").hidden = !report.contextSignals;
   const cards = events.map((event) => {
     const card = document.createElement("article");
@@ -372,32 +373,15 @@ async function loadReports() {
   let workerOnline = false;
   let workerReport = null;
   let pagesReport = null;
-  const pagesPromise = fetch(BASE_URL + "reports/latest.json", { cache: "no-store" }).catch(() => null);
-  if (API_BASE) {
-    const [latestResult, historyResult] = await Promise.allSettled([
-      fetch(API_BASE + "/api/reports/latest", { cache: "no-store" }),
-      refreshHistory()
-    ]);
-    if (latestResult.status === "fulfilled" && latestResult.value.ok) {
-      try {
-        const payload = await latestResult.value.json();
-        workerOnline = true;
-        workerReport = payload.report || null;
-      } catch {
-        // The archive and existing report remain available if the latest payload is malformed.
-      }
-    }
-    if (historyResult.status === "fulfilled" && historyResult.value) workerOnline = true;
-  }
-
-  try {
-    const response = await pagesPromise;
-    if (response?.ok) pagesReport = await response.json();
-  } catch {
-    // Keep the latest valid report already on screen.
-  }
-  const selected = chooseLatestReport({ worker: workerReport, pages: pagesReport, current: currentReport });
-  if (selected && selected !== currentReport) renderReport(selected);
+  if (API_BASE) void refreshHistory();
+  const sources = [{ name: "pages", url: BASE_URL + "reports/latest.json" }];
+  if (API_BASE) sources.push({ name: "worker", url: API_BASE + "/api/reports/latest" });
+  await loadReportSources(sources, (name, report) => {
+    if (name === "worker") { workerReport = report; workerOnline = true; }
+    else pagesReport = report;
+    const selected = chooseLatestReport({ worker: workerReport, pages: pagesReport, current: currentReport });
+    if (selected && selected !== currentReport) renderReport(selected);
+  });
 
   const label = byId("connection-label");
   label.textContent = workerOnline ? "เชื่อมต่อแล้ว" : currentReport ? "อ่านรายงานที่บันทึกไว้" : (API_BASE ? "เชื่อมต่อไม่ได้" : "โหมดดูรายงานในเครื่อง");

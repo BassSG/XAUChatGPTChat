@@ -18,7 +18,7 @@ async function approveConnection(request) {
   approvalPending = true;
   try {
     const approve = await new Promise(resolve => {
-      const child = spawn('powershell.exe', ['-NoProfile', '-STA', '-File', join(root, 'scripts', 'approve-device.ps1'), '-Number', request.number], { windowsHide: true, stdio: ['ignore','pipe','ignore'] });
+      const child = spawn('powershell.exe', ['-NoProfile', '-STA', '-WindowStyle', 'Normal', '-File', join(root, 'scripts', 'approve-device.ps1'), '-Number', request.number], { windowsHide: false, stdio: ['ignore','pipe','ignore'] });
       let result = '';
       const timeout = setTimeout(() => child.kill(), Math.max(1000, request.expiresAt - Date.now()));
       child.stdout.on('data', data => { result += data.toString(); });

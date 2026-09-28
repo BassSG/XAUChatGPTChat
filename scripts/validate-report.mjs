@@ -3,6 +3,7 @@ import { join } from "node:path";
 import sharp from "sharp";
 import { validateCandleDataset, validateChartPlan } from "../src/chart-data.js";
 import { validatePublicationEvidence } from "../src/report-accuracy.js";
+import { validateScenarioPlan } from "../src/scenario-plan.js";
 
 const args = process.argv.slice(2);
 const valueFor = (flag) => args[args.indexOf(flag) + 1];
@@ -13,6 +14,7 @@ const publishing = args.includes("--publish");
 if (!reportPath) throw new Error("Usage: node validate-report.mjs --input report.json [--image report.png]");
 
 const report = JSON.parse(await readFile(reportPath, "utf8"));
+validateScenarioPlan(report);
 const required = ["snapshotAt", "status", "headline", "summary", "bias", "entryZone", "trigger", "invalidation", "stop", "targets", "riskReward", "newsRisk", "body", "sources"];
 for (const field of required) {
   if (!(field in report)) throw new Error(`Missing required report field: ${field}`);

@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { scenarioSvg } from "../src/scenario-plan.js";
 
 const args = process.argv.slice(2);
 const option = (name) => {
@@ -172,5 +173,13 @@ scenarios.forEach((scenario, index) => {
 svg.push(text(72, 1274, indicatorSummary ? "EBW และข่าวที่ต้องระวัง" : "ข่าวและความเสี่ยง", 24, "#f1c36f", 700));
 svg.push(block(72, 1310, [indicatorSummary, map.context || report.newsRisk].filter(Boolean).join(" | ") || "ดูรายละเอียดในรายงานฉบับเต็ม", 22, "#dbe5eb", 500, 88, 2, 29));
 svg.push("</svg>");
-await sharp(Buffer.from(svg.join(""))).png({ compressionLevel: 9 }).toFile(path.resolve(outputPath));
+const scenario = scenarioSvg(report);
+const base = await sharp(Buffer.from(svg.join(""))).png().toBuffer();
+if (scenario) {
+  const addition = await sharp(Buffer.from(scenario)).png().toBuffer();
+  const { height: extraHeight } = await sharp(addition).metadata();
+  await sharp({ create: { width: 1200, height: 1360 + extraHeight, channels: 4, background: '#0b1928' } })
+    .composite([{ input: base, top: 0, left: 0 }, { input: addition, top: 1360, left: 0 }])
+    .png().toFile(path.resolve(outputPath));
+} else await sharp(base).png({ compressionLevel: 9 }).toFile(path.resolve(outputPath));
 process.stdout.write("Rendered XAU Desk price map.\n");

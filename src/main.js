@@ -3,6 +3,7 @@ import { reportState, newsEventState } from "./report-state.js";
 import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
 import { loadReportSources } from "./report-loader.js";
+import { scenarioSvg } from "./scenario-plan.js";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -176,6 +177,14 @@ function renderIndicatorContext(report) {
 function renderReport(report) {
   if (!report || !report.snapshotAt) return false;
   currentReport = report;
+  const scenarioHost = byId("scenario-plan-content");
+  try {
+    scenarioHost.innerHTML = scenarioSvg(report);
+    byId("scenario-plan").hidden = !scenarioHost.innerHTML;
+  } catch {
+    scenarioHost.replaceChildren();
+    byId("scenario-plan").hidden = true;
+  }
   byId("report-empty").hidden = true;
   byId("report-content").hidden = false;
   const status = normalizeStatus(report.status || report.bias);

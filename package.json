@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs scripts/chart-data.test.mjs scripts/publication-accuracy.test.mjs scripts/report-loader.test.mjs",
+    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs scripts/chart-data.test.mjs scripts/publication-accuracy.test.mjs scripts/report-loader.test.mjs scripts/scenario-plan.test.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "devDependencies": {

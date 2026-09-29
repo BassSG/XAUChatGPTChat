@@ -30,11 +30,34 @@ async function approveConnection(request) {
   finally { approvalPending = false; }
 }
 await mkdir(directory, { recursive: true });
-try {
-  const oldPid = Number(await readFile(lock, 'utf8'));
-  try { process.kill(oldPid, 0); console.log('XAU Desk connector is already running.'); process.exit(0); } catch { await unlink(lock); }
-} catch (e) { if (e.code !== 'ENOENT') throw e; }
-const guard = await open(lock, 'wx'); await guard.writeFile(String(process.pid)); await guard.close();
+const persistent = process.env.XAU_DESK_PERSIST === '1';
+while (true) {
+  try {
+    const guard = await open(lock, 'wx');
+    try { await guard.writeFile(String(process.pid)); } finally { await guard.close(); }
+    break;
+  } catch (e) {
+    if (e.code !== 'EEXIST') throw e;
+    let oldPid;
+    try { oldPid = Number(await readFile(lock, 'utf8')); } catch (readError) {
+      if (readError.code === 'ENOENT') continue;
+      throw readError;
+    }
+    let running = false;
+    if (Number.isSafeInteger(oldPid) && oldPid > 0) {
+      try { process.kill(oldPid, 0); running = true; } catch (checkError) {
+        if (checkError.code === 'EPERM') running = true;
+      }
+    }
+    if (running) {
+      if (!persistent) { console.log('XAU Desk connector is already running.'); process.exit(0); }
+      console.log('Another connector is active; waiting to take over if it stops.');
+      await delay(10000);
+      continue;
+    }
+    await unlink(lock).catch(unlinkError => { if (unlinkError.code !== 'ENOENT') throw unlinkError; });
+  }
+}
 try { config = JSON.parse(await readFile(file, 'utf8')); } catch { config = {}; }
 if (config.codexPath) process.env.XAU_CODEX_PATH = config.codexPath;
 const save = () => writeFile(file, JSON.stringify(config), { mode: 0o600 });

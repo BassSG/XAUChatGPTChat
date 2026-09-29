@@ -11,7 +11,7 @@ $stateDirectory = & $nodePath -e "console.log(require('path').dirname(require('f
 if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve connector state directory.' }
 $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }
 function Quote-Literal([string]$Value) { "'" + $Value.Replace("'", "''") + "'" }
-$launch = '$env:XAU_DESK_STATE_DIR=' + (Quote-Literal $stateDirectory) + '; $env:CODEX_HOME=' + (Quote-Literal $codexHome) + '; & ' + (Quote-Literal $nodePath) + ' ' + (Quote-Literal $agentPath) + ' 1>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled.log')) + ' 2>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled-error.log'))
+$launch = '$env:XAU_DESK_PERSIST=''1''; $env:XAU_DESK_STATE_DIR=' + (Quote-Literal $stateDirectory) + '; $env:CODEX_HOME=' + (Quote-Literal $codexHome) + '; & ' + (Quote-Literal $nodePath) + ' ' + (Quote-Literal $agentPath) + ' 1>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled.log')) + ' 2>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled-error.log'))
 $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($launch))
 $action = New-ScheduledTaskAction -Execute (Get-Command powershell.exe).Source -Argument ('-NoProfile -WindowStyle Hidden -EncodedCommand ' + $encoded) -WorkingDirectory $repoRoot
 $principal = New-ScheduledTaskPrincipal -UserId ([Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited

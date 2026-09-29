@@ -38,6 +38,7 @@ test('real D1 pairing, offline gate, atomic duplicate protection and terminal st
     for (const sql of tables.split(';').filter(s => s.trim())) await db.prepare(sql).run();
     await db.prepare('CREATE TRIGGER' + trigger).run();
     for (const sql of (await readFile('worker/migrations/0003_pairing_approval.sql','utf8')).split(';').filter(s=>s.trim())) await db.prepare(sql).run();
+    for (const sql of (await readFile('worker/migrations/0004_multiple_devices.sql','utf8')).split(';').filter(s=>s.trim())) await db.prepare(sql).run();
     async function api(path, body, token = '', origin = 'https://basssg.github.io') {
       const response = await mf.dispatchFetch('https://local.test/api/manual-analysis' + path, { method: body ? 'POST' : 'GET', headers: { Origin: origin, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, ...(body ? { body: JSON.stringify(body) } : {}) });
       return { status: response.status, body: await response.json() };
@@ -71,7 +72,18 @@ test('real D1 pairing, offline gate, atomic duplicate protection and terminal st
     assert.equal((await api('/connect/status',{key})).body.status,'approved');
     assert.equal((await api('/status',null,key)).body.authorized,true);
     assert.equal((await api('/agent/connect/decide',{id:approved.id,approve:true},deviceToken)).status,409);
+    await db.prepare('UPDATE manual_analysis_state SET connect_requested=0').run();
+    const secondKey = 'c'.repeat(64);
+    assert.equal((await api('/connect/start',{key:secondKey})).status,202);
+    const secondPending = (await api('/agent/connect/pending',{},deviceToken)).body.request;
+    assert.equal((await api('/agent/connect/decide',{id:secondPending.id,approve:true},deviceToken)).status,200);
+    assert.equal((await api('/status',null,key)).body.authorized,true);
+    assert.equal((await api('/status',null,secondKey)).body.authorized,true);
+    assert.equal((await api('/unpair',{},secondKey)).status,200);
+    assert.equal((await api('/status',null,key)).body.authorized,true);
+    assert.equal((await api('/status',null,secondKey)).body.authorized,false);
     await db.prepare('UPDATE manual_analysis_state SET browser_token_hash=NULL, agent_last_seen_at_ms=NULL').run();
+    await db.prepare('DELETE FROM manual_analysis_devices').run();
     await api('/agent/pairing', {code,deviceToken}, 'local-test-bootstrap-value-never-used-in-production');
     const paired = await api('/pair', { code });
     assert.equal(paired.status, 200);

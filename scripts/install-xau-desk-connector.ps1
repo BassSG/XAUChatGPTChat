@@ -15,9 +15,12 @@ $launch = '$env:XAU_DESK_PERSIST=''1''; $env:XAU_DESK_STATE_DIR=' + (Quote-Liter
 $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($launch))
 $action = New-ScheduledTaskAction -Execute (Get-Command powershell.exe).Source -Argument ('-NoProfile -WindowStyle Hidden -EncodedCommand ' + $encoded) -WorkingDirectory $repoRoot
 $principal = New-ScheduledTaskPrincipal -UserId ([Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited
-$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1)
-$taskArgs = @{TaskName='XAU Desk Connector';Action=$action;Principal=$principal;Settings=$settings;Description='Receive XAU Desk analysis requests in the signed-in user session';Force=$true}
-if ($InstallStartup) { $taskArgs.Trigger = New-ScheduledTaskTrigger -AtLogOn -User ([Security.Principal.WindowsIdentity]::GetCurrent().Name) }
+$settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) -StartWhenAvailable
+# Recheck every two minutes so a closed terminal or interrupted process cannot leave the connector offline until the next sign-in.
+$watchdog = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Minutes 2) -RepetitionDuration (New-TimeSpan -Days 3650)
+$triggers = @($watchdog)
+if ($InstallStartup) { $triggers += New-ScheduledTaskTrigger -AtLogOn -User ([Security.Principal.WindowsIdentity]::GetCurrent().Name) }
+$taskArgs = @{TaskName='XAU Desk Connector';Action=$action;Principal=$principal;Settings=$settings;Trigger=$triggers;Description='Receive XAU Desk analysis requests in the signed-in user session';Force=$true}
 Register-ScheduledTask @taskArgs | Out-Null
 if ($InstallStartup) {
   # Keep the existing shortcut compatible; both routes target the same singleton task.

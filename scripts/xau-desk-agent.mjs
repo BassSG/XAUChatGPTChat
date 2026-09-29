@@ -124,7 +124,7 @@ try {
       // A crash during a task requires review in Codex; never start that request twice.
       const ready = isOpen && preflight && (!config.activeJob || Boolean(active));
       const beat = await apiCall('/agent/heartbeat', { codexOpen: ready });
-      if (!beat.paired && !approvalPending) {
+      if (!approvalPending) {
         const pending = await apiCall('/agent/connect/pending', {});
         if (pending.request) void approveConnection(pending.request);
       }

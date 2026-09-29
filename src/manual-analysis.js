@@ -10,6 +10,11 @@ export function setupManualAnalysis({ apiBase, onPublished }) {
   let connectKey = '', connectBusy = false;
   try { connectKey = sessionStorage.getItem('xau-connect-pending') || ''; } catch {}
   const connectButton = byId('manual-connect-request');
+  const connectMessage = byId('manual-connect-message');
+  const showConnectMessage = (message, status) => {
+    connectMessage.textContent = message;
+    connectMessage.dataset.state = status;
+  };
   function render() {
     const stale = receivedAt && Date.now() - receivedAt > 30000;
     const view = requestView(stale ? { error: 'ข้อมูลการเชื่อมต่อหมดอายุ กำลังตรวจอีกครั้ง' } : state, Date.now() + serverOffset);
@@ -38,10 +43,10 @@ export function setupManualAnalysis({ apiBase, onPublished }) {
       if (connectKey) {
         try {
           const result = await call('/connect/status', { key: connectKey });
-          byId('manual-connect-message').textContent = result.status === 'pending' ? `เลขยืนยัน ${result.number} — ตรวจเลขบนคอมให้ตรงกัน แล้วกด “อนุญาต” ภายใน 3 นาที` : result.status === 'approved' ? 'เชื่อมต่อสำเร็จแล้ว กลับหน้าแรกเพื่อวิเคราะห์ได้' : result.status === 'rejected' ? 'คำขอถูกปฏิเสธบนคอม' : 'คำขอหมดอายุ กดขอเชื่อมต่อใหม่ได้';
+          showConnectMessage(result.status === 'pending' ? `เลขยืนยัน ${result.number} — ตรวจเลขบนคอมให้ตรงกัน แล้วกด “อนุญาต” ภายใน 3 นาที` : result.status === 'approved' ? 'เชื่อมต่อสำเร็จแล้ว กลับหน้าแรกเพื่อวิเคราะห์ได้' : result.status === 'rejected' ? 'คำขอถูกปฏิเสธบนคอม' : 'คำขอหมดอายุ กดขอเชื่อมต่อใหม่ได้', result.status === 'approved' ? 'success' : result.status === 'pending' ? 'pending' : 'error');
           if (result.status === 'approved') { localStorage.setItem(STORAGE, connectKey); token = connectKey; }
           if (result.status !== 'pending') { connectKey = ''; sessionStorage.removeItem('xau-connect-pending'); }
-        } catch (e) { byId('manual-connect-message').textContent = 'กำลังตรวจคำขออีกครั้ง: ' + e.message; if (e.status === 404) { connectKey = ''; sessionStorage.removeItem('xau-connect-pending'); } }
+        } catch (e) { showConnectMessage('กำลังตรวจคำขออีกครั้ง: ' + e.message, 'error'); if (e.status === 404) { connectKey = ''; sessionStorage.removeItem('xau-connect-pending'); } }
       }
       state = await call('/status'); receivedAt = Date.now(); serverOffset = state.serverNow - receivedAt;
       if (state.request?.status === 'done' && state.request.id !== lastDone) { lastDone = state.request.id; onPublished?.(); }
@@ -50,14 +55,14 @@ export function setupManualAnalysis({ apiBase, onPublished }) {
   }
   connectButton.addEventListener('click', async () => {
     if (connectBusy || connectKey) return;
-    connectBusy = true; render();
+    connectBusy = true; showConnectMessage('กำลังส่งคำขอไปยังคอม…', 'pending'); render();
     try {
       localStorage.setItem(STORAGE + '-check', '1'); localStorage.removeItem(STORAGE + '-check');
       const key = [...crypto.getRandomValues(new Uint8Array(32))].map(n => n.toString(16).padStart(2,'0')).join('');
       sessionStorage.setItem('xau-connect-pending', key);
-      await call('/connect/start', { key }); connectKey = key;
-      byId('manual-connect-message').textContent = 'ส่งคำขอแล้ว กำลังรอการอนุญาตบนคอม';
-    } catch (e) { sessionStorage.removeItem('xau-connect-pending'); byId('manual-connect-message').textContent = e.message; }
+      const result = await call('/connect/start', { key }); connectKey = key;
+      showConnectMessage(`เลขยืนยัน ${result.number} — ตรวจเลขบนคอมให้ตรงกัน แล้วกด “อนุญาต” ภายใน 3 นาที`, 'pending');
+    } catch (e) { sessionStorage.removeItem('xau-connect-pending'); showConnectMessage(e.message, 'error'); }
     finally { connectBusy = false; await refresh(); }
   });
   button.addEventListener('click', async () => {

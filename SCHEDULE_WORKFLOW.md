@@ -48,6 +48,16 @@ This workflow captures evidence at each run; it does not install a continuous pr
 
 ## Session focus
 
+### FMP supplemental collection (enabled)
+
+At each existing scheduled run, execute `powershell.exe -NoProfile -File scripts/collect-fmp.ps1 -OutputPath <absolute private temporary JSON path>` from this repository. The credential is already stored in the current Windows user's DPAPI store; never read it into chat, print it, pass it in command arguments, or put it in GitHub/Worker/frontend. This is an on-demand collection step, not an additional background schedule. Keep the existing model and run times.
+
+Read the resulting JSON before preparing the report. Use its USD calendar to cross-check Forex Factory and identify omissions, dated daily Treasury rows for contextSignals, and relevant news URLs to inspect original articles. Carry verified findings into the existing newsEvents, contextSignals, body and sources so they appear in the app and report image where relevant. Cite credential-free source URLs. The user authorized FMP use for this desk; this records their instruction, not a claim about provider licensing.
+
+Calendar timestamps are parsed explicitly as documented UTC and converted once to +07:00; the query includes adjacent UTC dates. Filter to the relevant Thai session. Do not assume article publishedDate is UTC: timezoneStatus remains UNVERIFIED until checked against the original source. Treasury dates are daily observations, not live ticks. providerActual is deliberately separate from confirmed Actual: verify the release time and original publisher when conflicting or not yet due; null is not zero. A failed endpoint must not stop the report: state the missing supplemental context and continue with the original sources. Do not promote an unverified API value into RELEASED just because the scheduled time passed. FMP never supplies Pepperstone entry/SL/TP, M5 triggers, DXY by proxy, or GLD holdings by proxy.
+
+Check the endpoint fetchedAt and data dates on every run; never reuse an earlier private file as fresh. Preserve the supplemental file privately alongside the primary evidence checkpoint. Only selected verified findings go into the report; never publish this raw file or the credential.
+
 - 09:00: overnight developments, the current structure, and important events ahead.
 - 14:30: review the morning plan, update the structure, and prepare for the European session. Account for daylight saving time when discussing regional market opens.
 - 19:00: review the afternoon plan, prepare for US data and the evening session. Do not state an Actual result for a future release.

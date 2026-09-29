@@ -1,256 +1,273 @@
 {
     "schemaVersion":  2,
-    "snapshotAt":  "2026-09-28T20:30:58+07:00",
+    "snapshotAt":  "2026-09-29T10:24:46+07:00",
     "status":  "WAIT",
-    "planId":  "20260928-2030-W1",
-    "planState":  "รอรีเทสต์",
-    "headline":  "WAIT — ฐานระยะสั้นหลุด รอเด้งทดสอบก่อนขาย",
-    "summary":  "M5 ปิดหลุด 4,145.21 แล้ว รอรีเทสต์ 4,144.69–4,145.21 ไม่ผ่านก่อนประเมินขาย ยังไม่ไล่ราคา; ฝั่งซื้อรอ M15 ยึด 4,154.84 กลับพร้อมรีเทสต์ ยังไม่มี Stop และเป้าที่พร้อมใช้",
-    "bias":  "เอียงขายจากการปิดหลุดฐาน M5 แต่ยังรอรีเทสต์",
-    "entryZone":  "ยังไม่มีจุดเข้า เฝ้ารีเทสต์ 4,144.69–4,145.21",
-    "trigger":  "ขาย: หลังรีเทสต์ M5 ปิดต่ำกว่า 4,144.69 พร้อมยอดจริง; ซื้อ: M15 ปิดเหนือ 4,154.84 แล้ว M5 รีเทสต์ 4,154.28–4,154.84 รับอยู่",
-    "invalidation":  "ขายยกเลิกเมื่อ M5 ยึด 4,145.21 และรีเทสต์รับอยู่; ซื้อยกเลิกเมื่อ M5 ปิดต่ำกว่า 4,154.28 หลังรีเทสต์",
-    "stop":  "รอ swing หลังรีเทสต์จริงและเผื่อ spread ยังไม่กำหนดราคา",
+    "planId":  "20260929-1020-W1",
+    "planState":  "รอแท่งปิดยืนยัน",
+    "headline":  "WAIT — รอหลุดฐาน 4,133.79 หรือยึด 4,139.44",
+    "summary":  "H1 ยังเอียงลง แต่ M15/M5 กำลังพักในกรอบ 4,133.79–4,139.44 รอ M15 ปิดหลุดฐานแล้ว M5 รีเทสต์ไม่ผ่านเพื่อประเมินขาย หรือรอ M15 ปิดเหนือ 4,139.44 เพื่อประเมินซื้อ ยังไม่มีจุดเข้า Stop หรือเป้าที่พร้อมใช้",
+    "bias":  "เอียงขายตาม H1 แต่ M5/M15 ยังไม่ยืนยันการหลุดฐาน",
+    "entryZone":  "ยังไม่มีจุดเข้า; เฝ้ารีเทสต์ฝั่งขาย 4,133.79–4,134.82 หลัง M15 ปิดหลุด",
+    "trigger":  "ขาย: M15 ปิดต่ำกว่า 4,133.79 แล้ว M5 รีเทสต์ 4,133.79–4,134.82 ไม่ผ่าน; ซื้อ: M15 ปิดเหนือ 4,139.44 แล้ว M5 รีเทสต์ 4,139.38–4,139.44 รับอยู่",
+    "invalidation":  "ขายยกเลิกเมื่อ M15 ปิดเหนือ 4,139.44 และ M5 รีเทสต์รับอยู่; ซื้อยกเลิกเมื่อ M5 ปิดต่ำกว่า 4,139.38 หลังรีเทสต์",
+    "stop":  "รอยอดหรือฐานหลังรีเทสต์จริงและเผื่อ spread; ยังไม่กำหนดราคา",
     "targets":  [
 
                 ],
-    "riskReward":  "ยังไม่คำนวณ R:R จนกว่า entry, Stop, เป้าและต้นทุนครบ",
-    "newsRisk":  "Bowman ผ่านเวลานัดแล้วแต่ยังไม่ยืนยันเนื้อหา; Cook 00:25 และ Barkin 00:30 คืนนี้ ระวัง spread และการเด้งสวน",
-    "body":  "XAU/USD — WAIT: แรงขายยังนำ แต่รอรีเทสต์ก่อนวางจุดเข้า\n\nข้อมูลจริงจาก TradingView PEPPERSTONE:XAUUSD ณ 28 ก.ย. 2026 เวลา 20:30:58 Asia/Bangkok ตลาดเปิด Bid 4,140.33 / Ask 4,140.48; spread 0.15 ดอลลาร์ต่อออนซ์ ระหว่างตรวจเห็น 0.09–0.20 จึงยังไม่รับรองว่าปกติสำหรับเข้าเทรด รายงานเป็น snapshot ไม่ติดตามราคาต่อเนื่อง\n\nโครงสร้างที่ตรวจได้\nH1 แท่ง 19:00–20:00: O 4,148.80 H 4,171.34 L 4,142.85 C 4,154.45 เป็นแท่งเด้ง แต่ราคาล่าสุดกลับต่ำกว่า low ของแท่งนี้แล้ว ยังต้องแยกว่าการหลุดใน H1 ปัจจุบันยังไม่ใช่ H1 ปิดหลุด\nM15 แท่ง 20:00–20:15: O 4,154.28 H 4,154.84 L 4,145.21 C 4,147.57 ปิดลงหลังเด้ง แนว 4,154.84 เป็นยอดของแท่งที่ตรวจ ไม่ใช่สัญญาณซื้อทันที\nM5 แท่ง 20:25–20:30: O 4,147.06 H 4,149.58 L 4,141.65 C 4,142.36 ปิดต่ำกว่า low M15 4,145.21 และ low H1 4,142.85 แล้ว แท่ง M5 ก่อนหน้า 20:20–20:25 ปิด 4,146.79 จึงเห็นการปิดข้ามระดับลงจริง\n\nการอนุมาน: ภาพระยะสั้นยังเอียงขาย การเด้งใน H1 ยังรักษาฐานไม่ได้ แต่การไล่ขายหลังหลุดทันทีไม่มีจุด Stop และเป้าที่พิสูจน์พื้นที่กำไรครบ จึงใช้ WAIT\n\nฉากหลักฝั่งขาย\nการเบรก M5 ต่ำกว่า 4,145.21 ยืนยันแล้วเวลา 20:30 รอราคาย้อนทดสอบ 4,144.69–4,145.21 (low M5 20:20 และ low M15 20:00) จากด้านล่าง จากนั้น M5 ปิดกลับต่ำกว่า 4,144.69 พร้อมยอดรีเทสต์ที่มองเห็น จึงประเมินขายใหม่ ยกเลิกฉากนี้เมื่อ M5 ยึด 4,145.21 กลับแล้วรีเทสต์รับอยู่ ไม่ใช่คำสั่ง Sell Limit และยังไม่มี entry พร้อมใช้\n\nฉากรองฝั่งซื้อ\nรอ M15 แท่งใหม่ปิดเหนือ 4,154.84 แล้ว M5 ย้อนทดสอบ 4,154.28–4,154.84 รับอยู่ พร้อมฐานยกสูง จึงประเมินซื้อสวนใหม่ ยกเลิกฉากซื้อหาก M5 ปิดต่ำกว่า 4,154.28 หลังรีเทสต์ ขณะ snapshot ยังไม่เกิดเงื่อนไขนี้ 4,171.34 เป็นยอด H1 ที่ใช้ประเมินพื้นที่ด้านบน ไม่ใช่ TP ที่อนุมัติแล้ว\n\nStop / เป้า / R:R\nยังไม่กำหนดตัวเลขเข้า Stop หรือ TP ต้องรอ swing หลังรีเทสต์จริง เผื่อ spread ปัจจุบันและต้นทุน แล้วตรวจแนวรับด้านล่างก่อนคำนวณ net R ไม่ใช้ low 4,141.65 เป็น TP ใหม่ เพราะราคาตอนตรวจอยู่ต่ำกว่าแล้ว ไม่มีผลจำลอง R และไม่อ้างผลเทรดของผู้ใช้\n\nEBW V10.4.4 จากแท่งปิด\nM5 ปิด 20:30: Buy score 13.67 / Sell score 64.42, RSI 37.99, Stoch K 10.81 / D 14.66; preferred side SELL แต่ Signal entry/SL/TP ว่าง\nH1 ปิด 20:00: Buy 0.41 / Sell 57.89, RSI 25.60, K 9.05 / D 8.23; preferred side SELL และไม่มี Signal entry/SL/TP ค่า M15 ยังโหลดไม่ครบจึงไม่ใช้ คะแนนเป็นหลักฐาน ไม่ใช่โอกาสชนะ ค่า RSI/Stoch ต่ำเตือนการเด้งสวน ไม่ยืนยันกลับตัว ยังไม่ตรวจต้นทุนของอินดิเคเตอร์ จึงไม่ใช้ net R จาก EBW\n\nสิ่งที่เปลี่ยนและทบทวนแผนก่อน\nเทียบสมุดบันทึกแผน 20260928-1430-W1 ณ 14:36:31 Bid 4,157.31 กับรอบนี้ 4,140.33 ลด 16.98 ดอลลาร์ ตัวเลขเก่าใช้เปรียบเทียบเท่านั้น เปลี่ยนมาดูฐานและโซนรีเทสต์ใหม่ด้านบน ผลแผนเดิม: ตรวจไม่ได้ เพราะไม่มีลำดับแท่งครบช่วงหลัง 14:36 ถึงปัจจุบัน และแผนเดิมไม่มี entry/Stop/TP พร้อมใช้ จึงไม่นับชนะ ไม่คำนวณ R\n\nข่าวที่ต้องรู้\nตรวจ Forex Factory รอบนี้ หน้าแสดงเขต Europe/London GMT+1 จึงบวก 6 ชั่วโมงเป็น Asia/Bangkok: Bowman กำหนด 19:15 วันนี้ ผ่านเวลาแล้ว แต่ยังไม่ยืนยันเนื้อหาหรือผลของคำพูด จึง UNVERIFIED ไม่อ้างว่าเป็นสาเหตุราคาลง ปฏิทิน Fed ยืนยันหัวข้อกำกับดูแลธนาคาร\nCook กำหนด 00:25 วันที่ 29 ก.ย. เรื่อง AI and Emerging Tech ยืนยันกำหนดจาก Fed; Barkin 00:30 ตาม Forex Factory ยังไม่ยืนยันต้นทาง ไม่มี Actual/Forecast/Previous สำหรับสุนทรพจน์ EUR Lagarde ตาม FF 20:30 อาจส่งผ่าน EUR และดอลลาร์ แต่ผลต่อทองยังไม่ยืนยัน เฝ้าความผันผวนและตรวจ spread ก่อนใช้เงื่อนไข\n\nบริบทจริงกับการอนุมาน\nTVC:DXY แสดง 101.191 และ +0.16% ณ 20:30 เป็นบริบทดอลลาร์แข็งที่อาจกดดันทอง ไม่ใช่ trigger M5\nTreasury วันที่ 25 ก.ย. 2026: 2 ปี 4.81%, 10 ปี 5.17% ตรวจแถวข้อมูลต้นทางใหม่ เป็นรายวัน ไม่ใช่ยีลด์สด SPDR หน้า Trust Information แสดง AWAITING จึงยืนยัน holdings ใหม่ไม่ได้ ไม่คัดตัวเลขเดิมมาใช้แทน\n\nแผนนี้สิ้นสุดเมื่อเงื่อนไขยกเลิกเกิด โครงสร้างเปลี่ยน หรือมีรายงานใหม่แทน ภาพเป็นแผนผังระดับราคา ไม่ใช่กราฟราคาจริง เส้นประคือฉากสมมติ ไม่ใช่คำทำนาย",
+    "riskReward":  "ยังไม่คำนวณ R:R เพราะยังไม่มี entry, Stop และ TP ที่พิสูจน์ครบ",
+    "newsRisk":  "ข่าว USD เวลา 20:00 และ 21:00; ตรวจ spread ใหม่ก่อนใช้สัญญาณใกล้ข่าว",
+    "body":  "XAU/USD — WAIT: ขาลงระยะใหญ่ยังนำ แต่ราคากำลังพักแถว 4,134–4,139\r\n\r\nข้อมูลจริง ณ 2026-09-29T10:24:46+07:00 จากกราฟ TradingView PEPPERSTONE:XAUUSD: Bid 4,136.78 / Ask 4,136.90, spread 0.12 ดอลลาร์ต่อออนซ์ (อ่าน quote เวลา 10:24:00 Asia/Bangkok) เป็นภาพขณะตรวจ ไม่ใช่ราคาที่ติดตามต่อเนื่อง\r\n\r\nแท่งปิดที่ตรวจจาก Data Window\r\n• H1 09:00–10:00: O 4,135.09 H 4,139.44 L 4,126.48 C 4,137.74 แท่งเด้งในภาพ H1 ที่ก่อนหน้านี้ลงแรง ยังไม่กลับเป็นขาขึ้นจากแท่งเดียว\r\n• M15 10:00–10:15: O 4,137.72 H 4,139.38 L 4,133.79 C 4,134.82 ปิดถอยจากยอด และอยู่ต่ำกว่า 4,139.38\r\n• M5 10:15–10:20: O 4,134.81 H 4,136.50 L 4,133.75 C 4,134.82 ราคาแตะบริเวณ low M15 แต่ยังไม่ปิดต่ำกว่า 4,133.79\r\n\r\nการอนุมาน: ระยะสั้นเด้งชนแนวต้านแล้วอ่อนตัว ขณะที่ H1 ยังเป็นขาลง จึงไม่ไล่ซื้อและไม่รีบขายกลางกรอบ WAIT นี้มีระดับให้สังเกตชัดเจน ไม่ใช่รายงานที่ไม่มีข้อมูล\r\n\r\nแผนหลักเฝ้าขาย: รอ M15 แท่งใหม่ปิดต่ำกว่า 4,133.79 ก่อน จากนั้นให้ M5 ย้อนทดสอบ 4,133.79–4,134.82 จากด้านล่าง แล้วปิดกลับต่ำกว่า 4,133.79 พร้อมยอดรีเทสต์จริง การปิดหลุดยังไม่เกิดในแท่ง M15 ล่าสุด โซนนี้เป็นพื้นที่เฝ้าดู ไม่ใช่ราคาเข้าพร้อมใช้ หาก M15 ยึด 4,139.44 กลับและ M5 รีเทสต์รับอยู่ ให้ยกเลิกฉากขายนี้\r\n\r\nเงื่อนไขเปลี่ยนมองซื้อ: รอ M15 ปิดเหนือ 4,139.44 แล้ว M5 รีเทสต์ 4,139.38–4,139.44 รับอยู่ พร้อมฐานยกสูง จึงประเมินซื้อใหม่ หากกลับปิดต่ำกว่า 4,139.38 หลังรีเทสต์ ให้ยกเลิกฉากซื้อ การเห็นราคาแตะเหนือระดับระหว่างแท่งยังไม่นับ\r\n\r\nStop / เป้า / R:R: ยังไม่กำหนดจุดเข้าและ Stop เป็นตัวเลข เพราะต้องเห็นยอดหรือฐานหลังรีเทสต์จริงและเผื่อ spread ณ เวลานั้น เป้าฝั่งขายต้องประเมินพื้นที่ถึง low H1 4,126.48 อีกครั้งหลังเกิดสัญญาณ; 4,126.48 ยังไม่ใช่ TP ที่อนุมัติ จึงยังไม่คำนวณ R:R หรือผลจำลองใด ๆ\r\n\r\nอินดิเคเตอร์ EBW V10.4.4 จากแท่งปิด: H1 09:00 ให้ SELL edge 73.19, BUY 0.70, RSI 40.46 และ preferred side SELL; M15 10:00 SELL 40.25, BUY 22.00, RSI 55.59, preferred side กลาง; M5 10:15 SELL 30.85, BUY 43.60, RSI 54.85, preferred side กลาง ไม่มี Signal entry/SL/TP บน M5 ค่าคะแนนเป็นหลักฐานประกอบ ไม่ใช่ความน่าจะเป็นชนะ และไม่แทนเงื่อนไขแท่งปิด\r\n\r\nข่าวและบริบท: Forex Factory แสดงเวลาตรง Asia/Bangkok ในรอบตรวจ 10:18 วันนี้ USD HPI m/m และ S\u0026P/CS Composite-20 HPI y/y กำหนด 20:00 (Forecast 0.1% และ 2.2% ตามลำดับ); CB Consumer Confidence และ JOLTS Job Openings กำหนด 21:00 (Forecast 89.2 และ 7.23M ตามลำดับ) ยังไม่มี Actual ในเวลาตรวจ ปิด/ลดความเสี่ยงก่อนข่าวตามแผนส่วนตัวและตรวจ spread ใหม่ หากกำลังจะใช้ trigger ใกล้ช่วงข่าว\r\nDXY จาก TradingView TVC:DXY 101.206 (+0.03% เทียบวันก่อน) ณ 10:19 เป็นบริบท ไม่ใช่ trigger M5\r\nUS Treasury ข้อมูลวันที่ 28 ก.ย. 2026: 2 ปี 4.92%, 10 ปี 5.24%; เป็นค่าเผยแพร่รายวัน ไม่ใช่ยีลด์สด SPDR Gold Shares วันที่ 28 ก.ย. ถือทอง 1,058.832 ตัน; เป็นข้อมูลกองทุนย้อนหลังหนึ่งวัน ไม่ใช่สัญญาณเข้าระยะสั้น\r\n\r\nทบทวนแผน 20260928-2030-W1: ราคาปัจจุบันต่ำกว่าบริเวณรีเทสต์ที่เคยเฝ้า แต่แท่งที่ตรวจรอบนี้ไม่ครอบคลุมลำดับหลังรายงานเดิมครบ จึงพิสูจน์ไม่ได้ว่าเกิด trigger หรือ entry และไม่มี Stop/TP ที่พร้อมใช้ บันทึกผลว่า \u0027ตรวจไม่ได้\u0027 ไม่อ้างชนะหรือผลเทรดจริงของผู้ใช้ แผนใหม่ใช้ระดับที่ตรวจวันนี้แทน\r\n\r\nแผนนี้ใช้จนกว่าโครงสร้างเปลี่ยน เงื่อนไขยกเลิกเกิด หรือมีรายงานใหม่แทน ภาพแนบเป็น \u0027แผนผังระดับราคา ไม่ใช่กราฟราคาจริง\u0027 เส้นทางในภาพเป็นเงื่อนไขสมมติ ไม่ใช่คำทำนาย",
     "sources":  [
                     {
-                        "name":  "TradingView PEPPERSTONE:XAUUSD H1/M15/M5 ตรวจ Data Window และ Bid/Ask 20:28–20:30:58",
+                        "name":  "TradingView PEPPERSTONE:XAUUSD H1/M15/M5, Bid/Ask 10:24:00",
                         "url":  "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD"
                     },
                     {
-                        "name":  "TVC:DXY 20:30",
-                        "url":  "https://www.tradingview.com/symbols/TVC-DXY/"
+                        "name":  "TradingView TVC:DXY 10:19",
+                        "url":  "https://www.tradingview.com/chart/?symbol=TVC%3ADXY"
                     },
                     {
-                        "name":  "Forex Factory GMT+1 แปลงเป็น +07:00",
-                        "url":  "https://www.forexfactory.com/calendar?day=sep28.2026"
+                        "name":  "Forex Factory 29 Sep 2026, timezone displayed 10:18",
+                        "url":  "https://www.forexfactory.com/calendar?day=sep29.2026"
                     },
                     {
-                        "name":  "Federal Reserve September calendar",
-                        "url":  "https://www.federalreserve.gov/newsevents/2026-september.htm"
+                        "name":  "US Treasury Daily Par Yield Curve 28 Sep 2026",
+                        "url":  "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202609\u0026type=daily_treasury_yield_curve"
                     },
                     {
-                        "name":  "US Treasury 25 September 2026",
-                        "url":  "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026\u0026type=daily_treasury_yield_curve"
-                    },
-                    {
-                        "name":  "SPDR GLD checked; AWAITING",
+                        "name":  "SPDR Gold Shares Trust Information 28 Sep 2026",
                         "url":  "https://www.spdrgoldshares.com/usa/gld/"
                     }
                 ],
     "validUntil":  "จนกว่าโครงสร้างเปลี่ยน เงื่อนไขยกเลิกเกิด หรือมีรายงานใหม่แทน",
-    "changeSinceLast":  "Bid ต่ำกว่ารอบ 14:36 อยู่ 16.98 ดอลลาร์; ใช้โซนใหม่ ผลเข้าแผนเก่าตรวจไม่ได้",
-    "waitFor":  "รอ M5 รีเทสต์ 4,144.69–4,145.21 ไม่ผ่าน พร้อมยอด Stop และเป้าที่ตรวจได้",
+    "changeSinceLast":  "ราคาอยู่ต่ำกว่าโซนเฝ้าขายของรายงานก่อน แต่ลำดับ trigger เดิมยังพิสูจน์ไม่ได้; ใช้ฐานและแนวต้านใหม่จากแท่งวันนี้",
+    "waitFor":  "รอ M15 ปิดต่ำกว่า 4,133.79 แล้ว M5 รีเทสต์ไม่ผ่าน หรือ M15 ปิดเหนือ 4,139.44 แล้ว M5 รีเทสต์รับอยู่",
     "planLevels":  null,
     "dataQuality":  {
+                        "detail":  "ตรวจแท่งปิดครบ 3 กรอบและราคา Bid/Ask ได้ แต่ยังไม่มี swing หลังรีเทสต์สำหรับ Stop/TP",
                         "status":  "PARTIAL",
-                        "detail":  "อ่าน OHLC ทั้งสามกรอบและ quote ได้; EBW M15 ไม่ครบ ยังไม่รับรอง spread ปกติหรือ Stop/TP",
                         "priceSource":  "PEPPERSTONE:XAUUSD",
-                        "priceAt":  "2026-09-28T20:30:58+07:00"
+                        "priceAt":  "2026-09-29T10:24:00+07:00"
                     },
     "evidence":  {
-                     "symbol":  "PEPPERSTONE:XAUUSD",
-                     "chartUrl":  "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD",
-                     "observedAt":  "2026-09-28T20:30:58+07:00",
-                     "marketState":  "OPEN",
-                     "quote":  {
-                                   "symbol":  "PEPPERSTONE:XAUUSD",
-                                   "at":  "2026-09-28T20:30:58+07:00",
-                                   "bid":  4140.33,
-                                   "ask":  4140.48,
-                                   "spread":  0.15
-                               },
-                     "bars":  {
-                                  "M5":  {
-                                             "closedAt":  "2026-09-28T20:30:00+07:00",
-                                             "open":  4147.06,
-                                             "high":  4149.58,
-                                             "low":  4141.65,
-                                             "close":  4142.36
-                                         },
-                                  "M15":  {
-                                              "closedAt":  "2026-09-28T20:15:00+07:00",
-                                              "open":  4154.28,
-                                              "high":  4154.84,
-                                              "low":  4145.21,
-                                              "close":  4147.57
-                                          },
-                                  "H1":  {
-                                             "closedAt":  "2026-09-28T20:00:00+07:00",
-                                             "open":  4148.8,
-                                             "high":  4171.34,
-                                             "low":  4142.85,
-                                             "close":  4154.45
-                                         }
-                              },
                      "spreadAssessment":  "UNAVAILABLE",
+                     "quote":  {
+                                   "spread":  0.12,
+                                   "bid":  4136.78,
+                                   "symbol":  "PEPPERSTONE:XAUUSD",
+                                   "at":  "2026-09-29T10:24:00+07:00",
+                                   "ask":  4136.9
+                               },
+                     "symbol":  "PEPPERSTONE:XAUUSD",
+                     "observedAt":  "2026-09-29T10:24:00+07:00",
+                     "chartUrl":  "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD",
                      "newsCheck":  {
                                        "status":  "OK",
-                                       "checkedAt":  "2026-09-28T20:28:36+07:00",
+                                       "checkedAt":  "2026-09-29T10:18:20+07:00",
                                        "sourceUrl":  "https://www.forexfactory.com/calendar"
-                                   }
+                                   },
+                     "bars":  {
+                                  "M5":  {
+                                             "high":  4136.5,
+                                             "closedAt":  "2026-09-29T10:20:00+07:00",
+                                             "close":  4134.82,
+                                             "open":  4134.81,
+                                             "low":  4133.75
+                                         },
+                                  "M15":  {
+                                              "high":  4139.38,
+                                              "closedAt":  "2026-09-29T10:15:00+07:00",
+                                              "close":  4134.82,
+                                              "open":  4137.72,
+                                              "low":  4133.79
+                                          },
+                                  "H1":  {
+                                             "high":  4139.44,
+                                             "closedAt":  "2026-09-29T10:00:00+07:00",
+                                             "close":  4137.74,
+                                             "open":  4135.09,
+                                             "low":  4126.48
+                                         }
+                              },
+                     "marketState":  "OPEN"
                  },
     "indicatorContext":  {
-                             "status":  "PARTIAL",
-                             "name":  "EBW V10.4.4",
-                             "symbol":  "PEPPERSTONE:XAUUSD",
-                             "observedAt":  "2026-09-28T20:30:58+07:00",
-                             "summary":  "M5/H1 เอียงขาย แต่ยังไม่มี Signal entry; M15 ยังไม่ครบ",
+                             "observedAt":  "2026-09-29T10:20:12+07:00",
+                             "status":  "OK",
                              "frames":  [
                                             {
                                                 "timeframe":  "M5",
-                                                "side":  "SELL",
-                                                "closedAt":  "2026-09-28T20:30:00+07:00",
-                                                "buyScore":  13.67,
-                                                "sellScore":  64.42,
-                                                "rsi":  37.99,
-                                                "stochK":  10.81,
-                                                "stochD":  14.66,
-                                                "costConfigured":  false
+                                                "side":  "NEUTRAL",
+                                                "stochD":  69.6,
+                                                "rsi":  54.85,
+                                                "stochK":  66.62,
+                                                "closedAt":  "2026-09-29T10:20:00+07:00",
+                                                "costConfigured":  false,
+                                                "buyScore":  43.6,
+                                                "sellScore":  30.85
+                                            },
+                                            {
+                                                "timeframe":  "M15",
+                                                "side":  "NEUTRAL",
+                                                "stochD":  89.37,
+                                                "rsi":  55.59,
+                                                "stochK":  89.43,
+                                                "closedAt":  "2026-09-29T10:15:00+07:00",
+                                                "costConfigured":  false,
+                                                "buyScore":  22.0,
+                                                "sellScore":  40.25
                                             },
                                             {
                                                 "timeframe":  "H1",
                                                 "side":  "SELL",
-                                                "closedAt":  "2026-09-28T20:00:00+07:00",
-                                                "buyScore":  0.41,
-                                                "sellScore":  57.89,
-                                                "rsi":  25.6,
-                                                "stochK":  9.05,
-                                                "stochD":  8.23,
-                                                "costConfigured":  false
+                                                "stochD":  25.98,
+                                                "rsi":  40.46,
+                                                "stochK":  32.18,
+                                                "closedAt":  "2026-09-29T10:00:00+07:00",
+                                                "costConfigured":  false,
+                                                "buyScore":  0.7,
+                                                "sellScore":  73.19
                                             }
-                                        ]
+                                        ],
+                             "name":  "EBW V10.4.4",
+                             "symbol":  "PEPPERSTONE:XAUUSD",
+                             "summary":  "H1 เอียงขาย; M15/M5 กลางและยังไม่มี signal entry"
                          },
     "priorReview":  {
-                        "planId":  "20260928-1430-W1",
-                        "outcome":  "ตรวจไม่ได้",
-                        "checkedAt":  "2026-09-28T20:30:58+07:00",
-                        "evidence":  "แท่งที่อ่านไม่ครอบคลุมลำดับหลังแผนเดิมครบ จึงไม่คำนวณ R หรืออ้างชนะ"
+                        "evidence":  "แท่งที่อ่านวันนี้ไม่ครอบคลุมลำดับหลัง 20:30 เมื่อวาน จึงพิสูจน์รีเทสต์, trigger หรือ entry เดิมไม่ได้; ไม่มี Stop/TP และไม่คำนวณ R",
+                        "checkedAt":  "2026-09-29T10:24:46+07:00",
+                        "planId":  "20260928-2030-W1",
+                        "outcome":  "ตรวจไม่ได้"
                     },
-    "contextSignals":  "DXY 101.191 +0.16% ณ 20:30; Treasury 25 ก.ย. 2Y 4.81%, 10Y 5.17%; SPDR ยังยืนยันไม่ได้ เป็นบริบทไม่ใช่ trigger",
+    "contextSignals":  "DXY 101.206 (+0.03%) ณ 10:19; Treasury วันที่ 28 ก.ย. 2Y 4.92%, 10Y 5.24%; SPDR วันที่ 28 ก.ย. 1,058.832 ตัน เป็นบริบท ไม่ใช่ trigger",
     "newsEvents":  [
                        {
-                           "title":  "Bowman — ผ่านเวลานัด ยังไม่ยืนยันเนื้อหา",
-                           "at":  "2026-09-28T19:15:00+07:00",
-                           "state":  "UNVERIFIED",
-                           "currency":  "USD",
-                           "sourceUrl":  "https://www.federalreserve.gov/newsevents/2026-september.htm"
-                       },
-                       {
-                           "title":  "Cook — AI and Emerging Tech",
-                           "at":  "2026-09-29T00:25:00+07:00",
+                           "forecast":  "0.1%",
                            "state":  "UPCOMING",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=sep29.2026",
+                           "previous":  "0.0%",
                            "currency":  "USD",
-                           "sourceUrl":  "https://www.federalreserve.gov/newsevents/2026-september.htm"
+                           "at":  "2026-09-29T20:00:00+07:00",
+                           "title":  "USD HPI m/m"
                        },
                        {
-                           "title":  "Barkin — ยังรอต้นทางยืนยัน",
-                           "at":  "2026-09-29T00:30:00+07:00",
-                           "state":  "UNVERIFIED",
+                           "forecast":  "2.2%",
+                           "state":  "UPCOMING",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=sep29.2026",
+                           "previous":  "2.1%",
                            "currency":  "USD",
-                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=sep28.2026"
+                           "at":  "2026-09-29T20:00:00+07:00",
+                           "title":  "USD S\u0026P/CS Composite-20 HPI y/y"
+                       },
+                       {
+                           "at":  "2026-09-29T21:00:00+07:00",
+                           "currency":  "USD",
+                           "state":  "UPCOMING",
+                           "impact":  "HIGH",
+                           "title":  "USD CB Consumer Confidence",
+                           "forecast":  "89.2",
+                           "previous":  "89.4",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=sep29.2026"
+                       },
+                       {
+                           "at":  "2026-09-29T21:00:00+07:00",
+                           "currency":  "USD",
+                           "state":  "UPCOMING",
+                           "impact":  "HIGH",
+                           "title":  "USD JOLTS Job Openings",
+                           "forecast":  "7.23M",
+                           "previous":  "7.27M",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=sep29.2026"
                        }
                    ],
     "priceMap":  {
-                     "banner":  "รอรีเทสต์ ก่อนประเมินขาย",
-                     "levels":  [
-                                    {
-                                        "price":  "4,171.34",
-                                        "label":  "ยอด H1 ที่ตรวจได้",
-                                        "tone":  "gold"
-                                    },
-                                    {
-                                        "price":  "4,154.28–4,154.84",
-                                        "label":  "โซนเงื่อนไขซื้อ",
-                                        "tone":  "teal"
-                                    },
-                                    {
-                                        "price":  "4,144.69–4,145.21",
-                                        "label":  "รอรีเทสต์ฝั่งขาย",
-                                        "tone":  "red"
-                                    },
-                                    {
-                                        "price":  "4,142.85",
-                                        "label":  "low H1 ที่ตรวจได้",
-                                        "tone":  "silver"
-                                    },
-                                    {
-                                        "price":  "4,141.65",
-                                        "label":  "low M5 ปิด 20:30",
-                                        "tone":  "silver"
-                                    },
-                                    {
-                                        "price":  "4,140.33",
-                                        "label":  "Bid ณ snapshot",
-                                        "tone":  "silver"
-                                    }
-                                ],
                      "scenarios":  [
                                        {
-                                           "title":  "รอขายหลังรีเทสต์",
                                            "tone":  "red",
+                                           "title":  "1 รอขายเมื่อฐานหลุด",
                                            "bullets":  [
-                                                           "M5 เบรก 4,145.21 แล้ว",
-                                                           "รอรีเทสต์ 4,144.69–4,145.21"
+                                                           "M15 ปิดต่ำกว่า 4,133.79",
+                                                           "M5 รีเทสต์ 4,133.79–4,134.82 ไม่ผ่าน",
+                                                           "รอยอดรีเทสต์จริงก่อนตั้ง Stop"
                                                        ]
                                        },
                                        {
-                                           "title":  "เงื่อนไขซื้อสวน",
                                            "tone":  "teal",
+                                           "title":  "2 เปลี่ยนมองซื้อ",
                                            "bullets":  [
-                                                           "M15 ปิดเหนือ 4,154.84",
-                                                           "M5 รีเทสต์ 4,154.28–4,154.84",
-                                                           "รับอยู่พร้อมฐานยกสูง",
-                                                           "ยังไม่มีสัญญาณซื้อ"
+                                                           "M15 ปิดเหนือ 4,139.44",
+                                                           "M5 รีเทสต์ 4,139.38–4,139.44 รับอยู่"
                                                        ]
                                        },
                                        {
-                                           "title":  "ยังไม่วางออเดอร์",
                                            "tone":  "gold",
+                                           "title":  "3 ก่อนข่าว",
                                            "bullets":  [
-                                                           "รอ swing Stop และเป้าจริง",
-                                                           "ยังไม่คำนวณ R:R"
+                                                           "USD 20:00 และ 21:00",
+                                                           "ยังไม่มีจุดเข้า / Stop / TP พร้อมใช้"
                                                        ]
                                        }
                                    ],
-                     "context":  "DXY 101.191 (+0.16%) · ไม่ใช้แทน trigger"
+                     "levels":  [
+                                    {
+                                        "label":  "ยอด H1 / ต้องปิดเหนือเพื่อประเมินซื้อ",
+                                        "tone":  "gold",
+                                        "price":  "4,139.44"
+                                    },
+                                    {
+                                        "label":  "ยอด M15",
+                                        "tone":  "silver",
+                                        "price":  "4,139.38"
+                                    },
+                                    {
+                                        "label":  "Bid ณ snapshot",
+                                        "tone":  "silver",
+                                        "price":  "4,136.78"
+                                    },
+                                    {
+                                        "label":  "low M15 / ฐานที่เฝ้า",
+                                        "tone":  "red",
+                                        "price":  "4,133.79"
+                                    },
+                                    {
+                                        "label":  "low H1 / แนวรับถัดไป",
+                                        "tone":  "teal",
+                                        "price":  "4,126.48"
+                                    }
+                                ],
+                     "context":  "DXY 101.206 · Treasury 2Y/10Y 4.92%/5.24% (28 ก.ย.)",
+                     "banner":  "WAIT • รอแท่งปิดยืนยัน"
                  },
     "scenarioPlan":  {
-                         "symbol":  "PEPPERSTONE:XAUUSD",
-                         "asOf":  "2026-09-28T20:30:58+07:00",
                          "scenarios":  [
                                            {
+                                               "confirmation":  "M5 รีเทสต์ไม่ผ่านและปิดต่ำกว่า 4,133.79",
+                                               "retestLow":  4133.79,
                                                "side":  "SELL",
-                                               "breakFrame":  "M5",
                                                "retestFrame":  "M5",
-                                               "breakPrice":  4145.21,
-                                               "retestLow":  4144.69,
-                                               "retestHigh":  4145.21,
-                                               "breakState":  "OBSERVED",
-                                               "breakClosedAt":  "2026-09-28T20:30:00+07:00",
-                                               "confirmation":  "หลังรีเทสต์ M5 ปิดต่ำกว่า 4,144.69 พร้อมยอด Stop จริง",
-                                               "invalidation":  "M5 ยึด 4,145.21 กลับและรีเทสต์รับอยู่",
-                                               "evidence":  "M5 20:25–20:30 ปิด 4,142.36 ต่ำกว่า low M15 4,145.21"
+                                               "breakState":  "WAITING",
+                                               "breakFrame":  "M15",
+                                               "breakPrice":  4133.79,
+                                               "invalidation":  "M15 ยึด 4,139.44 และรีเทสต์รับอยู่",
+                                               "evidence":  "M15 10:00 ปิด 4,134.82 เหนือ low 4,133.79",
+                                               "retestHigh":  4134.82
                                            },
                                            {
+                                               "confirmation":  "M5 รีเทสต์รับอยู่พร้อมฐานยกสูง",
+                                               "retestLow":  4139.38,
                                                "side":  "BUY",
-                                               "breakFrame":  "M15",
                                                "retestFrame":  "M5",
-                                               "breakPrice":  4154.84,
-                                               "retestLow":  4154.28,
-                                               "retestHigh":  4154.84,
                                                "breakState":  "WAITING",
-                                               "confirmation":  "M5 รีเทสต์รับอยู่ พร้อมฐานยกสูง จึงประเมินใหม่",
-                                               "invalidation":  "M5 ปิดต่ำกว่า 4,154.28 หลังรีเทสต์",
-                                               "evidence":  "ยอด M15 20:00–20:15 ที่ 4,154.84"
+                                               "breakFrame":  "M15",
+                                               "breakPrice":  4139.44,
+                                               "invalidation":  "M5 ปิดต่ำกว่า 4,139.38 หลังรีเทสต์",
+                                               "evidence":  "H1 09:00 high 4,139.44; M15 10:00 high 4,139.38",
+                                               "retestHigh":  4139.44
                                            }
-                                       ]
+                                       ],
+                         "asOf":  "2026-09-29T10:24:46+07:00",
+                         "symbol":  "PEPPERSTONE:XAUUSD"
                      },
-    "revision":  "7873db66acb7041c-4dfd751a37cd20a3",
-    "imageUrl":  "https://basssg.github.io/XAUChatGPTChat/reports/archive/analysis-20260928-133058.png"
+    "revision":  "d85b09dd3d6e488a-66dc146a8da6df9e",
+    "imageUrl":  "https://basssg.github.io/XAUChatGPTChat/reports/archive/analysis-20260929-032446.png"
 }

@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { mkdir, readFile, writeFile, open, unlink } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, open, unlink, appendFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { desktopOpen, CodexClient, runAnalysis } from './codex-analysis-client.mjs';
@@ -30,6 +30,14 @@ async function approveConnection(request) {
   finally { approvalPending = false; }
 }
 await mkdir(directory, { recursive: true });
+if (process.env.XAU_DESK_SCHEDULED === '1') {
+  const writeLog = (fileName, values) => {
+    const line = new Date().toISOString() + ' ' + values.map(String).join(' ') + '\n';
+    void appendFile(join(directory, fileName), line).catch(() => {});
+  };
+  console.log = (...values) => writeLog('connector-runtime.log', values);
+  console.error = (...values) => writeLog('connector-runtime-error.log', values);
+}
 const persistent = process.env.XAU_DESK_PERSIST === '1';
 while (true) {
   try {

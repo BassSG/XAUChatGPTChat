@@ -27,6 +27,8 @@ export function setupManualAnalysis({ apiBase, onPublished }) {
     connectButton.disabled = connectBusy || Boolean(connectKey);
     byId('manual-unpair').hidden = !state?.authorized;
     byId('manual-connection-state').textContent = view.label;
+    byId('manual-connection-state').dataset.state = state?.authorized && state.online ? 'online' : state?.authorized ? 'offline' : 'unpaired';
+    byId('manual-connection-recovery').hidden = !state?.authorized || Boolean(state.online);
     byId('manual-unpair').disabled = Boolean(state?.busy) || submitting;
   }
   async function call(path, body) {
@@ -91,6 +93,11 @@ export function setupManualAnalysis({ apiBase, onPublished }) {
     finally { submitting = false; await refresh(); }
   });
   byId('manual-refresh').addEventListener('click', refresh);
+  byId('manual-connection-refresh').addEventListener('click', async event => {
+    event.currentTarget.textContent = 'กำลังตรวจสถานะ…';
+    await refresh();
+    event.currentTarget.textContent = 'ตรวจสถานะอีกครั้ง';
+  });
   byId('manual-analysis-card').querySelector('a').addEventListener('click', () => { document.querySelector('.settings-details').open = true; });
   document.addEventListener('visibilitychange', refresh);
   window.addEventListener('online', refresh);

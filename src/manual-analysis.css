@@ -18,6 +18,12 @@
 .manual-connection code { overflow-wrap:anywhere; color:#e6c887; }
 .manual-connection summary { cursor:pointer; color:#edd09b; }
 .manual-connection a { color:#e7c98e; text-decoration:underline; }
+.manual-connection #manual-connection-state { display:inline-block; margin:0 0 10px; padding:7px 12px; border-radius:9px; background:#263338; color:#d7e5e0; font-weight:700; }
+.manual-connection #manual-connection-state[data-state="online"] { background:#173b2d; color:#9aefbc; }
+.manual-connection #manual-connection-state[data-state="offline"] { background:#3a2b1e; color:#f4ce8d; }
+.manual-connection-recovery { margin:4px 0 16px; padding:14px; border:1px solid #88683d; border-radius:12px; background:#281f19; }
+.manual-connection-recovery p { margin:0 0 12px; color:#f1d9ad; }
+.manual-connection-recovery button { min-height:44px; }
 #manual-connect-message { border-radius:10px; padding:12px 14px; margin:12px 0; background:#182b30; font-weight:650; }
 #manual-connect-message[data-state="pending"] { border:1px solid #d7b875; color:#f5dcaa; background:#342a1d; }
 #manual-connect-message[data-state="error"] { border:1px solid #e07b72; color:#ffd0c8; background:#392322; }

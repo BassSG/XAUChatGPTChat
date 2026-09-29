@@ -7,7 +7,6 @@
   .workspace-app .dashboard-grid > *, .workspace-app .desk-rail { grid-column: 1; min-width: 0; }
   .workspace-app .hero { padding: 36px 0 16px; }
   .workspace-app .section-heading { margin-bottom: 18px; }
-  .workspace-app .manual-analysis-card { margin-bottom: 20px; }
   .workspace-app #mobile-home { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(265px,.75fr); gap: 16px; margin-bottom: 20px; }
   .workspace-app .mobile-home-lead { grid-row: span 2; border: 1px solid #896b3d; border-radius: 18px; padding: clamp(22px,3vw,36px); background: radial-gradient(circle at 90% 0,#8c612d38,transparent 40%),linear-gradient(135deg,#1e2928,#111b20); box-shadow: 0 18px 50px #0003; }
   .workspace-app .mobile-home-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #c9d5d0; font-size: 14px; }

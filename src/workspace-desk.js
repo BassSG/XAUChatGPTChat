@@ -31,7 +31,7 @@ export function setupWorkspaceDesk() {
     news: ['ข่าวและบริบท', 'ดูข่าวที่เกี่ยวข้องกับแผนก่อนใช้เงื่อนไขราคา'],
     chart: ['กราฟราคา', 'สลับระหว่างกราฟตลาดกับกราฟตามรายงาน'],
     history: ['รายงานย้อนหลัง', 'เปิดรายงานเก่าเพื่อทบทวนแผนและหลักฐาน'],
-    settings: ['ตั้งค่าแอป', 'จัดการการเชื่อมต่อและการแจ้งเตือน']
+    settings: ['ตั้งค่าแอป', 'จัดการการแจ้งเตือนและการแสดงผล']
   };
   const show = (selector, visible) => document.querySelectorAll(selector).forEach(element =>
     element.classList.toggle('workspace-route-hidden', !visible));
@@ -45,7 +45,7 @@ export function setupWorkspaceDesk() {
     const { page, view } = workspaceRoute(location.hash);
     document.body.dataset.workspacePage = page;
     document.body.dataset.workspaceView = view;
-    show('#overview, .section-heading, #manual-analysis-card, #mobile-home', page === 'overview');
+    show('#overview, .section-heading, #mobile-home', page === 'overview');
     show('#analysis', page === 'plan' && view !== 'sequence');
     show('#scenario-plan, #mobile-sequence-empty', page === 'plan' && view === 'sequence');
     show('.desk-rail', page === 'news' || page === 'settings');

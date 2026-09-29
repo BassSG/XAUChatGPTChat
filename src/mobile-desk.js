@@ -83,7 +83,6 @@ export function setupMobileDesk() {
     document.body.dataset.mobilePage = page;
     document.body.dataset.mobileView = view;
     show('#mobile-home', page === 'home');
-    show('#manual-analysis-card', page === 'home');
     show('#mobile-plan-nav', page === 'plan');
     show('#mobile-chart-nav', page === 'chart');
     show('#analysis', page === 'plan' && view !== 'sequence');

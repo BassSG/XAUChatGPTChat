@@ -61,10 +61,6 @@
         </section>
         <div class="section-heading"><div><span class="section-kicker">ภาพรวมรอบล่าสุด</span><h2>แผนและข่าวที่ต้องดู</h2></div><span class="secure-label"><span>●</span> วิเคราะห์เพื่อวางแผน</span></div>
         <div class="mobile-only mobile-page-heading"><small>XAU / USD · DESK</small><h1 id="mobile-page-title">ภาพรวมวันนี้</h1></div>
-        <section id="manual-analysis-card" class="manual-analysis-card" aria-labelledby="manual-analysis-title">
-          <div><h2 id="manual-analysis-title">ขอบทวิเคราะห์รอบใหม่</h2><p id="manual-analysis-status" role="status" aria-live="polite">กำลังตรวจการเชื่อมต่อคอม</p><div class="manual-links"><a href="#notifications">เชื่อมต่อคอม</a><button id="manual-refresh" type="button">ตรวจอีกครั้ง</button></div><p id="manual-action-message" role="alert"></p></div>
-          <button id="manual-analysis-button" class="button button-primary" type="button" disabled>กำลังตรวจการเชื่อมต่อ</button>
-        </section>
         <section id="mobile-home" class="mobile-only" aria-label="สรุปรอบล่าสุด">
           <div class="mobile-home-lead">
             <div class="mobile-home-top"><small id="mobile-freshness">รอรายงาน</small><span id="mobile-status" class="bias-pill neutral">WAIT</span></div>
@@ -140,16 +136,6 @@
           </section>
           <section id="notifications" class="panel notify-panel">
             <details class="settings-details"><summary class="settings-summary"><span>ตั้งค่าแอปและการแจ้งเตือน</span><span id="notify-indicator" class="notify-indicator">OFF</span></summary>
-            <section class="manual-connection" aria-labelledby="manual-connection-title">
-              <h4 id="manual-connection-title">เชื่อมต่อคอมเพื่อวิเคราะห์ทันที</h4>
-              <p id="manual-connection-state" role="status">กำลังตรวจการเชื่อมต่อ</p>
-              <div id="manual-connection-recovery" class="manual-connection-recovery" hidden><p>อุปกรณ์นี้จับคู่แล้ว แต่คอมยังไม่ตอบกลับ เปิด Codex บนคอมไว้ แล้วกดตรวจสถานะอีกครั้ง หากยังไม่เชื่อมต่อ ให้เปิด XAU Desk Connector จากเมนู Start บนคอม</p><button id="manual-connection-refresh" class="button button-secondary" type="button">ตรวจสถานะอีกครั้ง</button></div>
-              <p>เปิด Codex บนคอมไว้ แล้วกดวิเคราะห์จากอุปกรณ์ที่จับคู่ได้หนึ่งครั้งทุก 15 นาที หากงานเดิมยังไม่เสร็จ ระบบจะรอให้จบก่อนรับงานใหม่</p>
-              <div id="manual-connect-section"><button id="manual-connect-request" class="button button-primary full-width" type="button">ขอเชื่อมต่อกับคอม</button><p id="manual-connect-message" role="status" aria-live="polite">กดแล้วตรวจเลขยืนยันบนคอม จากนั้นกดอนุญาต จับคู่ครั้งเดียวใช้ได้ต่อเนื่อง</p></div><form id="manual-pair-form"><details><summary>หรือใช้รหัสจากคอม</summary><label for="manual-pair-code">รหัสจับคู่ครั้งเดียวจากคอม</label><input id="manual-pair-code" name="pairing-code" type="text" maxlength="30" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" required /><button id="manual-pair-submit" class="button button-primary full-width" type="submit">จับคู่อุปกรณ์นี้</button></details></form>
-              <p id="manual-pair-message" role="status" aria-live="polite"></p>
-              <button id="manual-unpair" class="text-button" type="button" hidden>ยกเลิกการจับคู่อุปกรณ์นี้</button>
-              <details><summary>วิธีเชื่อมต่อครั้งแรก</summary><p>ใช้รหัสที่แสดงในหน้าจับคู่ XAU Desk บนคอม กรอกในช่องด้านบน รหัสหมดอายุภายใน 15 นาที และจับคู่ได้ครั้งเดียว</p><p>หากต้องเปิดตัวช่วยใหม่ ให้เปิดไฟล์ <code>scripts/start-xau-desk-agent.cmd</code> ในโปรเจกต์ XAU Desk บนคอม แล้วเปิดหน้าจับคู่ในโฟลเดอร์ <code>%LOCALAPPDATA%/XAU Desk</code></p><p>ใช้เบราว์เซอร์หรือแอปที่จับคู่ไว้ในการกดวิเคราะห์ ตัวช่วยจะตรวจ Codex ก่อนรับงานทุกครั้ง สถานะอาจใช้เวลาประมาณ 30 วินาทีในการอัปเดต</p></details>
-            </section>
             <p class="panel-description">รับสรุปสั้นเมื่อมีรายงานใหม่ แล้วแตะเพื่ออ่านแผนและข่าวฉบับเต็ม</p>
             <button id="install-button" class="button button-secondary full-width">ติดตั้งแอป</button>
             <div class="notification-preview">

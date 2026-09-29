@@ -8,7 +8,6 @@ import { setupMobileDesk, refreshMobileDesk } from "./mobile-desk.js";
 import "./mobile-desk.css";
 import { setupWorkspaceDesk } from "./workspace-desk.js";
 import "./workspace-desk.css";
-import { setupManualAnalysis } from './manual-analysis.js';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
@@ -675,7 +674,6 @@ async function init() {
   setupWorkspaceDesk();
   window.addEventListener('xau:route', mountTradingView);
   setupMobileDesk();
-  setupManualAnalysis({ apiBase: API_BASE, onPublished: loadReports });
   byId("subscribe-button").addEventListener("click", subscribeForPush);
   byId("test-button").addEventListener("click", sendTestAlert);
   byId("unsubscribe-button").addEventListener("click", unsubscribePush);

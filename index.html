@@ -26,8 +26,9 @@
           <a class="nav-link selected" href="#overview"><span>◫</span> ภาพรวม</a>
           <a class="nav-link" href="#analysis"><span>◈</span> แผนล่าสุด</a>
           <a class="nav-link" href="#news"><span>▦</span> ข่าวสำคัญ</a>
-          <a class="nav-link" href="#chart"><span>⌁</span> กราฟราคา</a>
+          <a class="nav-link" href="#market-chart"><span>⌁</span> กราฟราคา</a>
           <a class="nav-link" href="#history"><span>◷</span> แผนย้อนหลัง</a>
+          <a class="nav-link" href="#notifications"><span>⚙</span> ตั้งค่าแอป</a>
         </nav>
         <div class="sidebar-bottom">
           <a class="external-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noreferrer"><span>▦</span> ปฏิทินเศรษฐกิจ <span class="external-arrow">↗</span></a>
@@ -48,7 +49,7 @@
           <a class="tablet-nav-link selected" href="#overview">ภาพรวม</a>
           <a class="tablet-nav-link" href="#analysis">แผน</a>
           <a class="tablet-nav-link" href="#news">ข่าว</a>
-          <a class="tablet-nav-link" href="#chart">กราฟ</a>
+          <a class="tablet-nav-link" href="#market-chart">กราฟ</a>
           <a class="tablet-nav-link" href="#history">ย้อนหลัง</a>
         </nav>
         <section id="overview" class="hero">
@@ -77,6 +78,9 @@
         </section>
         <nav id="mobile-plan-nav" class="mobile-only mobile-subnav" aria-label="หมวดแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เส้นทางราคา</a><a href="#plan-image">ภาพสรุป</a><a href="#indicator-card">หลักฐาน</a><a href="#report-body">ฉบับเต็ม</a></nav>
         <nav id="mobile-chart-nav" class="mobile-only mobile-subnav" aria-label="ประเภทกราฟ"><a href="#market-chart">กราฟตลาด</a><a href="#chart">กราฟตามรายงาน</a></nav>
+        <div id="workspace-page-heading" class="workspace-page-heading" hidden><span id="workspace-page-kicker">XAU DESK</span><h1 id="workspace-page-title">ภาพรวม</h1><p id="workspace-page-description"></p></div>
+        <nav id="workspace-plan-nav" class="workspace-subnav" aria-label="เลือกส่วนของแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เบรก · รีเทสต์</a><a href="#indicator-card">หลักฐาน</a><a href="#plan-image">ภาพสรุป</a><a href="#report-body">ฉบับเต็ม</a></nav>
+        <nav id="workspace-chart-nav" class="workspace-subnav" aria-label="เลือกประเภทกราฟ"><a href="#market-chart">กราฟตลาด</a><a href="#chart">กราฟตามรายงาน</a></nav>
         <div class="dashboard-grid">
           <div id="mobile-side-picker" class="mobile-only" role="group" aria-label="เลือกฝั่งของแผน"></div>
           <div id="mobile-sequence-empty" class="mobile-only mobile-empty" hidden>รอบนี้ยังไม่มีภาพลำดับที่ยืนยันข้อมูลได้ <a href="#analysis">อ่านเงื่อนไขของแผน →</a></div>
@@ -198,7 +202,7 @@
                     <p id="plan-chart-fallback-detail">ใช้ข้อความและภาพแผนผังระดับราคาของรายงานได้ตามปกติ</p>
                     <a id="plan-fallback-image-link" class="plan-fallback-image-link" target="_blank" rel="noreferrer" hidden><img id="plan-fallback-image" alt="แผนผังระดับราคา ไม่ใช่กราฟราคาจริง" /><span>เปิดภาพสรุปขนาดใหญ่ ↗</span></a>
                     <p id="plan-fallback-image-error" hidden>โหลดภาพไม่สำเร็จ อ่านเงื่อนไขและข่าวด้านข้างได้ครบ</p>
-                    <div class="plan-fallback-links"><a href="#market-chart">ดูกราฟตลาด ↓</a><a href="#analysis">อ่านบทวิเคราะห์ทั้งหมด ↑</a></div>
+                    <div class="plan-fallback-links"><a href="#market-chart">เปิดกราฟตลาด →</a><a href="#report-body">อ่านบทวิเคราะห์ฉบับเต็ม →</a></div>
                   </div>
                 </div>
                 <div class="plan-chart-controls">

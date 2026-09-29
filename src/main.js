@@ -4,8 +4,10 @@ import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
 import { loadReportSources } from "./report-loader.js";
 import { scenarioHtml } from "./scenario-plan.js";
-import { setupMobileDesk, refreshMobileDesk, mobileRoute } from "./mobile-desk.js";
+import { setupMobileDesk, refreshMobileDesk } from "./mobile-desk.js";
 import "./mobile-desk.css";
+import { setupWorkspaceDesk } from "./workspace-desk.js";
+import "./workspace-desk.css";
 import { setupManualAnalysis } from './manual-analysis.js';
 
 const BASE_URL = import.meta.env.BASE_URL;
@@ -478,7 +480,7 @@ async function loadOlderHistory() {
 function mountTradingView() {
   const frame = byId("tradingview-chart");
   if (frame.dataset.mounted) return;
-  if (window.matchMedia('(max-width: 650px)').matches && mobileRoute(location.hash).view !== 'live') return;
+  if (location.hash !== '#market-chart') return;
   frame.dataset.mounted = 'true';
   frame.innerHTML = '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:calc(100% - 30px);width:100%"></div><div class="tradingview-widget-copyright"></div></div>';
   const script = document.createElement("script");
@@ -646,23 +648,6 @@ function setupInstallPrompt() {
   if (isStandalone()) byId("install-button").hidden = true;
 }
 
-function setupNav() {
-  const links = Array.from(document.querySelectorAll(".nav-link, .tablet-nav-link, .mobile-nav-link"));
-  const sections = ["overview", "analysis", "news", "chart", "history"].map(byId);
-  const sync = () => {
-    if (window.matchMedia('(max-width: 650px)').matches) return;
-    const visible = sections.reduce((active, section) => section.getBoundingClientRect().top <= 160 ? section.id : active, "overview");
-    links.forEach((link) => {
-      const selected = link.getAttribute("href") === "#" + visible;
-      link.classList.toggle("selected", selected);
-      if (selected) link.setAttribute("aria-current", "location");
-      else link.removeAttribute("aria-current");
-    });
-  };
-  window.addEventListener("scroll", sync, { passive: true });
-  sync();
-}
-
 function setupTextSize() {
   const sizes = ["normal", "large", "largest"];
   const labels = ["ปกติ", "ใหญ่", "ใหญ่มาก"];
@@ -687,7 +672,7 @@ async function init() {
   planChart = createPlanChart({ baseUrl: new URL(BASE_URL, window.location.origin).href, formatDate });
   setupInstallPrompt();
   setupTextSize();
-  setupNav();
+  setupWorkspaceDesk();
   window.addEventListener('xau:route', mountTradingView);
   setupMobileDesk();
   setupManualAnalysis({ apiBase: API_BASE, onPublished: loadReports });
@@ -706,8 +691,7 @@ async function init() {
     selectedChartReportKey = button.dataset.chartReportKey;
     byId("plan-chart-latest").hidden = false;
     planChart.render(report);
-    if (window.matchMedia('(max-width: 650px)').matches) location.hash = '#chart';
-    else byId("chart").scrollIntoView({ behavior: "smooth", block: "start" });
+    location.hash = '#chart';
   });
   byId("plan-chart-latest").addEventListener("click", () => {
     selectedChartReportKey = null;

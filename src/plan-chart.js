@@ -260,7 +260,7 @@ export function createPlanChart({ baseUrl, formatDate }) {
         text("plan-chart-status", report?.status || "WAIT");
         text("plan-chart-wait", report?.waitFor || "รอชุดแท่งราคาที่ตรวจสอบได้");
         text("plan-chart-asof", report?.snapshotAt ? `รายงาน ${formatDate(report.snapshotAt)}` : "ยังไม่มีรายงาน");
-        setView("fallback", `${state.validation.reason} กราฟตลาดด้านล่างยังเปิดดูได้ตามปกติ`);
+        setView("fallback", `${state.validation.reason} เปิดดูกราฟตลาดได้จากแท็บกราฟตลาด`);
         return;
       }
       document.getElementById("plan-chart-summary").hidden = false;

@@ -11,25 +11,23 @@ $stateDirectory = & $nodePath -e "console.log(require('path').dirname(require('f
 if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve connector state directory.' }
 $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $env:USERPROFILE '.codex' }
 function Quote-Literal([string]$Value) { "'" + $Value.Replace("'", "''") + "'" }
-$launch = '$env:XAU_DESK_PERSIST=''1''; $env:XAU_DESK_STATE_DIR=' + (Quote-Literal $stateDirectory) + '; $env:CODEX_HOME=' + (Quote-Literal $codexHome) + '; & ' + (Quote-Literal $nodePath) + ' ' + (Quote-Literal $agentPath) + ' 1>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled.log')) + ' 2>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled-error.log'))
+$launch = '$env:XAU_DESK_PERSIST=''1''; $env:XAU_DESK_STATE_DIR=' + (Quote-Literal $stateDirectory) + '; $env:CODEX_HOME=' + (Quote-Literal $codexHome) + '; & ' + (Quote-Literal $nodePath) + ' ' + (Quote-Literal $agentPath) + ' 1>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled.log')) + ' 2>> ' + (Quote-Literal (Join-Path $stateDirectory 'scheduled-error.log')) + '; if ($LASTEXITCODE -ne 0) { exit 1 }'
 $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($launch))
 $action = New-ScheduledTaskAction -Execute (Get-Command powershell.exe).Source -Argument ('-NoProfile -WindowStyle Hidden -EncodedCommand ' + $encoded) -WorkingDirectory $repoRoot
 $principal = New-ScheduledTaskPrincipal -UserId ([Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited
 $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::Zero) -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1) -StartWhenAvailable
-# Recheck every two minutes so a closed terminal or interrupted process cannot leave the connector offline until the next sign-in.
-$watchdog = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Minutes 2) -RepetitionDuration (New-TimeSpan -Days 3650)
-$triggers = @($watchdog)
-if ($InstallStartup) { $triggers += New-ScheduledTaskTrigger -AtLogOn -User ([Security.Principal.WindowsIdentity]::GetCurrent().Name) }
-$taskArgs = @{TaskName='XAU Desk Connector';Action=$action;Principal=$principal;Settings=$settings;Trigger=$triggers;Description='Receive XAU Desk analysis requests in the signed-in user session';Force=$true}
+$taskArgs = @{TaskName='XAU Desk Connector';Action=$action;Principal=$principal;Settings=$settings;Description='Receive XAU Desk analysis requests in the signed-in user session';Force=$true}
+if ($InstallStartup) { $taskArgs.Trigger = New-ScheduledTaskTrigger -AtLogOn -User ([Security.Principal.WindowsIdentity]::GetCurrent().Name) }
 Register-ScheduledTask @taskArgs | Out-Null
 if ($InstallStartup) {
-  # Keep the existing shortcut compatible; both routes target the same singleton task.
-  $shell = New-Object -ComObject WScript.Shell
-  $shortcut = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Startup')) 'XAU Desk Connector.lnk'))
-  $shortcut.TargetPath = (Get-Command powershell.exe).Source
-  $shortcut.Arguments = '-NoProfile -WindowStyle Hidden -Command "Start-ScheduledTask -TaskName ''XAU Desk Connector''"'
-  $shortcut.WindowStyle = 7
-  $shortcut.Save()
+  # Remove the duplicate Startup shortcut created by older installations.
+  $shortcutPath = Join-Path ([Environment]::GetFolderPath('Startup')) 'XAU Desk Connector.lnk'
+  if (Test-Path -LiteralPath $shortcutPath) {
+    $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcutPath)
+    if ($shortcut.TargetPath -eq (Get-Command powershell.exe).Source -and $shortcut.Arguments -like '*Start-ScheduledTask*XAU Desk Connector*') {
+      Remove-Item -LiteralPath $shortcutPath
+    }
+  }
 }
 Start-ScheduledTask -TaskName 'XAU Desk Connector'
 Write-Output 'Connector registered and started independently of the chat process.'

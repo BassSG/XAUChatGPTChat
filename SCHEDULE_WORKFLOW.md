@@ -2,6 +2,8 @@
 
 This file is the shared contract for the weekday 09:00, 14:30, and 19:00 Codex schedules. Keep the scheduled times and GPT-6 Sol High settings. At every run, send the Thai report and image in Codex, update the journal, and publish the same report to XAU Desk.
 
+Read and follow `ANALYSIS_OPERATING_PLAN.md` at the start of each run. The user's core method is their indicator on H1, M15 and M5: collect its verified zones, plan levels and signal lifecycle as well as scores, then synthesize the frames. Check H4/D1 directly only when the documented context conditions require it. Never claim exact Pine/source/input equivalence from an indicator name alone. Record the per-run completeness metrics specified there in the private journal; do not upgrade reliability scores without real run evidence.
+
 ## Version 3: preserve observations and finish a useful decision
 
 Follow this section before preparing prose or artwork. New publications require `schemaVersion: 3`; historical reports stay readable without changing their claims.

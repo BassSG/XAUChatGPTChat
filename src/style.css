@@ -728,3 +728,13 @@ html[data-text-size="largest"] { --read-body: 24px; --read-small: 22px; --read-l
   .plan-chart-frame-note { flex-basis: 100%; margin-left: 0; text-align: left; }
   .plan-chart-summary { grid-template-columns: minmax(0,1fr); }
 }
+/* Evidence readiness is part of the plan, not a live signal indicator. */
+.readiness-card { margin: 18px 0; padding: 20px; border: 1px solid #39515b; border-radius: 14px; background: #10222b; }
+.readiness-card h3 { margin: 0 0 14px; font-size: 20px; color: #f0d69c; }
+.readiness-card > p { margin: 14px 0 0; color: #a9bcc5; font-size: 14px; line-height: 1.7; }
+.readiness-row { display: grid; grid-template-columns: minmax(180px,1fr) minmax(0,1.4fr); gap: 10px; padding: 12px 0; border-bottom: 1px solid #ffffff12; font-size: 16px; line-height: 1.65; overflow-wrap: anywhere; }
+.readiness-row.ready strong { color: #7ddebe; }
+.readiness-row.pending strong { color: #f3cc89; }
+.readiness-row span { color: #cad8dc; }
+.workspace-app .mobile-home-lead .delivery-note, .delivery-note { margin: 12px 0; padding: 12px 15px; border-left: 3px solid #edba74; background: #392b1d; color: #ffe1b2; font-size: 15px; line-height: 1.7; }
+@media(max-width:650px) { .readiness-row { grid-template-columns: minmax(0,1fr); gap: 3px; } }

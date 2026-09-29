@@ -1,3 +1,4 @@
+import { DECISION_REASONS } from './analysis-readiness.js';
 const SYMBOL = "PEPPERSTONE:XAUUSD";
 const FRAMES = { M5: 5 * 60_000, M15: 15 * 60_000, H1: 60 * 60_000 };
 
@@ -27,12 +28,18 @@ function containsPrice(value, expected) {
 }
 
 export function validatePublicationEvidence(report) {
-  check(report.schemaVersion === 2, "New reports require schemaVersion 2 and verified evidence");
+  check(report.schemaVersion === 3, "New reports require schemaVersion 3 and archived evidence");
   const snapshot = time(report.snapshotAt, "snapshotAt");
   check(snapshot <= Date.now() + 60_000, "snapshotAt cannot be in the future");
   check(Date.now() - snapshot <= 15 * 60_000, "A new report must be published within 15 minutes of its snapshot");
   check(typeof report.planId === "string" && report.planId.trim(), "planId is required");
   check(typeof report.waitFor === "string" && report.waitFor.trim(), "waitFor is required");
+  check(report.decision && Object.hasOwn(DECISION_REASONS, report.decision.reason), 'Specify why the plan is waiting or actionable');
+  check(typeof report.decision.nextAction === 'string' && report.decision.nextAction.trim(), 'State the next observable action');
+  check(Array.isArray(report.decision.missing) && report.decision.missing.every(item => typeof item === 'string' && item.trim()), 'decision.missing must list concrete missing evidence');
+  check(report.evidenceArchive && /^[a-f0-9]{64}$/.test(report.evidenceArchive.sha256 || ''), 'Record observations before publication');
+  age(report.evidenceArchive.capturedAt, snapshot, 15 * 60_000, 'evidenceArchive.capturedAt');
+  check(['DATA_WINDOW', 'PERMITTED_EXPORT'].includes(report.evidenceArchive.method), 'Evidence capture method is required');
   check(report.dataQuality && ["OK", "PARTIAL", "UNAVAILABLE"].includes(report.dataQuality.status), "dataQuality is required");
   check(report.dataQuality.priceSource === SYMBOL, "dataQuality.priceSource must be PEPPERSTONE:XAUUSD");
   check(report.evidence?.symbol === SYMBOL, "evidence.symbol must be PEPPERSTONE:XAUUSD");
@@ -61,6 +68,18 @@ export function validatePublicationEvidence(report) {
   check(calendar && ["OK", "UNAVAILABLE"].includes(calendar.status), "A news check status is required");
   age(calendar.checkedAt, snapshot, 15 * 60_000, "newsCheck.checkedAt");
   if (calendar.status === "OK") check(/^https:\/\/www\.forexfactory\.com\/calendar/.test(calendar.sourceUrl || ""), "News check needs the Forex Factory calendar URL");
+  if (report.decision.reason === 'DATA_MISSING') check(report.decision.missing.length > 0, 'Identify the missing data');
+  if (report.decision.reason === 'SIGNAL_PENDING' || report.status !== 'WAIT') {
+    check(report.evidence.marketState === 'OPEN' && quote && calendar.status === 'OK', 'Signal-only waiting needs verified market inputs');
+    for (const [frame, maxAge] of [['M5', 600000], ['M15', 1800000], ['H1', 7200000]]) {
+      check(bars[frame], 'Missing closed ' + frame + ': use DATA_MISSING');
+      age(bars[frame].closedAt, snapshot, maxAge, frame + '.closedAt');
+    }
+  }
+  for (const [frame] of Object.entries(bars)) check(Number.isInteger(report.evidenceArchive.counts?.[frame]) && report.evidenceArchive.counts[frame] > 0, 'Evidence archive must contain the reported timeframe');
+  if (report.decision.reason === 'MARKET_CLOSED') check(report.evidence.marketState === 'CLOSED', 'Market closure must be observed');
+  if (report.status !== 'WAIT') check(report.decision.reason === 'CONDITIONAL_PLAN' && report.decision.missing.length === 0, 'WATCH requires a complete conditional plan');
+  if (report.status === 'WAIT') check(report.decision.reason !== 'CONDITIONAL_PLAN', 'A complete conditional plan uses WATCH');
 
   check(report.indicatorContext && ["OK", "PARTIAL", "UNAVAILABLE"].includes(report.indicatorContext.status), "indicatorContext status is required");
   if (report.indicatorContext.status === "OK") {
@@ -76,12 +95,17 @@ export function validatePublicationEvidence(report) {
   }
   if (report.priorReview) {
     check(report.priorReview.checkedAt && time(report.priorReview.checkedAt, "priorReview.checkedAt") <= snapshot, "priorReview.checkedAt is required");
+    if (report.priorReview.simulatedR != null) {
+      check(Number.isFinite(report.priorReview.simulatedR) && ['SIMULATED_STOP', 'SIMULATED_TP1'].includes(report.priorReview.resultStatus), 'R requires a completed reproducible simulation');
+      check(['TRIGGER','ENTRY'].every(type => report.priorReview.timeline?.some(event => event.type === type)) && report.priorReview.timeline?.some(event => ['STOP','TARGET'].includes(event.type)), 'R requires trigger, entry and exit evidence');
+    }
     if (["ยกเลิก", "เกิดสัญญาณ"].includes(report.priorReview.outcome)) {
       check(Array.isArray(report.priorReview.timeline) && report.priorReview.timeline.length, "Proven prior outcomes need a closed-bar timeline");
       for (const event of report.priorReview.timeline) {
-        check(["TRIGGER", "ENTRY", "INVALIDATED", "STOP", "TARGET"].includes(event.type), "Invalid prior-review event");
+        check(["BREAK", "TRIGGER", "ENTRY", "INVALIDATED", "STOP", "TARGET"].includes(event.type), "Invalid prior-review event");
         check(time(event.closedAt, "priorReview.timeline.closedAt") <= snapshot, "Prior event needs a closed-bar time");
         check(event.symbol === SYMBOL, "Prior event must use Pepperstone");
+        check(event.timeframe in FRAMES && event.bar && ['open','high','low','close'].every(key => number(event.bar[key])), 'Prior events need the actual candle and timeframe');
       }
     }
   }

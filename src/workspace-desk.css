@@ -54,6 +54,9 @@
   .workspace-app[data-workspace-page="plan"][data-workspace-view="full"] .plan-grid,
   .workspace-app[data-workspace-page="plan"][data-workspace-view="full"] #indicator-card,
   .workspace-app[data-workspace-page="plan"][data-workspace-view="full"] #report-image-link { display: none !important; }
+  .workspace-app[data-workspace-page="plan"][data-workspace-view="evidence"] #readiness-card,
+  .workspace-app[data-workspace-page="plan"][data-workspace-view="image"] #readiness-card,
+  .workspace-app[data-workspace-page="plan"][data-workspace-view="full"] #readiness-card,
   .workspace-app[data-workspace-page="plan"][data-workspace-view="evidence"] #report-wait-card,
   .workspace-app[data-workspace-page="plan"][data-workspace-view="image"] #report-wait-card,
   .workspace-app[data-workspace-page="plan"][data-workspace-view="full"] #report-wait-card { display: none !important; }

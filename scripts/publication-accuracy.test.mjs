@@ -10,7 +10,9 @@ const snapshotAt = bangkok(at());
 
 function waitReport() {
   return {
-    schemaVersion: 2, snapshotAt, status: "WAIT", planId: "TEST-WAIT", waitFor: "รอราคาเปิด", entryZone: "รอ", stop: "รอ", targets: [],
+    schemaVersion: 3, snapshotAt, status: "WAIT", planId: "TEST-WAIT", waitFor: "รอราคาเปิด", entryZone: "รอ", stop: "รอ", targets: [],
+    decision: { reason: 'MARKET_CLOSED', missing: [], nextAction: 'รอตลาดเปิดและตรวจราคาใหม่' },
+    evidenceArchive: { sha256: '0'.repeat(64), capturedAt: snapshotAt, method: 'DATA_WINDOW', counts: {} },
     sources: ["TradingView PEPPERSTONE:XAUUSD"],
     dataQuality: { status: "PARTIAL", priceSource: "PEPPERSTONE:XAUUSD" },
     evidence: { symbol: "PEPPERSTONE:XAUUSD", chartUrl: "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD", observedAt: snapshotAt, marketState: "CLOSED", newsCheck: { status: "UNAVAILABLE", checkedAt: snapshotAt }, bars: {} },
@@ -22,6 +24,8 @@ function waitReport() {
 function watchReport() {
   const report = waitReport();
   report.status = "WATCH BUY";
+  report.decision = { reason: 'CONDITIONAL_PLAN', missing: [], nextAction: 'รอแท่งปิดยืนยันก่อนประเมินเข้า' };
+  report.evidenceArchive.counts = { H1: 1, M15: 1, M5: 1 };
   report.dataQuality = { status: "OK", priceSource: "PEPPERSTONE:XAUUSD", priceAt: snapshotAt };
   report.evidence.marketState = "OPEN";
   report.evidence.spreadAssessment = "NORMAL";

@@ -1,3 +1,4 @@
+import { decisionView } from './analysis-readiness.js';
 export function reportState(report, now = Date.now()) {
   const age = now - Date.parse(report.snapshotAt);
   const expiry = /^\d{4}-\d\d-\d\dT/.test(report.validUntil || "") ? Date.parse(report.validUntil) : NaN;
@@ -17,7 +18,25 @@ export function reportState(report, now = Date.now()) {
   if (age >= 4 * 60 * 60 * 1000) return { title: "ต้องตรวจราคาใหม่", detail: "สถานะนี้อ้างอิงเวลาที่บันทึกรายงาน ยังไม่ใช่สัญญาณใหม่", tone: "warning" };
   if (/ตรวจไม่ได้/.test(planState)) return { title: "ยังตรวจสัญญาณไม่ได้", detail: "รอข้อมูลและแท่งปิดที่ตรวจสอบได้", tone: "warning" };
   if (/พบสัญญาณ/.test(planState)) return { title: "รายงานระบุว่าพบสัญญาณ", detail: "ตรวจราคาเข้าและความเสี่ยงล่าสุดก่อนตัดสินใจ", tone: "active" };
-  return { title: "รอเงื่อนไขยืนยัน", detail: report.waitFor || "รอแท่งปิดตามเงื่อนไขในแผน", tone: "waiting" };
+  return decisionView(report) || { title: "รอเงื่อนไขยืนยัน", detail: report.waitFor || "รอแท่งปิดตามเงื่อนไขในแผน", tone: "waiting" };
+}
+
+// A missing report is observable; its cause (quota, PC, publication) is not.
+export function deliveryState(report, now = Date.now()) {
+  const local = new Date(now + 7 * 3600000);
+  const midnight = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate()) - 7 * 3600000;
+  for (let day = 0; day < 8; day++) {
+    const base = midnight - day * 86400000;
+    const weekday = new Date(base + 7 * 3600000).getUTCDay();
+    if (weekday === 0 || weekday === 6) continue;
+    for (const [hour, minute] of [[19,0],[14,30],[9,0]]) {
+      const slot = base + (hour * 60 + minute) * 60000;
+      if (now < slot + 30 * 60000) continue;
+      if (Date.parse(report?.snapshotAt || '') >= slot) return null;
+      return { title: 'ยังไม่มีรายงานใหม่สำหรับรอบตามตารางล่าสุด', detail: 'กำลังแสดงรายงานรอบก่อน กรุณาตรวจผลการรันใน Codex; หน้าเว็บยังยืนยันสาเหตุไม่ได้' };
+    }
+  }
+  return null;
 }
 
 export function newsEventState(event, now = Date.now()) {

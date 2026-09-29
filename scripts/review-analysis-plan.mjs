@@ -1,0 +1,13 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { reviewPlan } from '../src/plan-review.js';
+import { createHash } from 'node:crypto';
+const args = process.argv.slice(2);
+const option = name => args.includes(name) ? args[args.indexOf(name) + 1] : null;
+if (!option('--report') || !option('--evidence') || !option('--output')) throw new Error('Usage: node scripts/review-analysis-plan.mjs --report original-report.json --evidence observations.json --output review.json');
+const read = async path => JSON.parse((await readFile(path, 'utf8')).replace(/^\uFEFF/, ''));
+const original = await read(option('--report'));
+const observations = await read(option('--evidence'));
+const hash = object => createHash('sha256').update(JSON.stringify(object)).digest('hex');
+const result = { ...reviewPlan(original, observations), reviewMethod: 'RULE_REPLAY_V1', originalSnapshotAt: original.snapshotAt, originalReportSha256: hash(original), evidenceSha256: hash(observations) };
+await writeFile(option('--output'), JSON.stringify(result, null, 2) + '\n', 'utf8');
+console.log(JSON.stringify(result));

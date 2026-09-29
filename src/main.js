@@ -1,5 +1,6 @@
 import "./style.css";
-import { reportState, newsEventState } from "./report-state.js";
+import { reportState, newsEventState, deliveryState } from "./report-state.js";
+import { readinessItems } from './analysis-readiness.js';
 import { createPlanChart } from "./plan-chart.js";
 import { chooseLatestReport } from "./report-selection.js";
 import { loadReportSources } from "./report-loader.js";
@@ -68,6 +69,16 @@ function updateReportState(report) {
   const freshness = freshnessLabel(report);
   byId("report-freshness").textContent = freshness.text;
   byId("report-freshness").className = "freshness-badge " + freshness.type;
+  const delivery = deliveryState(report);
+  byId('delivery-note').hidden = !delivery;
+  byId('delivery-note').textContent = delivery ? delivery.title + ' · ' + delivery.detail : '';
+  byId('report-readiness').replaceChildren(...readinessItems(report).map(item => {
+    const row = document.createElement('div');
+    row.className = 'readiness-row ' + (item.ready ? 'ready' : 'pending');
+    const label = document.createElement('strong'); label.textContent = (item.ready ? '✓ ' : '○ ') + item.label;
+    const detail = document.createElement('span'); detail.textContent = item.ready ? item.detail : 'ยังขาด: ' + item.detail;
+    row.append(label, detail); return row;
+  }));
 }
 
 function renderSources(container, sources) {

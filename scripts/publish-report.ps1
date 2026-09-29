@@ -28,6 +28,8 @@ if ($report.chartPlan -and -not $ChartDataDirectory) {
 if ($ChartDataDirectory -and -not (Test-Path -LiteralPath $ChartDataDirectory -PathType Container)) {
   throw "Chart data directory not found: $ChartDataDirectory"
 }
+node (Join-Path $PSScriptRoot 'verify-recorded-evidence.mjs') --input $ReportPath
+if ($LASTEXITCODE -ne 0) { throw 'Recorded evidence does not match the report; no files were published.' }
 if ($ImagePath) {
   if ($ChartDataDirectory) {
     node (Join-Path $PSScriptRoot 'validate-report.mjs') --publish --input $ReportPath --image $ImagePath --chart-data-dir $ChartDataDirectory
@@ -43,7 +45,7 @@ if ($ImagePath) {
 }
 if ($LASTEXITCODE -ne 0) { throw 'Report validation failed; no files were published.' }
 
-if ($report.schemaVersion -eq 2) {
+if ($report.schemaVersion -eq 3) {
   $taskRoot = Split-Path -Parent (Split-Path -Parent $repoRoot)
   $journalPath = Join-Path (Join-Path $taskRoot 'outputs') 'XAUUSD_Trading_Desk_Journal.md'
   if (-not (Test-Path -LiteralPath $journalPath -PathType Leaf)) { throw 'Trading desk journal is missing; update it before publication.' }
@@ -56,6 +58,9 @@ if (-not $snapshotMatch.Success) {
   throw 'Report snapshotAt must be an ISO 8601 string.'
 }
 $timestamp = [DateTimeOffset]::Parse($snapshotMatch.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture).ToUniversalTime().ToString('yyyyMMdd-HHmmss')
+New-Item -ItemType Directory -Force -Path $archiveDirectory | Out-Null
+$archiveReport = Join-Path $archiveDirectory ('analysis-' + $timestamp + '.json')
+if (Test-Path -LiteralPath $archiveReport) { throw 'An immutable report already exists at this snapshot. Capture a new snapshot instead of rewriting it.' }
 if ($ImagePath) {
   New-Item -ItemType Directory -Force -Path $archiveDirectory | Out-Null
   $archiveName = 'analysis-' + $timestamp + '.png'
@@ -98,8 +103,10 @@ if ($report.chartPlan) {
 
 $serializedReport = $report | ConvertTo-Json -Depth 20
 [System.IO.File]::WriteAllText($targetReport, $serializedReport, (New-Object System.Text.UTF8Encoding($false)))
+[System.IO.File]::WriteAllText($archiveReport, $serializedReport, (New-Object System.Text.UTF8Encoding($false)))
 Set-Location -LiteralPath $repoRoot
 git add -- public/reports/latest.json
+git add -- ('public/reports/archive/analysis-' + $timestamp + '.json')
 if ($ImagePath) {
   git add -- public/reports/latest.png
   git add -- ('public/reports/archive/analysis-' + $timestamp + '.png')

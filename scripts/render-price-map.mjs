@@ -2,6 +2,7 @@ import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { scenarioSvg } from "../src/scenario-plan.js";
+import { DECISION_REASONS } from "../src/analysis-readiness.js";
 
 const args = process.argv.slice(2);
 const option = (name) => {
@@ -124,8 +125,8 @@ const svg = [
   text(70, 105, "XAU/USD · แผนระดับราคา", 59, "#ffe3a2", 800),
   text(74, 150, "แผนผังระดับราคา ไม่ใช่กราฟราคาจริง", 25, "#b6c9d8", 500),
   rect(65, 185, 1070, 145, 37, "#111923", statusTone.border, 5),
-  text(105, 281, status, 94, statusTone.dot, 900),
-  block(420, 261, map.banner || report.headline || "รอเงื่อนไขยืนยัน", 42, "#f2f5f6", 700, 23, 2, 45),
+  text(105, 281, status, status.length > 4 ? 44 : 94, statusTone.dot, 900),
+  block(420, 261, DECISION_REASONS[report.decision?.reason]?.replace(/^WAIT · /, '') || map.banner || report.headline || "รอเงื่อนไขยืนยัน", 42, "#f2f5f6", 700, 23, 2, 45),
   text(84, 394, "แนวโน้มขึ้น / เป้าหมาย", 25, "#d8e6f0", 700),
   text(84, 1194, "แนวโน้มลง / ยกเลิก", 25, "#d8e6f0", 700),
   line(87, 425, 87, 1110, "#d8e6f0", 5),

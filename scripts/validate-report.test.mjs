@@ -53,7 +53,9 @@ test("publisher accepts an evidence-limited new WAIT without fabricated levels",
   const stamp = new Date(Date.now() - 30_000);
   const snapshotAt = new Date(stamp.getTime() + 7 * 3600_000).toISOString().replace("Z", "+07:00");
   const report = {
-    ...base, schemaVersion: 2, snapshotAt, planId: "TEST-WAIT", waitFor: "รอข้อมูลราคาหลัก", sources: ["TradingView PEPPERSTONE:XAUUSD"],
+    ...base, schemaVersion: 3, snapshotAt, planId: "TEST-WAIT", waitFor: "รอข้อมูลราคาหลัก", sources: ["TradingView PEPPERSTONE:XAUUSD"],
+    decision: { reason: 'DATA_MISSING', missing: ['ข้อมูลราคาหลัก'], nextAction: 'ตรวจราคาใหม่' },
+    evidenceArchive: { sha256: '0'.repeat(64), capturedAt: snapshotAt, method: 'DATA_WINDOW', counts: {} },
     dataQuality: { status: "UNAVAILABLE", priceSource: "PEPPERSTONE:XAUUSD" },
     evidence: { symbol: "PEPPERSTONE:XAUUSD", chartUrl: "https://www.tradingview.com/chart/?symbol=PEPPERSTONE%3AXAUUSD", observedAt: snapshotAt, marketState: "UNAVAILABLE", bars: {}, newsCheck: { status: "UNAVAILABLE", checkedAt: snapshotAt } },
     indicatorContext: { status: "UNAVAILABLE", name: "EBW V10.4.4", symbol: "PEPPERSTONE:XAUUSD", summary: "ยังตรวจไม่ได้", frames: [] },

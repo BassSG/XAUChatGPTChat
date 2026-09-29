@@ -52,7 +52,7 @@ export function setupMobileDesk() {
   const media = window.matchMedia('(max-width: 650px)');
   const show = (selector, yes) => document.querySelectorAll(selector).forEach(el => el.classList.toggle('mobile-route-hidden', !yes));
   const groups = {
-    conditions: '.plan-grid, #report-wait-card',
+    conditions: '.plan-grid, #report-wait-card, #readiness-card',
     image: '#report-image-link, #mobile-image-empty',
     evidence: '#indicator-card, #report-change-card, #prior-review-card, #weekly-review-card',
     full: '.full-analysis, .source-details, #report-validity'

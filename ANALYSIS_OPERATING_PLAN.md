@@ -6,7 +6,7 @@
 
 ## สัญญา V4 ที่ใช้ก่อนเริ่มวิเคราะห์
 
-อ่าน V4_REASONING_CONTRACT.md ก่อนทุกครั้ง ลำดับหลักคือ XAU HTF (W1/D1/H4/H1) → Daily SR → AMM → M15 Setup → M5 Trigger → DXY Filter ใช้ SPDR เป็น flow ระยะกลาง ข่าวเป็นชั้นภาวะตลาด/ความเสี่ยง และ EBW เป็นตัวประกอบยืนยันเท่านั้น ตั้ง baseline ครั้งแรกหรือ refresh เมื่อเข้าเงื่อนไข; รอบถัดไปใช้ baseline เดิมพร้อมหลักฐาน origin และตรวจ H1 invalidation ใหม่ตาม policy ไม่ต้องอ่าน HTF ทุกกรอบซ้ำโดยไม่มีเหตุ
+เริ่มด้วย FAST_RUN_WORKFLOW.md และ prepare-analysis-run.mjs; อ่านสัญญา V4 เต็มเมื่อเริ่มครั้งแรกหรือ hash กติกาเปลี่ยน รอบถัดไปอ่านเฉพาะส่วนที่ต้องใช้ ลำดับหลักคือ XAU HTF (W1/D1/H4/H1) → Daily SR → AMM → M15 Setup → M5 Trigger → DXY Filter ใช้ SPDR เป็น flow ระยะกลาง ข่าวเป็นชั้นภาวะตลาด/ความเสี่ยง และ EBW เป็นตัวประกอบยืนยันเท่านั้น ตั้ง baseline ครั้งแรกหรือ refresh เมื่อเข้าเงื่อนไข; รอบถัดไปใช้ baseline เดิมพร้อมหลักฐาน origin และตรวจ H1 invalidation ใหม่ตาม policy ไม่ต้องอ่าน HTF ทุกกรอบซ้ำโดยไม่มีเหตุ
 
 ## 1. ตรวจอินดิเคเตอร์ประกอบเมื่ออ่านค่า
 

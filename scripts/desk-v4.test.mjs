@@ -28,7 +28,7 @@ test('fixture fails publication even with a fresh quote and complete WATCH',()=>
   assert.throws(()=>validatePublicationEvidence(fixtureReport(true)),/fixtures cannot be published/);
 });
 test('V3 stays V3 and has no implied V4 baseline',async()=>{
-  const old=JSON.parse(await readFile('public/reports/latest.json','utf8'));
+  const old=JSON.parse(await readFile('public/reports/archive/analysis-20260930-021055.json','utf8'));
   assert.equal(old.schemaVersion,3);assert.equal(validateDeskV4(old),null);assert.equal(deskHtml(old),'');
   assert.ok(scenarioHtml(old).includes('M15'));assert.throws(()=>assembleDeskReport(old),/no automatic conversion/);
 });

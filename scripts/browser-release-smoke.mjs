@@ -7,7 +7,7 @@ const require=createRequire(import.meta.url);
 const {chromium}=require(process.env.XAU_PLAYWRIGHT_PATH || 'playwright');
 const browser=await chromium.launch({headless:true,...(process.env.XAU_BROWSER_CHANNEL?{channel:process.env.XAU_BROWSER_CHANNEL}:{})});
 const output=resolve('.test-artifacts');await mkdir(output,{recursive:true});
-const cases=[['v3',JSON.parse(await readFile('public/reports/latest.json','utf8'))],['wait',fixtureReport()],['watch',fixtureReport(true)]];
+const cases=[['v3',JSON.parse(await readFile('public/reports/archive/analysis-20260930-021055.json','utf8'))],['wait',fixtureReport()],['watch',fixtureReport(true)]];
 let passed=0;const results=[];
 try{
   for(const [width,height]of [[1440,1000],[820,1180],[390,844]])for(const [name,report]of cases){

@@ -4,7 +4,7 @@
 
 The previous three automations were standalone cron runs. Each started a separate projectless chat, repeated a long prompt and full operating documents, and consulted a growing journal/memory. The inspected evening run also retried blocked chart controls repeatedly and waited for future news. These are avoidable workflow costs; the FMP requests alone did not explain a 20+ minute run.
 
-- The three existing automation IDs were updated through the Codex automation tool to continue in one existing analysis chat. Original weekday times 09:00 / 14:30 / 19:00 are unchanged. The selected chat's recorded model setting is `gpt-6-sol` / `high`. Heartbeats inherit their target chat's model; they do not store a separate model override. Keep that chat's setting unchanged.
+- The three existing automation IDs were updated through the Codex automation tool to continue in one existing analysis chat. Original weekday times 09:00 / 14:30 / 19:00 are unchanged. At the time of this optimization the selected chat's recorded model setting was `gpt-6-sol` / `high`. Heartbeats inherit their target chat's model; they do not store a separate model override. The subsequent authorized model update below supersedes that model snapshot.
 - `FAST_RUN_WORKFLOW.md` is the compact entry contract. Full contracts are read on first use/change, with hashes acknowledged at READY rather than merely when a preparation script runs.
 - `prepare-analysis-run.mjs` loads a compact latest-report pointer, immutable structural evidence and baseline candidate, original report identity, journal index (including legacy sections), browser URL hints and deadlines. It does not approve carry automatically or cache current market confirmation.
 - The current closed H1 check remains mandatory before carry. Expiry, suspension, re-baseline, missing original archive or hash/reference mismatch require refresh. Original W1/D1/H4 dates/OHLC remain unchanged. No quote is copied into the structural carry file.
@@ -30,3 +30,7 @@ The 8-minute collection / 12-minute report-ready budget is an operating target, 
 Browser hints are URLs, not authenticated sessions or proof that a chart is live. A closed application or inaccessible primary source still requires an honest, useful information-limited report under the existing workflow.
 
 OpenAI documents the distinction between new-chat standalone tasks and existing-chat schedules in [Scheduled tasks](https://learn.chatgpt.com/docs/automations?surface=app).
+
+## Subsequent user-requested model update — 2026-09-30
+
+The user requested GPT-6.1 Sol Extra High for every scheduled analysis. All three existing heartbeat schedules now target the same existing chat whose recorded setting is `gpt-6.1-sol` / `xhigh`. Prompts, active workflow headers and private automation memories were updated to match. Weekday recurrence, scheduled times, report/evidence gates and the efficient startup workflow remain unchanged. No market analysis was triggered by this settings update. The model supports `xhigh` according to [OpenAI Docs](https://developers.openai.com/api/docs/models/gpt-6.1-sol).

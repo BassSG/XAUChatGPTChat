@@ -44,9 +44,9 @@ jobs:
           VITE_API_BASE_URL: ${{ vars.XAU_WORKER_URL }}
       - name: Check for a new analysis report
         id: report-change
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
-          if git diff-tree --root --no-commit-id --name-only -r "$GITHUB_SHA" | grep -qE '^public/reports/latest(\.json|\.png)$'; then
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || git diff-tree --root --no-commit-id --name-only -r "$GITHUB_SHA" | grep -qE '^public/reports/latest(\.json|\.png)$'; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"

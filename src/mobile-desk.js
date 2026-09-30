@@ -32,17 +32,18 @@ export function refreshMobileDesk() {
   const cards = [...document.querySelectorAll('.sequence-card')];
   byId('mobile-sequence-empty').hidden = cards.length > 0;
   const picker = byId('mobile-side-picker');
-  const selected = picker.querySelector('[aria-pressed="true"]')?.dataset.side || cards[0]?.dataset.side;
+  const cardKey = card => card.dataset.role || card.dataset.side;
+  const selected = picker.querySelector('[aria-pressed="true"]')?.dataset.key || (cards[0] && cardKey(cards[0]));
   picker.replaceChildren(...cards.map(card => {
     const button = document.createElement('button');
-    button.type = 'button'; button.dataset.side = card.dataset.side;
-    button.textContent = card.dataset.side === 'BUY' ? 'ฝั่งซื้อ' : 'ฝั่งขาย';
-    button.setAttribute('aria-pressed', String(card.dataset.side === selected));
+    button.type = 'button'; button.dataset.side = card.dataset.side; button.dataset.key=cardKey(card);
+    button.textContent = (card.dataset.role === 'PRIMARY' ? 'แผนหลัก · ' : card.dataset.role === 'ALTERNATIVE' ? 'แผนสำรอง · ' : '') + (card.dataset.side === 'BUY' ? 'ซื้อ' : 'ขาย');
+    button.setAttribute('aria-pressed', String(cardKey(card) === selected));
     button.addEventListener('click', () => {
       picker.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
       cards.forEach(c => c.classList.toggle('mobile-side-hidden', c !== card));
     });
-    card.classList.toggle('mobile-side-hidden', card.dataset.side !== selected);
+    card.classList.toggle('mobile-side-hidden', cardKey(card) !== selected);
     return button;
   }));
   applyRoute(false);
@@ -52,7 +53,7 @@ export function setupMobileDesk() {
   const media = window.matchMedia('(max-width: 650px)');
   const show = (selector, yes) => document.querySelectorAll(selector).forEach(el => el.classList.toggle('mobile-route-hidden', !yes));
   const groups = {
-    conditions: '.plan-grid, #report-wait-card, #readiness-card',
+    conditions: '.plan-grid, #report-wait-card, #readiness-card, #desk-v4-content',
     image: '#report-image-link, #mobile-image-empty',
     evidence: '#indicator-card, #report-change-card, #prior-review-card, #weekly-review-card',
     full: '.full-analysis, .source-details, #report-validity'

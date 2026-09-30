@@ -1,3 +1,6 @@
+import { validateDeskV4 } from './desk-v4.js';
+import { validateScenarioPlan } from './scenario-plan.js';
+import { newsEmbargo, assertProductionReport, validateNewsEvents } from './desk-policy.js';
 import { DECISION_REASONS } from './analysis-readiness.js';
 const SYMBOL = "PEPPERSTONE:XAUUSD";
 const FRAMES = { M5: 5 * 60_000, M15: 15 * 60_000, H1: 60 * 60_000 };
@@ -28,7 +31,11 @@ function containsPrice(value, expected) {
 }
 
 export function validatePublicationEvidence(report) {
-  check(report.schemaVersion === 3, "New reports require schemaVersion 3 and archived evidence");
+  assertProductionReport(report);
+  validateNewsEvents(report);
+  validateScenarioPlan(report);
+  check([3,4].includes(report.schemaVersion), "New reports require schemaVersion 3 or 4 and archived evidence");
+  validateDeskV4(report);
   const snapshot = time(report.snapshotAt, "snapshotAt");
   check(snapshot <= Date.now() + 60_000, "snapshotAt cannot be in the future");
   check(Date.now() - snapshot <= 15 * 60_000, "A new report must be published within 15 minutes of its snapshot");
@@ -128,8 +135,8 @@ export function validatePublicationEvidence(report) {
     age(bars[frame].closedAt, snapshot, maxAge, `${frame}.closedAt`);
   }
   for (const event of report.newsEvents || []) {
-    if (["UPCOMING", "UNVERIFIED"].includes(event.state) && event.currency === "USD" && event.impact === "HIGH" && Math.abs(time(event.at, "newsEvent.at") - snapshot) <= 30 * 60_000) {
-      throw new Error("WATCH cannot be published within 30 minutes around an unverified high-impact USD event");
+    if (newsEmbargo([event], snapshot).length > 0) {
+      throw new Error("WATCH cannot be published inside the shared high-impact USD event embargo");
     }
   }
   const plan = report.planLevels;

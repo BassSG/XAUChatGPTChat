@@ -1,3 +1,4 @@
+import { validateDeskV4 } from '../src/desk-v4.js';
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
@@ -15,6 +16,8 @@ if (!reportPath) throw new Error("Usage: node validate-report.mjs --input report
 
 const report = JSON.parse(await readFile(reportPath, "utf8"));
 validateScenarioPlan(report);
+if (report.schemaVersion != null && ![1,2,3,4].includes(report.schemaVersion)) throw new Error("Unsupported report schema version");
+validateDeskV4(report);
 const required = ["snapshotAt", "status", "headline", "summary", "bias", "entryZone", "trigger", "invalidation", "stop", "targets", "riskReward", "newsRisk", "body", "sources"];
 for (const field of required) {
   if (!(field in report)) throw new Error(`Missing required report field: ${field}`);

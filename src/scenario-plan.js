@@ -4,7 +4,9 @@ export function validateScenarioPlan(report) {
   if (!plan) return null;
   if (plan.symbol !== 'PEPPERSTONE:XAUUSD' || Date.parse(plan.asOf) !== Date.parse(report.snapshotAt)) throw new Error('Scenario source/time must match report');
   if (!Array.isArray(plan.scenarios) || !plan.scenarios.length || plan.scenarios.length > 2) throw new Error('Use 1–2 scenarios');
+  if(report.schemaVersion===4 && (plan.scenarios[0].role!=='PRIMARY' || plan.scenarios.length===2 && (plan.scenarios[1].role!=='ALTERNATIVE' || !plan.scenarios[1].transition)))throw new Error('V4 needs PRIMARY then conditional ALTERNATIVE');
   for (const s of plan.scenarios) {
+    if (report.schemaVersion === 4 && (!['M15','H1'].includes(s.breakFrame) || s.retestFrame !== 'M5' || !['PRIMARY','ALTERNATIVE'].includes(s.role))) throw new Error('V4 scenario requires M15+ setup and M5 retest with role');
     if (!['BUY','SELL'].includes(s.side) || !['M5','M15','H1'].includes(s.breakFrame) || !['M5','M15','H1'].includes(s.retestFrame)) throw new Error('Invalid scenario side/timeframe');
     if (![s.breakPrice,s.retestLow,s.retestHigh].every(Number.isFinite) || s.retestLow > s.retestHigh || s.breakPrice < s.retestLow || s.breakPrice > s.retestHigh) throw new Error('Invalid scenario levels');
     if (![s.confirmation,s.invalidation,s.evidence].every(v => typeof v === 'string' && v.trim())) throw new Error('Scenario needs confirmation, invalidation and evidence');
@@ -16,16 +18,17 @@ export function validateScenarioPlan(report) {
 export function scenarioHtml(report) {
   const plan = validateScenarioPlan(report);
   if (!plan) return '';
+  const source = scenarioSvg(report);
   return `<p class="sequence-note">แผนผังระดับราคา ไม่ใช่กราฟราคาจริง · เส้นประ = เส้นทางสมมติ</p>` + plan.scenarios.map((s, i) => {
-    const source = scenarioSvg({ ...report, scenarioPlan: { ...plan, scenarios: [s] } });
     // Reuse exactly the same paths as the report image, cropping only the drawings.
-    const drawing = (x, label) => source.replace(/width="1200" height="\d+" viewBox="[^"]+"/, `role="img" aria-label="${esc(label)}" width="525" height="180" viewBox="${x} 248 525 180"`);
-    return `<article data-side="${s.side}" class="sequence-card ${s.side === 'BUY' ? 'sequence-buy' : 'sequence-sell'}">
-      <h4>${i + 1}. ${s.side === 'BUY' ? 'ฉากฝั่งซื้อ' : 'ฉากฝั่งขาย'} · ${esc(s.breakFrame)} เบรก → ${esc(s.retestFrame)} รีเทสต์</h4>
+    const drawing = (x, label) => source.replace(/width="1200" height="\d+" viewBox="[^"]+"/, `role="img" aria-label="${esc(label)}" width="525" height="180" viewBox="${x} ${248+i*550} 525 180"`);
+    return `<article data-side="${s.side}" data-role="${esc(s.role || '')}" class="sequence-card ${s.side === 'BUY' ? 'sequence-buy' : 'sequence-sell'}">
+      <h4>${i + 1}. ${s.role === 'PRIMARY' ? 'แผนหลัก · ' : s.role === 'ALTERNATIVE' ? 'แผนสำรอง · ' : ''}${s.side === 'BUY' ? 'ฉากฝั่งซื้อ' : 'ฉากฝั่งขาย'} · ${esc(s.breakFrame)} เบรก → ${esc(s.retestFrame)} รีเทสต์</h4>
       <div class="sequence-steps">
         <div><h5>① ${esc(s.breakFrame)} ปิด${s.side === 'BUY' ? 'เหนือ' : 'ต่ำกว่า'} ${s.breakPrice.toFixed(2)}</h5>${drawing(45, 'เส้นทางสมมติขั้นเบรก')}<p>${s.breakState === 'OBSERVED' ? `พบแท่งปิดตามรายงาน ${esc(s.breakClosedAt.slice(11,16))}` : 'กรอบประ = แท่งยืนยันที่รอ ยังไม่เกิด'}</p></div>
         <div><h5>② ${esc(s.retestFrame)} รีเทสต์ ${s.retestLow.toFixed(2)}–${s.retestHigh.toFixed(2)}</h5>${drawing(615, 'เส้นทางสมมติขั้นรีเทสต์')}<p>จุดสีทอง = โซนทดสอบ · รอแท่งปิดยืนยัน</p></div>
       </div>
+      <p class="sequence-transition">${esc(s.transition || s.structuralReason || '')}</p>
       <p class="sequence-confirm">③ ${esc(s.confirmation)}</p>
       <p class="sequence-cancel">ยกเลิกฉาก: ${esc(s.invalidation)}</p>
     </article>`;
@@ -48,7 +51,7 @@ export function scenarioSvg(report) {
   plan.scenarios.forEach((s,i)=>{
     const y=150+i*550; const buy=s.side==='BUY'; const color=buy?'#49d6c9':'#ff808b';
     svg+=`<g transform="translate(0 ${y})"><rect x="20" y="8" width="1160" height="526" rx="18" fill="#102638" stroke="${color}"/>`;
-    svg+=t(45,50,`${i+1}. ${buy?'ฉากฝั่งซื้อ':'ฉากฝั่งขาย'} · ${s.breakFrame} เบรก → ${s.retestFrame} รีเทสต์`,29,color);
+    svg+=t(45,50,`${i+1}. ${s.role==='PRIMARY'?'แผนหลัก · ':s.role==='ALTERNATIVE'?'แผนสำรอง · ':''}${buy?'ซื้อ':'ขาย'} · ${s.breakFrame} เบรก → ${s.retestFrame} รีเทสต์`,29,color);
     svg+=t(45,90,`① ${s.breakFrame} ปิด${buy?'เหนือ':'ต่ำกว่า'} ${s.breakPrice.toFixed(2)}`,25);
     svg+=t(615,90,`② ${s.retestFrame} รีเทสต์ ${s.retestLow.toFixed(2)}–${s.retestHigh.toFixed(2)}`,24);
     for(const x of [45,615]) svg+=`<rect x="${x}" y="162" width="525" height="35" fill="${color}" opacity=".15"/><line x1="${x}" y1="180" x2="${x+525}" y2="180" stroke="${color}" stroke-width="2"/>`;

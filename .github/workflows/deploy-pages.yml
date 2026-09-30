@@ -32,6 +32,12 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Run desk regression tests
+        run: npm test
+      - name: Install Worker test dependencies
+        run: npm ci --prefix worker
+      - name: Run Worker and release validation
+        run: npm run test:manual && npm run test:release
       - name: Build site
         run: npm run build
         env:

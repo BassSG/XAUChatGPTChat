@@ -45,7 +45,7 @@ if ($ImagePath) {
 }
 if ($LASTEXITCODE -ne 0) { throw 'Report validation failed; no files were published.' }
 
-if ($report.schemaVersion -eq 3) {
+if ($report.schemaVersion -in @(3, 4)) {
   $taskRoot = Split-Path -Parent (Split-Path -Parent $repoRoot)
   $journalPath = Join-Path (Join-Path $taskRoot 'outputs') 'XAUUSD_Trading_Desk_Journal.md'
   if (-not (Test-Path -LiteralPath $journalPath -PathType Leaf)) { throw 'Trading desk journal is missing; update it before publication.' }

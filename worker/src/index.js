@@ -1,3 +1,4 @@
+import { validatePublicationEvidence } from '../../src/report-accuracy.js';
 import { sendPushNotification, rawPayload } from "@mmmike/web-push/send";
 import { handleManualAnalysis } from "./manual-analysis.js";
 
@@ -219,6 +220,7 @@ async function route(request, env, url) {
     if (!body || typeof body.snapshotAt !== "string" || !Number.isFinite(Date.parse(body.snapshotAt))) {
       return json({ error: "A valid snapshotAt timestamp is required." }, 400);
     }
+    try { validatePublicationEvidence(body); } catch (error) { return json({ error: error.message }, 400); }
     const snapshotAt = new Date(body.snapshotAt).toISOString();
     const headline = String(body.headline || "XAU/USD desk brief").slice(0, 180);
     const summary = String(body.summary || body.body || "").slice(0, 500);

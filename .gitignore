@@ -6,3 +6,5 @@ worker/.dev.vars
 .env
 .env.*
 !.env.example
+
+.test-artifacts/

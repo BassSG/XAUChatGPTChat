@@ -1,4 +1,6 @@
 import "./style.css";
+import "./desk-v4.css";
+import { deskHtml } from "./desk-render.js";
 import { reportState, newsEventState, deliveryState } from "./report-state.js";
 import { readinessItems } from './analysis-readiness.js';
 import { createPlanChart } from "./plan-chart.js";
@@ -123,7 +125,7 @@ function renderNews(report) {
     head.append(title, state);
     const detail = document.createElement("p");
     const time = event.at ? formatDate(event.at) : "ยังไม่ยืนยันเวลา";
-    const figures = announced ? [event.actual && "จริง " + event.actual, event.forecast && "คาด " + event.forecast, event.previous && "ก่อน " + event.previous].filter(Boolean).join(" · ") : "";
+    const figures = announced ? [event.actual != null && "จริง " + event.actual, event.forecast && "คาด " + event.forecast, event.previous && "ก่อน " + event.previous].filter(Boolean).join(" · ") : "";
     detail.textContent = [time, figures, event.impact].filter(Boolean).join("\n");
     card.append(head, detail);
     const linkUrl = safeWebUrl(event.sourceUrl);
@@ -192,6 +194,9 @@ function renderIndicatorContext(report) {
 function renderReport(report) {
   if (!report || !report.snapshotAt) return false;
   currentReport = report;
+  let deskHost = byId("desk-v4-content");
+  if (!deskHost) { deskHost = document.createElement("div"); deskHost.id = "desk-v4-content"; byId("report-content").prepend(deskHost); }
+  deskHost.innerHTML = deskHtml(report); deskHost.hidden = report.schemaVersion !== 4;
   const scenarioHost = byId("scenario-plan-content");
   try {
     scenarioHost.innerHTML = scenarioHtml(report);
@@ -369,7 +374,7 @@ function renderHistory() {
       '<span class="history-tag ' + status.className + '">' + escapeHTML(status.label) + '</span>' +
       '<span class="history-summary">' + escapeHTML(title) + (outcome ? '<small class="history-outcome">ผลตรวจ: ' + escapeHTML(outcome) + '</small>' : '') + '</span>' +
       '<span class="history-arrow" aria-hidden="true">›</span></summary>' +
-      '<div class="history-detail">' +
+      '<div class="history-detail">' + deskHtml(report) +
       (summary ? '<p class="history-detail-summary">' + escapeHTML(summary) + '</p>' : '') +
       '<div class="history-plan-grid">' +
       historyField("มุมมอง", report.bias || report.status) +

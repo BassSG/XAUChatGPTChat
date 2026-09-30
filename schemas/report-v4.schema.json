@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:xau-desk:report-v4",
+  "title": "V4 additive report envelope; semantic validation is src/desk-v4.js plus report-accuracy.js",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "snapshotAt",
+    "status",
+    "desk",
+    "headline",
+    "summary",
+    "bias",
+    "entryZone",
+    "trigger",
+    "invalidation",
+    "stop",
+    "targets",
+    "riskReward",
+    "newsRisk",
+    "body",
+    "sources"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 4
+    },
+    "snapshotAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "WAIT",
+        "WATCH BUY",
+        "WATCH SELL"
+      ]
+    },
+    "testOnly": {
+      "type": "boolean",
+      "description": "true is rejected by all publication boundaries"
+    },
+    "desk": {
+      "type": "object",
+      "required": [
+        "policyId",
+        "hierarchy",
+        "baseline",
+        "tacticalState",
+        "xauSummary",
+        "dailySR",
+        "amm",
+        "phase",
+        "setup",
+        "trigger",
+        "waitZones",
+        "noTradeZones",
+        "invalidation",
+        "dxy",
+        "spdr",
+        "news",
+        "rebaseline",
+        "entryIdea",
+        "conclusion"
+      ],
+      "properties": {
+        "policyId": {
+          "type": "string"
+        },
+        "hierarchy": {
+          "const": [
+            "XAU_HTF",
+            "DAILY_SR",
+            "AMM",
+            "M15_SETUP",
+            "M5_TRIGGER",
+            "DXY_FILTER"
+          ]
+        },
+        "baseline": {
+          "type": "object",
+          "required": [
+            "id",
+            "status",
+            "bias",
+            "invalidation",
+            "refreshReason"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "ACTIVE",
+                "SUSPENDED",
+                "UNAVAILABLE"
+              ]
+            },
+            "mode": {
+              "enum": [
+                "INITIAL",
+                "REFRESH",
+                "CARRY_FORWARD"
+              ]
+            },
+            "frames": {
+              "type": "object",
+              "required": [
+                "W1",
+                "D1",
+                "H4",
+                "H1"
+              ]
+            }
+          }
+        },
+        "tacticalState": {
+          "enum": [
+            "ACTIVE",
+            "SUSPENDED"
+          ]
+        },
+        "dailySR": {
+          "type": "object",
+          "required": [
+            "role",
+            "summary",
+            "levels"
+          ],
+          "properties": {
+            "role": {
+              "const": "LOCATION_MAP"
+            },
+            "levels": {
+              "type": "array"
+            }
+          }
+        },
+        "amm": {
+          "type": "object",
+          "required": [
+            "role",
+            "summary",
+            "zones"
+          ],
+          "properties": {
+            "role": {
+              "const": "SCENARIO_REFINER"
+            },
+            "zones": {
+              "type": "array"
+            }
+          }
+        },
+        "phase": {
+          "type": "object",
+          "required": [
+            "name",
+            "location",
+            "reason"
+          ],
+          "properties": {
+            "name": {
+              "enum": [
+                "TREND_IMPULSE",
+                "PULLBACK",
+                "CONSOLIDATION",
+                "BREAKOUT",
+                "RETEST",
+                "TRANSITION",
+                "REVERSAL_CANDIDATE",
+                "UNAVAILABLE"
+              ]
+            }
+          }
+        },
+        "setup": {
+          "type": "object",
+          "required": [
+            "timeframe",
+            "side",
+            "status",
+            "priceLocation",
+            "opposingLiquidity",
+            "reason"
+          ],
+          "properties": {
+            "timeframe": {
+              "const": "M15"
+            }
+          }
+        },
+        "trigger": {
+          "type": "object",
+          "required": [
+            "timeframe",
+            "state",
+            "condition"
+          ],
+          "properties": {
+            "timeframe": {
+              "const": "M5"
+            }
+          }
+        },
+        "waitZones": {
+          "type": "array"
+        },
+        "noTradeZones": {
+          "type": "array"
+        },
+        "invalidation": {
+          "type": "object",
+          "required": [
+            "triggerFailure",
+            "tactical",
+            "structural",
+            "actualStop",
+            "rebaseline"
+          ]
+        },
+        "dxy": {
+          "type": "object",
+          "required": [
+            "role",
+            "state",
+            "structure",
+            "reason"
+          ],
+          "properties": {
+            "role": {
+              "const": "CONFIRMATION_FILTER"
+            },
+            "state": {
+              "enum": [
+                "CONFIRM",
+                "NEUTRAL",
+                "CONTRADICT",
+                "UNAVAILABLE"
+              ]
+            }
+          }
+        },
+        "spdr": {
+          "type": "object",
+          "required": [
+            "role",
+            "summary",
+            "direction",
+            "flowBias"
+          ],
+          "properties": {
+            "role": {
+              "const": "MEDIUM_TERM_FLOW"
+            }
+          }
+        },
+        "news": {
+          "type": "object",
+          "required": [
+            "role",
+            "regime",
+            "policyId"
+          ],
+          "properties": {
+            "role": {
+              "const": "REGIME_EVENT_RISK"
+            }
+          }
+        },
+        "rebaseline": {
+          "type": "object",
+          "required": [
+            "state",
+            "signals"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "STABLE",
+                "REQUIRED"
+              ]
+            },
+            "signals": {
+              "type": "array"
+            }
+          }
+        },
+        "risk": {
+          "type": "object",
+          "description": "Required for WATCH: STRUCTURE_FIRST, stopEvidence, targetEvidence"
+        },
+        "entryIdea": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conclusion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "xauSummary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

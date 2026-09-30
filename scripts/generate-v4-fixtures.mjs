@@ -1,0 +1,10 @@
+import { mkdir,writeFile } from 'node:fs/promises';
+import { resolve,relative } from 'node:path';
+import { fixtureReport } from './fixtures/desk-v4-fixture.mjs';
+const args=process.argv.slice(2),index=args.indexOf('--output-dir');
+if(index<0)throw new Error('Use --output-dir in a private test directory');
+const dest=resolve(args[index+1]),pub=resolve('public');
+if(!relative(pub,dest).startsWith('..'))throw new Error('Fixtures cannot be written to public/');
+await mkdir(dest,{recursive:true});
+for(const [name,watch] of [['wait',false],['watch',true]]) await writeFile(resolve(dest,`v4-${name}.json`),JSON.stringify(fixtureReport(watch),null,2)+'\n');
+console.log('Generated explicit TEST fixtures outside public/.');

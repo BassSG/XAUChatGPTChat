@@ -9,6 +9,6 @@ const original = await read(option('--report'));
 const observations = await read(option('--evidence'));
 const hash = object => createHash('sha256').update(JSON.stringify(object)).digest('hex');
 if(original.schemaVersion >= 3 && observations.publication?.originalReportSha256 !== hash(original)) throw new Error('Publication receipt must match original immutable report');
-const result = { ...reviewPlan(original, observations), reviewMethod: 'RULE_REPLAY_V1', originalSnapshotAt: original.snapshotAt, originalReportSha256: hash(original), evidenceSha256: hash(observations) };
+const result = { ...reviewPlan(original, observations), reviewMethod: original.reviewRules?.version===3?'ARCHETYPE_REPLAY_V3':'RULE_REPLAY_V1', originalSnapshotAt: original.snapshotAt, originalReportSha256: hash(original), evidenceSha256: hash(observations) };
 await writeFile(option('--output'), JSON.stringify(result, null, 2) + '\n', 'utf8');
 console.log(JSON.stringify(result));

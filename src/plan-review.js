@@ -1,11 +1,17 @@
 import { validateEvidencePack, FRAME_MS, PRIMARY_SYMBOL } from './analysis-evidence.js';
 import { validateScenarioPlan } from './scenario-plan.js';
 import {isLocationDesk,isBreakSetup,selectedScenario} from './scenario-archetypes.js';
+import {reviewScenarioV3} from './scenario-review.js';
+import {validateDeskV4} from './desk-v4.js';
 
 // Replay only rules published with the original plan. No rules are inferred from prose.
 export function reviewPlan(report, evidence) {
   validateEvidencePack(evidence);
   validateScenarioPlan(report);
+  if(report.desk?.architectureVersion==='4.3'&&report.reviewRules?.version===3){
+    try{validateDeskV4(report);}catch(e){return {planId:report.planId,checkedAt:evidence.capturedAt,outcome:'ตรวจไม่ได้',resultStatus:'UNVERIFIABLE',simulatedR:null,timeline:[],evidence:'แผนต้นฉบับไม่ผ่าน validator: '+e.message};}
+    return reviewScenarioV3(report,evidence);
+  }
   const result = { planId: report.planId, checkedAt: evidence.capturedAt, outcome: 'ตรวจไม่ได้', evidence: '', timeline: [], simulatedR: null, resultStatus: 'UNVERIFIABLE' };
   const fail = text => ({ ...result, outcome: 'ตรวจไม่ได้', resultStatus: 'UNVERIFIABLE', evidence: text });
   if(isLocationDesk(report)&&(!isBreakSetup(selectedScenario(report))||report.desk.activeScenarioRole==='ALTERNATIVE'||report.reviewSupport?.mode==='UNSUPPORTED_MANUAL'))return fail('ชนิด setup นี้ยังไม่รองรับ replay ต้องทบทวนด้วยหลักฐานเอง ไม่คำนวณ R และไม่อนุมานกติกาย้อนหลัง');

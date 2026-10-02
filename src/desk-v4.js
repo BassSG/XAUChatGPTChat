@@ -1,8 +1,10 @@
 import { DESK_POLICY, LOCATION_POLICY, reportPolicy, newsEmbargo } from './desk-policy.js';
-import {isLocationDesk,isBreakSetup,isRebaselineSetup,selectedScenario,scenarioZone,confirmsM15} from './scenario-archetypes.js';
+import {isLocationDesk,isAlignedDesk,isBreakSetup,isRebaselineSetup,selectedScenario,scenarioZone,confirmsM15} from './scenario-archetypes.js';
 import {scanLocations,locationCandidates,zoneRelation,locationPriceLevels} from './desk-location.js';
 import {validateDeskContext} from './desk-context.js';
 import {validateScenarioPlan} from './scenario-plan.js';
+import {validateEnrichment} from './desk-enrichment.js';
+import {validateScenarioReviewRules} from './scenario-review.js';
 export const HIERARCHY = ['XAU_HTF', 'DAILY_SR', 'AMM', 'M15_SETUP', 'M5_TRIGGER', 'DXY_FILTER'];
 export const PHASES = ['TREND_IMPULSE','PULLBACK','CONSOLIDATION','BREAKOUT','RETEST','TRANSITION','REVERSAL_CANDIDATE','UNAVAILABLE'];
 export const NO_TRADE = {
@@ -80,6 +82,7 @@ export function applyRebaseline(report) {
   d.setup.status = 'SUSPENDED'; next.planLevels = null; next.status = 'WAIT';
   next.scenarioPlan = undefined;
   next.reviewRules = undefined;
+  if(isAlignedDesk(next))delete d.reviewDefinition;
   if(isLocationDesk(next)){
     d.waitZones=[];d.activeScenarioRole='PRIMARY';d.setup.locationRelation='UNKNOWN';d.setup.priceLocation='UNKNOWN';
     d.opportunityInputs={continuationScenarios:[]};d.phase={name:'TRANSITION',location:'UNKNOWN',reason:'โครงสร้างเดิมถูกพัก ต้องประเมินฐานใหม่จากสัญญาณ Re-baseline'};
@@ -239,17 +242,20 @@ export function validateDeskV4(report) {
     ok(p.targets.every(t=>d.risk.targetEvidence.some(r=>r.bar.high===t.price || r.bar.low===t.price)), 'targets must match observed opposing levels');
     ok(d.setup.opposingLiquidity==='CLEAR','WATCH needs clear opposing liquidity');
   }
-  if(report.reviewRules){
+  if(isAlignedDesk(report)&&report.reviewRules?.version===3){
+    validateScenarioReviewRules(report);
+  }else if(report.reviewRules){
     ok(!location||isBreakSetup(scenarios[0])&&(!d.activeScenarioRole||d.activeScenarioRole==='PRIMARY'),'new archetypes use explicit unsupported/manual replay; do not retrofit retest rules');
     const rules=report.reviewRules;
     ok(rules.version===2 && rules.side===scenarios[0]?.side && rules.confirmation==='RETEST_THEN_CLOSE' && price(rules.confirmationPrice) && rules.entry==='NEXT_M5_OPEN_WITHIN_ZONE' && rules.exit==='FULL_AT_TP1_OR_STOP', 'V4 replay needs original version 2 primary rules');
     ok(rules.invalidation && ['M5','M15','H1'].includes(rules.invalidation.timeframe) && ['ABOVE','BELOW'].includes(rules.invalidation.direction) && price(rules.invalidation.price), 'replay invalidation required');
   }
+  validateEnrichment(report,references);
   return readiness;
 }
 function validateLocationArchitecture(report,snapshot){
   const d=report.desk,m=d.locationMatrix,expected=scanLocations(report);
-  ok(text(report.candidateEntryZone)&&['LEGACY_BREAK_RETEST','UNSUPPORTED_MANUAL'].includes(report.reviewSupport?.mode)&&text(report.reviewSupport.reason),'separate candidate output and explicit replay support required');
+  ok(text(report.candidateEntryZone)&&['LEGACY_BREAK_RETEST','UNSUPPORTED_MANUAL',...(isAlignedDesk(report)?['ARCHETYPE_REPLAY_V3']:[])].includes(report.reviewSupport?.mode)&&text(report.reviewSupport.reason),'separate candidate output and explicit replay support required');
   ok(m&&m.state===expected.state&&text(m.reason),'location scan required before scenario selection');
   ok(m.currentPrice===expected.currentPrice&&m.quoteAt===expected.quoteAt,'location current price must match quote');
   for(const key of ['aboveCandidates','atCandidates','belowCandidates','continuationLevels','criticalLevels']){
@@ -301,7 +307,7 @@ function validateLocationArchitecture(report,snapshot){
     ok(d.setup.side===selected.side,'M15 setup must belong to selected scenario');
   }
   if(report.status!=='WAIT')ok(d.risk.quality===(report.planLevels.netR>=reportPolicy(report).preferredNetR?'PREFERRED':'CONDITIONAL'),'risk quality must match versioned net R policy');
-  if(selected&&(!isBreakSetup(selected)||d.activeScenarioRole==='ALTERNATIVE'))ok(report.reviewSupport.mode==='UNSUPPORTED_MANUAL'&&!report.reviewRules,'new setup replay must stay explicitly manual and unscored');
+  if(selected&&(!isBreakSetup(selected)||d.activeScenarioRole==='ALTERNATIVE'))ok(isAlignedDesk(report)&&report.reviewSupport.mode==='ARCHETYPE_REPLAY_V3'&&report.reviewRules?.version===3 || report.reviewSupport.mode==='UNSUPPORTED_MANUAL'&&!report.reviewRules,'new setup replay needs explicit V3 rules or manual/unscored review');
   for(const z of d.waitZones){
     ok(['BUY','SELL'].includes(z.side)&&['PRIMARY','ALTERNATIVE','CANDIDATE'].includes(z.priority)&&text(z.purpose)&&text(z.sourceLayer)&&text(z.setupType),'typed wait zone required');
     ok(['ABOVE','BELOW','AT_ZONE','PASSED','UNKNOWN'].includes(z.relationToCurrentPrice),'wait-zone position required');

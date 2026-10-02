@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fixtureDraft,fixtureReport } from './fixtures/desk-v4-fixture.mjs';
 import {locationReport} from './fixtures/desk-v42-fixture.mjs';
+import {alignedReport} from './fixtures/desk-v43-fixture.mjs';
 import { assembleDeskReport } from '../src/desk-generation.js';
 import { validateDeskV4 } from '../src/desk-v4.js';
 import { reviewPlan } from '../src/plan-review.js';
@@ -75,6 +76,7 @@ test('Worker rejects fixtures, stale data, future Actuals, and invalid V4 before
     const send=body=>mf.dispatchFetch('https://local.test/api/admin/reports',{method:'POST',headers:{Authorization:'Bearer TEST-ONLY-NONSECRET','Content-Type':'application/json'},body:JSON.stringify(body)});
     assert.equal((await send(fixtureReport(true))).status,400);
     assert.equal((await send(locationReport('SELL',true))).status,400);
+    assert.equal((await send(alignedReport('SELL',true))).status,400);
     const base=fixtureReport(true);delete base.testOnly;delete base.dataClass; // local emulator only
     const stale=structuredClone(base);stale.evidence.quote.at='2020-01-01T00:00:00Z';assert.equal((await send(stale)).status,400);
     const future=structuredClone(base);future.newsEvents=[{title:'test',at:'2999-01-01T00:00:00Z',state:'RELEASED',actual:0,sourceUrl:'https://example.test'}];assert.equal((await send(future)).status,400);
@@ -83,5 +85,9 @@ test('Worker rejects fixtures, stale data, future Actuals, and invalid V4 before
     assert.equal((await send(base)).status,201);assert.equal((await db.prepare('SELECT count(*) as n FROM reports').first()).n,1);
     const location=locationReport('SELL',true);delete location.testOnly;delete location.dataClass; // local emulator only
     assert.equal((await send(location)).status,201);assert.equal((await db.prepare('SELECT count(*) as n FROM reports').first()).n,2);
+    const aligned=alignedReport('SELL',true);delete aligned.testOnly;delete aligned.dataClass; // local emulator only
+    const mismatch=structuredClone(aligned);mismatch.desk.indicatorVerification.chartSourceSha256='1'.repeat(64);assert.equal((await send(mismatch)).status,400);
+    const invalidM5=structuredClone(aligned);invalidM5.reviewRules.m5.price=100;assert.equal((await send(invalidM5)).status,400);
+    assert.equal((await send(aligned)).status,201);assert.equal((await db.prepare('SELECT count(*) as n FROM reports').first()).n,3);
   }finally{await mf.dispose();}
 });

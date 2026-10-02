@@ -1,6 +1,6 @@
 import { reportPolicy } from './desk-policy.js';
-import {selectedScenario} from './scenario-archetypes.js';
-export const TOOLKIT = ['EMA','RSI','STOCHASTIC','FVG','OB','EQH','EQL','DIVERGENCE','SWEEP','ABSORPTION','DISPLACEMENT','HH_HL','LH_LL','BOS','CHOCH','ONE_TWO_THREE','PREMIUM_DISCOUNT','EQUILIBRIUM'];
+import {selectedScenario,isAlignedDesk} from './scenario-archetypes.js';
+export const TOOLKIT = ['EMA','RSI','STOCHASTIC','FVG','OB','EQH','EQL','DIVERGENCE','SWEEP','ABSORPTION','DISPLACEMENT','HH_HL','LH_LL','BOS','CHOCH','ONE_TWO_THREE','PREMIUM_DISCOUNT','EQUILIBRIUM','SUPPLY_DEMAND','SWING_HIGH','SWING_LOW'];
 const ok=(value,message)=>{if(!value)throw new Error('V4.2 context: '+message);};
 const text=v=>typeof v==='string'&&v.trim();
 // Optional observations never become substitutes for the structural setup.
@@ -14,7 +14,12 @@ export function validateDeskContext(report,references){
     ok(item.observedAt&&Date.parse(item.observedAt)<=at&&Date.parse(item.observedAt)>=Math.max(...item.evidence.map(r=>Date.parse(r.closedAt))),'toolkit observation chronology');
     if(item.name==='EMA')ok([25,50,100,200].includes(item.parameters?.period)&&Number.isFinite(item.value),'EMA period/value');
     if(item.name==='RSI')ok(item.parameters?.period===14&&item.value>=0&&item.value<=100,'RSI14 value');
-    if(item.name==='STOCHASTIC')ok(item.parameters?.k===9&&item.parameters?.smooth===3&&item.parameters?.d===3&&[item.value?.k,item.value?.d].every(v=>Number.isFinite(v)&&v>=0&&v<=100),'Stochastic 9-3-3 value');
+    if(item.name==='STOCHASTIC'){
+      const p=item.parameters,verified=report.desk.indicatorVerification;
+      const canonical=p?.k===9&&p?.smooth===3&&p?.d===3;
+      const actual=isAlignedDesk(report)&&['INPUTS_VERIFIED','EXACT_SOURCE_VERIFIED'].includes(verified?.state)&&p?.k===verified.inputs.combo_kLength&&p?.smooth===verified.inputs.combo_kSmooth&&p?.d===verified.inputs.combo_dLength;
+      ok((canonical||actual)&&[item.value?.k,item.value?.d].every(v=>Number.isFinite(v)&&v>=0&&v<=100),'Stochastic parameters must be 9-3-3 or actually verified chart Inputs');
+    }
     if(['EQH','EQL'].includes(item.name))ok(item.parameters?.tolerance===policy.equalLevelTolerance,'equal-level tolerance must use desk policy');
   }
   const frames=d.dxy.frames;

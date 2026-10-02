@@ -1,8 +1,8 @@
 # XAU/USD Trading Desk V4 — authoritative reasoning contract
 
-## Current V4.2 location extension
+## Current V4.3 source and location alignment
 
-For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+New runs follow [V4_3_SOURCE_ALIGNMENT.md](V4_3_SOURCE_ALIGNMENT.md), building on [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md). Use schemaVersion 4 / architectureVersion "4.3" / policy XAU_V4_2. Scan above/current/below; verify actual Pine/source/Inputs and relevant confluence; select appropriate M15 then M5; preserve useful WAIT planning and dated DXY/SPDR/news. New explicit reviewRules V3 supports the scenario selected at publication. V4.2 manual-review and original V4 PRIMARY-only/reviewRules V2 descriptions below are historical compatibility branches. Preserve evidence, freshness, journal, publisher, schedules and model.
 
 
 This contract supersedes earlier indicator-led reasoning instructions. It extends the existing desk; it does not replace collection, evidence, freshness, review, journal or publication controls. Historical V3 reports retain their original interpretation. Schedule times and models remain unchanged.
@@ -64,7 +64,7 @@ New desk fields: `policyId`, `hierarchy`, `baseline`, `tacticalState`, `xauSumma
 
 ## Review and backward compatibility
 
-V4 `reviewRules.version:2` preserves the existing break→retest→next-M5-open simulation rules, but requires an archived publication receipt `{planId,publishedAt,originalReportSha256,sourceUrl}` in the review evidence pack. Collect actual Worker publication time, not snapshot time. Entry starts at the first M5 opening at/after actual publication. Entry expiry does not truncate evidence needed to resolve an already-open simulated position. Missing bars or ambiguous same-bar TP/SL remain unscored. Review only the original PRIMARY; never activate an alternative retrospectively.
+Historical original V4 / 4.2 break-only `reviewRules.version:2` preserves the existing break→retest→next-M5-open simulation rules, but requires an archived publication receipt `{planId,publishedAt,originalReportSha256,sourceUrl}` in the review evidence pack. Collect actual Worker publication time, not snapshot time. Entry starts at the first M5 opening at/after actual publication. Entry expiry does not truncate evidence needed to resolve an already-open simulated position. Missing bars or ambiguous same-bar TP/SL remain unscored. That legacy replay reviews only its original PRIMARY. Current 4.3 V3 rules review the explicitly selected-at-publication scenario; neither path activates an alternative retrospectively.
 
 V3 reports render through the original path, receive no fabricated V4 fields, and are not rewritten. Original V1 review rules are retained. For schema 3/4 production reports, a missing actual publication receipt makes replay unverifiable rather than using a potentially premature snapshot start. Original rule semantics must not be retrofitted to manufacture a result. Unsupported review logic remains explicitly unverifiable.
 

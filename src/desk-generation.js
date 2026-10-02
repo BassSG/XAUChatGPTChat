@@ -1,8 +1,10 @@
 import { applyRebaseline, deskReadiness, validateDeskV4, NO_TRADE } from './desk-v4.js';
 import { deskBody } from './desk-render.js';
 import { attachLocationScan, locationPriceLevels } from './desk-location.js';
-import { isLocationDesk, isBreakSetup, scenarioZone, scenarioTitle, zoneText,selectedScenario } from './scenario-archetypes.js';
+import { isLocationDesk, isAlignedDesk, isBreakSetup, scenarioZone, scenarioTitle, zoneText,selectedScenario } from './scenario-archetypes.js';
 import { reportPolicy } from './desk-policy.js';
+import {enrichDesk} from './desk-enrichment.js';
+import {buildScenarioReviewRules} from './scenario-review.js';
 // Input is observed structure + explicit analyst reasoning, never an indicator-score vote.
 export function assembleDeskReport(input) {
   if(input.schemaVersion!==4)throw new Error('V4 draft required; no automatic conversion of V3');
@@ -26,7 +28,11 @@ export function assembleDeskReport(input) {
     if(report.status==='WAIT')report.desk.conclusion+='\n'+report.candidateEntryZone;
     const supported=scenarios.length&&isBreakSetup(scenarios[0])&&(report.desk.activeScenarioRole||'PRIMARY')==='PRIMARY';
     report.reviewSupport={mode:supported?'LEGACY_BREAK_RETEST':'UNSUPPORTED_MANUAL',reason:supported?'ใช้กติกาเดิมที่เผยแพร่พร้อมแผนเท่านั้น':'ชนิด setup นี้ต้องทบทวนหลักฐานเอง ยังไม่รองรับ replay และไม่นับ R อัตโนมัติ'};
-    if(!supported)delete report.reviewRules;
+    if(isAlignedDesk(report)){
+      const rules=buildScenarioReviewRules(report);
+      if(rules){report.reviewRules=rules;report.reviewSupport={mode:'ARCHETYPE_REPLAY_V3',reason:'ตรวจชนิด M15 → M5 ของฉากที่เลือก ณ เผยแพร่ ด้วยกติกาเดิมและ receipt; ไม่เปิดแผนสำรองย้อนหลัง ไม่ใช่ Pine fill หรือผลบัญชีผู้ใช้'};}
+      else {delete report.reviewRules;report.reviewSupport={mode:'UNSUPPORTED_MANUAL',reason:'ไม่มี reviewDefinition ตัวเลขครบในแผนต้นฉบับ จึงทบทวนด้วยหลักฐานเอง ไม่ตั้งกติกาย้อนหลัง'};}
+    }else if(!supported)delete report.reviewRules;
   }
   report.headline=report.status+' — '+Array.from(report.status==='WAIT' ? ready.reasons.map(r=>NO_TRADE[r]).join(' · ') : report.desk.conclusion).slice(0,150).join('');
   report.summary=Array.from(report.desk.conclusion).slice(0,500).join('');
@@ -52,6 +58,7 @@ export function assembleDeskReport(input) {
   if(location&&p)report.riskReward+=` · ${p.netR>=reportPolicy(report).preferredNetR?'ผ่านเกณฑ์ที่ต้องการ':'ผ่านขั้นต่ำ แต่ต่ำกว่าเกณฑ์ที่ต้องการ'}`;
   report.priceMap={banner:report.headline,levels:p?[{kind:'ENTRY',price:`${n(p.entry.low)}–${n(p.entry.high)}`,label:'โซนเข้า'},{kind:'STOP',price:n(p.stop.price),label:'Stop ตามโครงสร้าง'},{kind:'TARGET',price:n(p.targets[0].price),label:'เป้าแรก'}]:[],scenarios:[],context:report.newsRisk};
   if(location)report.priceMap.levels=p?[...report.priceMap.levels,...locationPriceLevels(report)].slice(0,7):locationPriceLevels(report);
+  enrichDesk(report);
   validateDeskV4(report);
   report.body=deskBody(report);
   return report;

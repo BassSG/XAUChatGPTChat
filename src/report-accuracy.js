@@ -109,7 +109,7 @@ export function validatePublicationEvidence(report) {
     if (["ยกเลิก", "เกิดสัญญาณ"].includes(report.priorReview.outcome)) {
       check(Array.isArray(report.priorReview.timeline) && report.priorReview.timeline.length, "Proven prior outcomes need a closed-bar timeline");
       for (const event of report.priorReview.timeline) {
-        check(["BREAK", "TRIGGER", "ENTRY", "INVALIDATED", "STOP", "TARGET"].includes(event.type), "Invalid prior-review event");
+        check(["BREAK", "TRIGGER", "ENTRY", "INVALIDATED", "STOP", "TARGET",...(report.priorReview.reviewMethod==='ARCHETYPE_REPLAY_V3'?['SETUP','NEWS_FILTER']:[])].includes(event.type), "Invalid prior-review event");
         check(time(event.closedAt, "priorReview.timeline.closedAt") <= snapshot, "Prior event needs a closed-bar time");
         check(event.symbol === SYMBOL, "Prior event must use Pepperstone");
         check(event.timeframe in FRAMES && event.bar && ['open','high','low','close'].every(key => number(event.bar[key])), 'Prior events need the actual candle and timeframe');

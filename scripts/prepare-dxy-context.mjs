@@ -1,0 +1,13 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {checkDxyCarry} from '../src/dxy-baseline.js';
+import {requirePrivatePath} from './fmp-cache.mjs';
+const args=process.argv.slice(2),get=k=>args.includes(k)?args[args.indexOf(k)+1]:null;
+if(!get('--context')||!get('--h1')||!get('--output')||!get('--at'))throw new Error('Use --context private/context.json --h1 actual-DXY-H1-frame.json --at ISO --output private/dxy-carry.json');
+const read=async p=>JSON.parse((await readFile(p,'utf8')).replace(/^\uFEFF/,''));
+const context=await read(get('--context')),h1=await read(get('--h1'));
+const result=checkDxyCarry(context.supplemental?.dxyBaseline,h1,get('--at'));
+const out=resolve(get('--output'));requirePrivatePath(out,resolve(dirname(fileURLToPath(import.meta.url)),'..'));
+await mkdir(dirname(out),{recursive:true});await writeFile(out,JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({state:result.state,reason:result.reason,output:out}));

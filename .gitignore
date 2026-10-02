@@ -8,3 +8,4 @@ worker/.dev.vars
 !.env.example
 
 .test-artifacts/
+__pycache__/

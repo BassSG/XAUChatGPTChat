@@ -1,5 +1,5 @@
 const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
-import {isLocationDesk,isBreakSetup,isRebaselineSetup,SETUP_TYPES,CONFIRMATION_TYPES,TREND_RELATIONSHIPS,scenarioZone,scenarioTitle,scenarioSteps,zoneText} from './scenario-archetypes.js';
+import {isLocationDesk,isAlignedDesk,isBreakSetup,isRebaselineSetup,SETUP_TYPES,CONFIRMATION_TYPES,TREND_RELATIONSHIPS,scenarioZone,scenarioTitle,scenarioSteps,zoneText} from './scenario-archetypes.js';
 import {diagramLines} from './diagram-text.js';
 export function validateScenarioPlan(report) {
   const plan = report.scenarioPlan;
@@ -14,6 +14,7 @@ export function validateScenarioPlan(report) {
       if(s.setupFrame!=='M15'||s.triggerFrame!=='M5')throw new Error('V4.2 requires M15 setup then M5 fine entry');
       const c=s.m15Confirmation;
       if(!c||!CONFIRMATION_TYPES.includes(c.type)||!['PENDING','OBSERVED'].includes(c.state)||!Array.isArray(c.evidence))throw new Error('V4.2 needs typed M15 confirmation');
+      if(['ENGULFING_CLOSE','FAILED_RECLAIM','SWING_RESUMPTION'].includes(c.type)&&!isAlignedDesk(report))throw new Error('New pattern definitions require explicit architectureVersion 4.3');
       const z=scenarioZone(s);
       if(![z.low,z.high].every(v=>Number.isFinite(v)&&v>0)||z.low>z.high)throw new Error('Invalid scenario zone');
       if(!isBreakSetup(s)){

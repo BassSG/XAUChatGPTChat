@@ -1,8 +1,8 @@
 # XAU Desk — แบบแผนการวิเคราะห์และความเสถียร
 
-## Current V4.2 location extension
+## Current V4.3 source and location alignment
 
-For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+New runs follow [V4_3_SOURCE_ALIGNMENT.md](V4_3_SOURCE_ALIGNMENT.md), building on [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md). Use schemaVersion 4 / architectureVersion "4.3" / policy XAU_V4_2. Scan above/current/below; verify actual Pine/source/Inputs and relevant confluence; select appropriate M15 then M5; preserve useful WAIT planning and dated DXY/SPDR/news. New explicit reviewRules V3 supports the scenario selected at publication. V4.2 manual-review and original V4 PRIMARY-only/reviewRules V2 descriptions below are historical compatibility branches. Preserve evidence, freshness, journal, publisher, schedules and model.
 
 
 ## เป้าหมาย
@@ -17,7 +17,7 @@ For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before 
 
 หลักฐานราคาคือกราฟแท่งมาตรฐาน PEPPERSTONE:XAUUSD; อ่านอินดิเคเตอร์ของผู้ใช้เป็นข้อมูลประกอบบน H1 → M15 → M5 อ่านชื่อและเวอร์ชันที่แสดงจริง ตรวจโหมดและค่าตั้งที่มีผลเมื่อเข้าถึงได้: Intraday/Limit Planner, Signal timeframes, higher-TF filter, Map refresh, cost allowance และ source warmup
 
-เก็บสถานะการตรวจต้นฉบับเป็น EXACT_SOURCE_VERIFIED / NAME_ONLY / UNAVAILABLE ในบันทึกส่วนตัว ชื่อเวอร์ชันตรงกันอย่างเดียวไม่พิสูจน์ว่าโค้ดและ inputs เหมือนต้นฉบับ เมื่อไม่มีสิทธิ์อ่านโค้ดใน Editor ให้บอก NAME_ONLY ห้ามอ้าง exact match ห้ามเปลี่ยน saved layout หรือ inputs เงียบ ๆ ถ้าสคริปต์ไม่อยู่บนกราฟ ให้ระบุข้อขาดและส่งรายงานข้อมูลที่มี ไม่อ้างว่าติดตั้งแล้ว
+เก็บสถานะการตรวจต้นฉบับเป็น UNAVAILABLE / NAME_ONLY / INPUTS_VERIFIED / EXACT_SOURCE_VERIFIED / SOURCE_MISMATCH ใน desk.indicatorVerification และหลักฐานส่วนตัวตาม V4_3_SOURCE_ALIGNMENT.md ชื่อเวอร์ชันตรงกันอย่างเดียวไม่พิสูจน์ว่าโค้ดและ inputs เหมือนต้นฉบับ เมื่ออ่าน Inputs ได้แต่ยังไม่ได้ตรวจ source ใช้ INPUTS_VERIFIED; เมื่ออ่านได้เพียงชื่อใช้ NAME_ONLY ห้ามอ้าง exact match ห้ามเปลี่ยน saved layout หรือ inputs เงียบ ๆ ถ้าสคริปต์ไม่อยู่บนกราฟ ให้ระบุข้อขาดและส่งรายงานข้อมูลที่มี ไม่อ้างว่าติดตั้งแล้ว
 
 ข้อค้นพบจากไฟล์ต้นฉบับที่ผู้ใช้ให้ (เป็นค่าเริ่มต้น/ตรรกะโค้ด ไม่ใช่การยืนยันค่าบนกราฟ):
 
@@ -42,7 +42,7 @@ For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before 
 
 แยก NOT_PRESENT (ไม่มีค่า/สัญญาณในอินดี้), UNREADABLE (อ่านไม่ได้) และ VERIFIED (อ่านพร้อมเวลาได้) ห้ามแทน null ด้วย 0 ห้ามเอา Signal เก่ามาอ้างเป็นสัญญาณของแท่งที่เลือกเพียงเพราะยังแสดงอยู่ แยก Signal TP, setup TP และ nearest resistance ซึ่งอาจมีความหมายต่างกัน
 
-ใช้ indicatorContext.frames fields เดิมกับค่าที่รองรับเป็นตัวประกอบ; โครงสร้างหลักลง desk ตามสัญญา V4; รายละเอียดโซน/โหมด/เวลาเกิดสัญญาณที่เกิน schema ให้บันทึกใน body และหลักฐานส่วนตัว ไม่จำเป็นต้องเปลี่ยน frontend ก่อนรายงานมีข้อมูล ใช้ support/resistance แบบจุดเฉพาะเมื่ออินดี้แสดงเป็นจุด ไม่แปลงขอบโซนเป็นจุดตามใจ
+ใช้ indicatorContext.frames fields เดิมกับค่าที่รองรับเป็นตัวประกอบ; โครงสร้างหลักลง desk ตามสัญญา V4.3. โซนและ confluence ลง toolkit.observations / zoneEvidence, source/Inputs ลง indicatorVerification, แยก AMM source, DXY conditions และ SPDR history ตาม fields ที่รองรับ; รายละเอียดส่วนเกินอยู่ใน body และหลักฐานส่วนตัว. ใช้ support/resistance แบบจุดเฉพาะเมื่ออินดี้แสดงเป็นจุด ไม่แปลงขอบโซนเป็นจุดตามใจ
 
 ## 3. สังเคราะห์ตามลำดับ Trading Desk V4
 

@@ -1,6 +1,8 @@
 # XAU Desk V4.2 — location first, multiple setup archetypes
 
-Current new-run contract. Incremental extension of V4; collection, freshness, private immutable evidence, journal, plan review and publisher remain required. New reports keep schemaVersion 4 and explicitly set desk.architectureVersion "4.2", policyId XAU_V4_2. Do not convert historical reports. Keep existing schedules and GPT-6.1 Sol xhigh.
+Historical 4.2 contract retained for compatible reports. New runs use [V4_3_SOURCE_ALIGNMENT.md](V4_3_SOURCE_ALIGNMENT.md); its source verification, M15 extensions and explicit replay V3 override the matching 4.2-only sections here.
+
+Historical 4.2 contract. Incremental extension of V4; collection, freshness, private immutable evidence, journal, plan review and publisher remain required. Reports originally generated under this version keep schemaVersion 4 and desk.architectureVersion "4.2", policyId XAU_V4_2. Current new reports use 4.3 as specified above. Do not convert historical reports. Keep existing schedules and GPT-6.1 Sol xhigh.
 
 ## Decision order
 

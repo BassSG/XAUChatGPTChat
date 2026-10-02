@@ -31,14 +31,15 @@ if (report.schemaVersion === 4 && report.desk.baseline.mode === 'CARRY_FORWARD')
 }
 const review = report.priorReview;
 if (review && (!['ตรวจไม่ได้','รอตรวจ'].includes(review.outcome) || review.simulatedR != null)) {
-  if (review.reviewMethod !== 'RULE_REPLAY_V1' || !Number.isFinite(Date.parse(review.originalSnapshotAt))) throw new Error('A proven prior outcome requires a reproducible review');
+  if (!['RULE_REPLAY_V1','ARCHETYPE_REPLAY_V3'].includes(review.reviewMethod) || !Number.isFinite(Date.parse(review.originalSnapshotAt))) throw new Error('A proven prior outcome requires a reproducible review');
   const stamp = new Date(review.originalSnapshotAt).toISOString().slice(0,19).replace(/[-:]/g,'').replace('T','-');
   const original = await read(join(scriptRoot, '../public/reports/archive/analysis-' + stamp + '.json'));
   if (hash(original) !== review.originalReportSha256 || original.planId !== review.planId) throw new Error('Original plan differs from the published archive');
+  if((original.reviewRules?.version===3)!==(review.reviewMethod==='ARCHETYPE_REPLAY_V3'))throw new Error('Review method differs from the original published rule version');
   const reviewPack = await archived(review.evidenceSha256);
   if(original.schemaVersion >= 3 && reviewPack.publication?.originalReportSha256 !== hash(original))throw new Error('Review publication receipt differs from original');
   const expected = reviewPlan(original, reviewPack);
-  for (const key of ['planId','checkedAt','outcome','resultStatus','simulatedR','timeline','evidence','reviewFrom','reviewTo']) {
+  for (const key of ['planId','checkedAt','outcome','resultStatus','simulatedR','timeline','evidence','reviewFrom','reviewTo','scenarioRole']) {
     if (JSON.stringify(review[key]) !== JSON.stringify(expected[key])) throw new Error('Prior review differs from replay: ' + key);
   }
 }

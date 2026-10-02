@@ -51,6 +51,15 @@ export function validateEvidencePack(pack) {
         }
       }
     }
+    for(const key of ['spdrHistory','newsContext'])if(pack.context[key]!=null){
+      requireValue(Array.isArray(pack.context[key]),'Auxiliary dated context must be an array');
+      for(const row of pack.context[key])requireValue(Number.isFinite(instant(row.checkedAt))&&instant(row.checkedAt)<=captured,'Dated context check must precede capture');
+    }
+    for(const key of ['indicatorVerification','ammSource'])if(pack.context[key]!=null){
+      const row=pack.context[key];requireValue(row&&typeof row==='object'&&!Array.isArray(row),'Invalid source verification context');
+      const at=row.verifiedAt||row.checkedAt;
+      if(row.state!=='UNAVAILABLE')requireValue(Number.isFinite(instant(at))&&instant(at)<=captured,'Source verification must precede capture');
+    }
   }
   return pack;
 }
@@ -72,6 +81,12 @@ export function matchReportEvidence(report, pack) {
     requireValue(bar && (scenario.side === 'BUY' ? bar.close > scenario.breakPrice : bar.close < scenario.breakPrice), 'Observed break is not supported by the recorded candle');
   }
   if (report.schemaVersion === 4) {
+    if(report.desk?.architectureVersion==='4.3'){
+      for(const [field,value]of [['indicatorVerification',report.desk.indicatorVerification],['ammSource',report.desk.amm.source],['spdrHistory',report.desk.spdr.history||[]],['newsContext',report.desk.news.context||[]],['dxyConditions',report.desk.dxy.conditions||[]]]){
+        if(value?.state==='UNAVAILABLE'||Array.isArray(value)&&!value.length)continue;
+        requireValue(JSON.stringify(pack.context?.[field])===JSON.stringify(value),'Source/context differs from private archive: '+field);
+      }
+    }
     // Auxiliary context is archived privately; it never supplies XAU execution prices.
     for(const frame of report.desk?.dxy?.frames||[]){
       if(frame.direction==='UNAVAILABLE')continue;

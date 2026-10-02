@@ -6,16 +6,19 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs scripts/chart-data.test.mjs scripts/publication-accuracy.test.mjs scripts/report-loader.test.mjs scripts/scenario-plan.test.mjs scripts/mobile-desk.test.mjs scripts/workspace-desk.test.mjs scripts/analysis-evidence.test.mjs scripts/plan-review.test.mjs scripts/fmp-context.test.mjs scripts/desk-v4.test.mjs scripts/analysis-runtime.test.mjs scripts/desk-v42.test.mjs",
+    "test": "node --test scripts/validate-report.test.mjs scripts/report-state.test.mjs scripts/chart-data.test.mjs scripts/publication-accuracy.test.mjs scripts/report-loader.test.mjs scripts/scenario-plan.test.mjs scripts/mobile-desk.test.mjs scripts/workspace-desk.test.mjs scripts/analysis-evidence.test.mjs scripts/plan-review.test.mjs scripts/fmp-context.test.mjs scripts/desk-v4.test.mjs scripts/analysis-runtime.test.mjs scripts/desk-v42.test.mjs scripts/desk-v43.test.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test:manual": "node --test scripts/manual-analysis.test.mjs",
     "test:v4": "node --test scripts/desk-v4.test.mjs",
     "test:release": "node --test scripts/release-validation.test.mjs",
     "test:browser": "node scripts/browser-release-smoke.mjs",
     "test:all": "npm test && npm run test:manual && npm run test:release",
-    "test:v42": "node --test scripts/desk-v42.test.mjs"
+    "test:v42": "node --test scripts/desk-v42.test.mjs",
+    "test:v43": "node --test scripts/desk-v43.test.mjs"
   },
   "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "sharp": "^0.35.4",
     "vite": "8.3.1"
   },

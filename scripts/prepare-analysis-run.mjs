@@ -10,4 +10,5 @@ console.log(JSON.stringify({contextPath,startedAt:c.startedAt,contractsChanged:c
   latest:c.latest,baseline:{state:c.baseline.state,reason:c.baseline.reason,id:c.baseline.baseline?.id,refreshAt:c.baseline.baseline?.refreshAt},
   carryEvidence:c.carryEvidence,journal:{...c.journal,pendingCandidates:c.journal.pendingCandidates.map(({planId,line,reviewHint,reviewForPlanId})=>({planId,line,reviewHint,reviewForPlanId}))},
   browserHints:c.browserHints,requiredFresh:c.requiredFresh,newsWindow:c.newsWindow,
+  deskArchitecture:c.deskArchitecture,supplemental:{indicator:c.supplemental.indicatorVerification?.state||'UNAVAILABLE',dxyBaseline:c.supplemental.dxyBaseline?.state||'UNAVAILABLE',spdrDates:c.supplemental.spdrHistory.length,gaps:c.supplemental.gaps},
   collectUntil:c.budget.collectUntil,targetFinishAt:c.budget.targetFinishAt,progressPath:c.progressPath}));

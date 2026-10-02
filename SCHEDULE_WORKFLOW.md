@@ -1,8 +1,8 @@
 # XAU Desk: shared scheduled report workflow
 
-## Current V4.2 location extension
+## Current V4.3 source and location alignment
 
-For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+New runs follow [V4_3_SOURCE_ALIGNMENT.md](V4_3_SOURCE_ALIGNMENT.md), building on [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md). Use schemaVersion 4 / architectureVersion "4.3" / policy XAU_V4_2. Scan above/current/below; verify actual Pine/source/Inputs and relevant confluence; select appropriate M15 then M5; preserve useful WAIT planning and dated DXY/SPDR/news. New explicit reviewRules V3 supports the scenario selected at publication. V4.2 manual-review and original V4 PRIMARY-only/reviewRules V2 descriptions below are historical compatibility branches. Preserve evidence, freshness, journal, publisher, schedules and model.
 
 
 This file is the shared contract for the weekday 09:00, 14:30, and 19:00 Codex schedules. Keep the scheduled times. Use GPT-6.1 Sol Extra High (`gpt-6.1-sol`, `xhigh`) as requested by the user on 2026-09-30. The heartbeat schedules share an existing chat configured with this model and reasoning effort. At every run, send the Thai report and image in Codex, update the journal, and publish the same report to XAU Desk.
@@ -27,12 +27,18 @@ Observations JSON shape (values must come from actual reads):
  chartUrl:<direct chart URL>, method:"DATA_WINDOW"|"PERMITTED_EXPORT",
  quote:<same verified quote as evidence.quote, or omit if unavailable>,
  frames:{H1:[{closedAt,open,high,low,close},...],M15:[...],M5:[...]},
- gaps:[<specific missing intervals or retrieval limitations>]}
+ gaps:[<specific missing intervals or retrieval limitations>],
+ context:{indicatorVerification,ammSource,toolkitObservations,
+          spdrHistory,dxyFrames,dxyConditions,newsContext}}
 ```
 
 Use an empty frames object and explicit gaps if no candles can be read; this still supports a full information-limited WAIT report. `capturedAt` is the actual collection time, never a fabricated refresh of an old observation. Each frame array must be ordered and contain only closed candles. Record any missing interval; do not fill it by interpolation. Private observations are not a public chart export. Optional proprietary chart datasets still require the separate permission/data path below.
 
 ### Reproducible plan review
+
+Current 4.3: use the explicit desk.reviewDefinition and frozen reviewRules V3 described in V4_3_SOURCE_ALIGNMENT.md. Replay the selected-at-publication Primary or Alternative with its typed M15 confirmation; no definition means manual/unscored. Never infer thresholds retrospectively. The receipt, evidence archive, CLI and outcome rules below remain required.
+
+#### Historical original V4 / 4.2 break replay V2
 
 For a simple break → M5 retest → close confirmation setup, publish `reviewRules` with the ORIGINAL report if those are exactly the intended rules:
 
@@ -43,7 +49,7 @@ For a simple break → M5 retest → close confirmation setup, publish `reviewRu
  entry:"NEXT_M5_OPEN_WITHIN_ZONE",exit:"FULL_AT_TP1_OR_STOP"}
 ```
 
-V4 uses reviewRules version 2 and the PRIMARY scenario. Archive an actual Worker publication receipt in review evidence as defined in V4_REASONING_CONTRACT.md; no receipt means unverifiable. Entry expiry stops new entries but does not end the evidence window for an already-open simulation. The matching `scenarioPlan` provides the break timeframe, level and retest zone. State these exact rules in Thai, including the simple close-based invalidation, next-M5-open entry only inside the published zone, full exit at TP1/Stop and stated cost assumption. Review begins with the next M5 opening at or after publication; say so in the plan. The replay uses the chart's OHLC with declared costs for a conditional simulation, not broker fills. Do not assign these rules to complex retest-based invalidations, limit orders, partial exits, or other methods that differ. For unsupported setups explain the limitation and use manual review without claiming a proven outcome or R through this automatic path.
+Historical original V4 / 4.2 break-only replay uses reviewRules version 2 and its PRIMARY scenario. Archive an actual Worker publication receipt in review evidence as defined in V4_REASONING_CONTRACT.md; no receipt means unverifiable. Entry expiry stops new entries but does not end the evidence window for an already-open simulation. The matching `scenarioPlan` provides the break timeframe, level and retest zone. State these exact rules in Thai, including the simple close-based invalidation, next-M5-open entry only inside the published zone, full exit at TP1/Stop and stated cost assumption. Review begins with the next M5 opening at or after publication; say so in the plan. The replay uses the chart's OHLC with declared costs for a conditional simulation, not broker fills. Do not assign these rules to complex retest-based invalidations, limit orders, partial exits, or other methods that differ. For unsupported setups explain the limitation and use manual review without claiming a proven outcome or R through this automatic path.
 
 On the next run collect the closed Pepperstone bars covering the review window (or an authorized export). Archive that review evidence with `record-analysis-evidence.mjs`, then run:
 

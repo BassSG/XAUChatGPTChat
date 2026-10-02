@@ -1,6 +1,7 @@
 import { validatePublicationEvidence } from '../../src/report-accuracy.js';
 import { sendPushNotification, rawPayload } from "@mmmike/web-push/send";
 import { handleManualAnalysis } from "./manual-analysis.js";
+import { readReportRequest } from "./report-request.js";
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" };
 
@@ -214,9 +215,9 @@ async function route(request, env, url) {
     if (!env.REPORT_TOKEN || readBearer(request) !== env.REPORT_TOKEN) {
       return json({ error: "Unauthorized." }, 401);
     }
-    const contentLength = Number(request.headers.get("Content-Length") || "0");
-    if (contentLength > 100_000) return json({ error: "Report payload is too large." }, 413);
-    const body = await request.json().catch(() => null);
+    let body;
+    try { body = await readReportRequest(request); }
+    catch (error) { return json({ error: error.message }, error.status || 400); }
     if (!body || typeof body.snapshotAt !== "string" || !Number.isFinite(Date.parse(body.snapshotAt))) {
       return json({ error: "A valid snapshotAt timestamp is required." }, 400);
     }

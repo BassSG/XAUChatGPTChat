@@ -37,7 +37,7 @@ jobs:
       - name: Install Worker test dependencies
         run: npm ci --prefix worker
       - name: Run Worker and release validation
-        run: npm run test:manual && npm run test:release
+        run: npm run test:manual && npm run test:release && npm run test:transport
       - name: Build site
         run: npm run build
         env:

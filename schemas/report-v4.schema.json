@@ -299,8 +299,264 @@
         "xauSummary": {
           "type": "string",
           "minLength": 1
+        },
+        "architectureVersion": {
+          "const": "4.2"
+        },
+        "locationMatrix": {
+          "type": "object",
+          "required": [
+            "state",
+            "reason",
+            "currentPrice",
+            "quoteAt",
+            "aboveCandidates",
+            "atCandidates",
+            "belowCandidates",
+            "continuationLevels",
+            "criticalLevels"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "AVAILABLE",
+                "UNAVAILABLE"
+              ]
+            },
+            "currentPrice": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "aboveCandidates": {
+              "type": "array"
+            },
+            "atCandidates": {
+              "type": "array"
+            },
+            "belowCandidates": {
+              "type": "array"
+            },
+            "continuationLevels": {
+              "type": "array"
+            },
+            "criticalLevels": {
+              "type": "array"
+            }
+          }
+        },
+        "scenarioSelection": {
+          "type": "object",
+          "required": [
+            "mode",
+            "reason"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "AUTO",
+                "ANALYST"
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rejectedLocationReason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "activeScenarioRole": {
+          "enum": [
+            "PRIMARY",
+            "ALTERNATIVE"
+          ]
+        },
+        "toolkit": {
+          "type": "object",
+          "properties": {
+            "observations": {
+              "type": "array"
+            }
+          }
+        },
+        "opportunityInputs": {
+          "type": "object",
+          "properties": {
+            "continuationScenarios": {
+              "type": "array"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "architectureVersion"
+            ],
+            "properties": {
+              "architectureVersion": {
+                "const": "4.2"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "locationMatrix",
+              "scenarioSelection",
+              "activeScenarioRole"
+            ],
+            "properties": {
+              "policyId": {
+                "const": "XAU_V4_2"
+              },
+              "waitZones": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "low",
+                    "high",
+                    "side",
+                    "purpose",
+                    "priority",
+                    "sourceLayer",
+                    "setupType",
+                    "relationToCurrentPrice",
+                    "condition",
+                    "evidence"
+                  ]
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "policyId": {
+                "const": "XAU_V4_1"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "candidateEntryZone": {
+      "type": "string"
+    },
+    "reviewSupport": {
+      "type": "object",
+      "required": [
+        "mode",
+        "reason"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "LEGACY_BREAK_RETEST",
+            "UNSUPPORTED_MANUAL"
+          ]
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "desk": {
+            "required": [
+              "architectureVersion"
+            ],
+            "properties": {
+              "architectureVersion": {
+                "const": "4.2"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "candidateEntryZone",
+          "reviewSupport"
+        ],
+        "properties": {
+          "scenarioPlan": {
+            "type": "object",
+            "properties": {
+              "scenarios": {
+                "type": "array",
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "role",
+                    "setupType",
+                    "trendRelationship",
+                    "setupFrame",
+                    "triggerFrame",
+                    "m15Confirmation",
+                    "structuralReason",
+                    "levelEvidence"
+                  ],
+                  "properties": {
+                    "setupType": {
+                      "enum": [
+                        "PULLBACK_CONTINUATION",
+                        "BREAK_RETEST_CONTINUATION",
+                        "DEEP_RETRACE_CONTINUATION",
+                        "SUPPORT_REACTION_SCALP",
+                        "RESISTANCE_REACTION_SCALP",
+                        "RECOVERY_REBASELINE",
+                        "REVERSAL_REBASELINE"
+                      ]
+                    },
+                    "setupFrame": {
+                      "const": "M15"
+                    },
+                    "triggerFrame": {
+                      "const": "M5"
+                    },
+                    "m15Confirmation": {
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "state",
+                        "evidence"
+                      ],
+                      "properties": {
+                        "type": {
+                          "enum": [
+                            "BREAK_CLOSE",
+                            "REJECTION_CLOSE",
+                            "SWEEP_RECLAIM",
+                            "ZONE_HOLD",
+                            "STRUCTURE_RESUMPTION",
+                            "BOS_CONFIRMATION"
+                          ]
+                        },
+                        "state": {
+                          "enum": [
+                            "PENDING",
+                            "OBSERVED"
+                          ]
+                        },
+                        "evidence": {
+                          "type": "array"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

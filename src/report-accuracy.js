@@ -1,6 +1,6 @@
 import { validateDeskV4 } from './desk-v4.js';
 import { validateScenarioPlan } from './scenario-plan.js';
-import { newsEmbargo, assertProductionReport, validateNewsEvents } from './desk-policy.js';
+import { newsEmbargo, assertProductionReport, validateNewsEvents,reportPolicy } from './desk-policy.js';
 import { DECISION_REASONS } from './analysis-readiness.js';
 const SYMBOL = "PEPPERSTONE:XAUUSD";
 const FRAMES = { M5: 5 * 60_000, M15: 15 * 60_000, H1: 60 * 60_000 };
@@ -135,7 +135,7 @@ export function validatePublicationEvidence(report) {
     age(bars[frame].closedAt, snapshot, maxAge, `${frame}.closedAt`);
   }
   for (const event of report.newsEvents || []) {
-    if (newsEmbargo([event], snapshot).length > 0) {
+    if (newsEmbargo([event], snapshot,reportPolicy(report)).length > 0) {
       throw new Error("WATCH cannot be published inside the shared high-impact USD event embargo");
     }
   }

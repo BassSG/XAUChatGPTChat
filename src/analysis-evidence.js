@@ -35,6 +35,23 @@ export function validateEvidencePack(pack) {
     const p=pack.publication;
     requireValue(typeof p.planId==='string' && /^[a-f0-9]{64}$/.test(p.originalReportSha256 || '') && Number.isFinite(instant(p.publishedAt)) && instant(p.publishedAt)<=captured && String(p.sourceUrl || '').startsWith('https://'), 'Invalid publication receipt');
   }
+  if(pack.context){
+    requireValue(typeof pack.context==='object'&&!Array.isArray(pack.context),'Invalid auxiliary context');
+    for(const [key,symbol]of [['dxyFrames','TVC:DXY'],['toolkitObservations',PRIMARY_SYMBOL]]){
+      if(pack.context[key]==null)continue;
+      requireValue(Array.isArray(pack.context[key]),'Auxiliary observations must be arrays');
+      for(const item of pack.context[key]){
+        if(item.direction==='UNAVAILABLE'||item.state==='UNAVAILABLE')continue;
+        if(key==='toolkitObservations')requireValue(Number.isFinite(instant(item.observedAt))&&instant(item.observedAt)<=captured,'Toolkit observation after evidence capture');
+        requireValue(item.evidence?.length>0,'Auxiliary observation needs closed references');
+        let previous=-Infinity;
+        for(const r of item.evidence){const closed=instant(r.closedAt),b=r.bar;
+          requireValue(r.symbol===symbol&&r.timeframe===item.timeframe&&FRAME_MS[r.timeframe]&&Number.isFinite(closed)&&closed<=captured&&closed>previous&&b&&['open','high','low','close'].every(k=>Number.isFinite(b[k])&&b[k]>0)&&b.high>=Math.max(b.open,b.close)&&b.low<=Math.min(b.open,b.close),'Invalid auxiliary closed evidence');
+          previous=closed;
+        }
+      }
+    }
+  }
   return pack;
 }
 
@@ -55,6 +72,15 @@ export function matchReportEvidence(report, pack) {
     requireValue(bar && (scenario.side === 'BUY' ? bar.close > scenario.breakPrice : bar.close < scenario.breakPrice), 'Observed break is not supported by the recorded candle');
   }
   if (report.schemaVersion === 4) {
+    // Auxiliary context is archived privately; it never supplies XAU execution prices.
+    for(const frame of report.desk?.dxy?.frames||[]){
+      if(frame.direction==='UNAVAILABLE')continue;
+      requireValue((pack.context?.dxyFrames||[]).some(f=>JSON.stringify(f)===JSON.stringify(frame)),'DXY structure differs from archived context');
+    }
+    for(const item of report.desk?.toolkit?.observations||[]){
+      if(item.state!=='OBSERVED')continue;
+      requireValue((pack.context?.toolkitObservations||[]).some(o=>JSON.stringify(o)===JSON.stringify(item)),'Toolkit observation differs from archived context');
+    }
     const refs = [...deskEvidenceReferences(report.desk), ...deskEvidenceReferences(report.scenarioPlan)];
     for (const ref of refs) {
       const source = pack.frames[ref.timeframe]?.find(b=>instant(b.closedAt)===instant(ref.closedAt));

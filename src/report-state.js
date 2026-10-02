@@ -1,4 +1,4 @@
-import { newsEmbargo, DESK_POLICY } from './desk-policy.js';
+import { newsEmbargo, DESK_POLICY,reportPolicy } from './desk-policy.js';
 import { decisionView } from './analysis-readiness.js';
 export function reportState(report, now = Date.now()) {
   const age = now - Date.parse(report.snapshotAt);
@@ -12,7 +12,7 @@ export function reportState(report, now = Date.now()) {
   if (report.status !== "WAIT" && report.evidence?.quote?.at && now - Date.parse(report.evidence.quote.at) > 2 * 60 * 1000) {
     return { title: "ต้องตรวจราคาล่าสุด", detail: "Bid/Ask และ spread ในแผนเป็นข้อมูล ณ รอบวิเคราะห์ ให้ตรวจกราฟใหม่ก่อนใช้", tone: "warning" };
   }
-  if (newsEmbargo(report.newsEvents,now).length) return { title:'อยู่ในช่วงพักก่อน/หลังข่าว', detail:'ตรวจข่าวและโครงสร้างใหม่ก่อนใช้แผน', tone:'warning' };
+  if (newsEmbargo(report.newsEvents,now,reportPolicy(report)).length) return { title:'อยู่ในช่วงพักก่อน/หลังข่าว', detail:'ตรวจข่าวและโครงสร้างใหม่ก่อนใช้แผน', tone:'warning' };
   if (/ยกเลิก/.test(planState)) return { title: "แผนถูกยกเลิก", detail: "ดูหลักฐานและเงื่อนไขในรายงานฉบับเต็มก่อนวางแผนใหม่", tone: "warning" };
   if (/หมดอายุ/.test(planState)) return { title: "แผนหมดอายุ", detail: "ต้องตรวจโครงสร้างราคาใหม่ก่อนวางแผน", tone: "warning" };
   if (Number.isFinite(expiry) && now > expiry) return { title: "แผนพ้นเวลาที่ระบุ", detail: "เงื่อนไขและระดับราคาในรายงานนี้ต้องตรวจใหม่", tone: "warning" };
@@ -41,11 +41,11 @@ export function deliveryState(report, now = Date.now()) {
   return null;
 }
 
-export function newsEventState(event, now = Date.now()) {
+export function newsEventState(event, now = Date.now(), policy=DESK_POLICY) {
   if (event.state === "RELEASED") return { className: "released", text: "ประกาศแล้ว" };
   if (event.state === "UNVERIFIED") return { className: "unverified", text: "รอยืนยันผล" };
   const eventTime = Date.parse(event.at || "");
   if (Number.isFinite(eventTime) && now >= eventTime) return { className: "unverified", text: "ถึงเวลาแล้ว · ยังไม่ยืนยันผล" };
-  if (Number.isFinite(eventTime) && eventTime - now <= DESK_POLICY.newsBeforeMinutes * 60 * 1000) return { className: "upcoming", text: "ใกล้ประกาศ" };
+  if (Number.isFinite(eventTime) && eventTime - now <= policy.newsBeforeMinutes * 60 * 1000) return { className: "upcoming", text: "ใกล้ประกาศ" };
   return { className: "upcoming", text: "รอประกาศ" };
 }

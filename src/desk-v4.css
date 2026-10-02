@@ -11,3 +11,12 @@
 .workspace-app:not([data-workspace-view="conditions"]):not([data-workspace-view="full"]) #desk-v4-content { display:none; }
 @media(min-width:1000px){ .desk-v4 { grid-template-columns:repeat(2,minmax(0,1fr)); }.desk-hierarchy,.desk-test,.desk-conclusion { grid-column:1/-1; } }
 @media(max-width:650px){ .desk-layer summary { font-size:18px; padding:14px; }.desk-layer p { font-size:17px; padding:0 14px 16px; }.desk-v4 { gap:10px; } }
+.location-brief { padding:22px; border:1px solid #c9a355; border-radius:18px; background:linear-gradient(135deg,#1c302d,#14212c); min-width:0; }
+.location-brief strong { color:#f2cb83; font-size:22px; }
+.location-brief p { white-space:pre-line; overflow-wrap:anywhere; line-height:1.8; font-size:18px; color:#e8f1ef; }
+.location-brief a { display:inline-block; color:#63e0ce; font-size:17px; }
+.location-brief ul { list-style:none; padding:0; margin:14px 0; font-size:18px; line-height:1.65; }
+.location-brief li { padding:9px 0; overflow-wrap:anywhere; border-bottom:1px solid #ffffff14; }
+.location-brief .location-sell { color:#ffabb3; }.location-brief .location-buy { color:#65e0cb; }.location-brief .location-primary { color:#f4d394; font-weight:700; }
+@media(max-width:650px) { .location-brief ul { font-size:17px; } }
+@media(max-width:650px) { .location-brief { padding:18px; } .location-brief p { font-size:17px; } }

@@ -61,6 +61,7 @@
         </section>
         <div class="section-heading"><div><span class="section-kicker">ภาพรวมรอบล่าสุด</span><h2>แผนและข่าวที่ต้องดู</h2></div><span class="secure-label"><span>●</span> วิเคราะห์เพื่อวางแผน</span></div>
         <div class="mobile-only mobile-page-heading"><small>XAU / USD · DESK</small><h1 id="mobile-page-title">ภาพรวมวันนี้</h1></div>
+        <section id="overview-location" hidden aria-label="ตำแหน่งราคาและโซนรอ"></section>
         <section id="mobile-home" class="mobile-only" aria-label="สรุปรอบล่าสุด">
           <div class="mobile-home-lead">
             <div class="mobile-home-top"><small id="mobile-freshness">รอรายงาน</small><span id="mobile-status" class="bias-pill neutral">WAIT</span></div>
@@ -70,13 +71,14 @@
             <div class="home-wait"><small>สิ่งที่กำลังรอ</small><p id="mobile-wait">รายงานรอบถัดไปจะแสดงตรงนี้</p></div>
             <a class="mobile-primary-link" href="#analysis">เปิดแผนและเงื่อนไข <span aria-hidden="true">→</span></a>
           </div>
-          <div class="mobile-home-shortcuts"><a href="#scenario-plan">เส้นทางราคา <small>เบรก · รีเทสต์ · ยืนยัน →</small></a><a href="#market-chart">เปิดกราฟ <small>ติดตามราคาตลาด →</small></a></div>
+          <div class="mobile-home-shortcuts"><a href="#scenario-plan">เส้นทางราคา <small>โซนรอ · M15 · M5 →</small></a><a href="#market-chart">เปิดกราฟ <small>ติดตามราคาตลาด →</small></a></div>
+          <div id="mobile-location" hidden></div>
           <a class="mobile-home-news" href="#news"><strong>ข่าวที่ต้องรู้ ↗</strong><p id="mobile-news">กำลังโหลดข่าวจากรายงาน</p></a>
         </section>
         <nav id="mobile-plan-nav" class="mobile-only mobile-subnav" aria-label="หมวดแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เส้นทางราคา</a><a href="#plan-image">ภาพสรุป</a><a href="#indicator-card">หลักฐาน</a><a href="#report-body">ฉบับเต็ม</a></nav>
         <nav id="mobile-chart-nav" class="mobile-only mobile-subnav" aria-label="ประเภทกราฟ"><a href="#market-chart">กราฟตลาด</a><a href="#chart">กราฟตามรายงาน</a></nav>
         <div id="workspace-page-heading" class="workspace-page-heading" hidden><span id="workspace-page-kicker">XAU DESK</span><h1 id="workspace-page-title">ภาพรวม</h1><p id="workspace-page-description"></p></div>
-        <nav id="workspace-plan-nav" class="workspace-subnav" aria-label="เลือกส่วนของแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เบรก · รีเทสต์</a><a href="#indicator-card">หลักฐาน</a><a href="#plan-image">ภาพสรุป</a><a href="#report-body">ฉบับเต็ม</a></nav>
+        <nav id="workspace-plan-nav" class="workspace-subnav" aria-label="เลือกส่วนของแผน"><a href="#analysis">เงื่อนไข</a><a href="#scenario-plan">เส้นทางแผน</a><a href="#indicator-card">หลักฐาน</a><a href="#plan-image">ภาพสรุป</a><a href="#report-body">ฉบับเต็ม</a></nav>
         <nav id="workspace-chart-nav" class="workspace-subnav" aria-label="เลือกประเภทกราฟ"><a href="#market-chart">กราฟตลาด</a><a href="#chart">กราฟตามรายงาน</a></nav>
         <div class="dashboard-grid">
           <div id="mobile-side-picker" class="mobile-only" role="group" aria-label="เลือกฝั่งของแผน"></div>
@@ -160,7 +162,7 @@
           </section>
           </aside>
           <section id="scenario-plan" class="panel scenario-panel" hidden>
-            <div class="panel-header"><div><span class="panel-kicker">ดูเงื่อนไขทีละขั้น</span><h3>เบรกตรงไหน · รีเทสต์ตรงไหน</h3></div></div>
+            <div class="panel-header"><div><span class="panel-kicker">ดูเงื่อนไขทีละขั้น</span><h3>รอที่ไหน · ยืนยันอย่างไร</h3></div></div>
             <p class="panel-description">ภาพใช้กรอบเวลาตามเงื่อนไขของรายงาน เส้นประแสดงเส้นทางสมมติ ให้ตรวจราคาปัจจุบันก่อนใช้แผน</p>
             <div id="scenario-plan-content"></div>
           </section>

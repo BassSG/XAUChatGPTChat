@@ -1,5 +1,10 @@
 # XAU Desk — เริ่มรอบด้วยข้อมูลย่อ
 
+## Current V4.2 location extension
+
+For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+
+
 ใช้กับ 09:00 / 14:30 / 19:00 เดิม ใช้ GPT-6.1 Sol Extra High (`gpt-6.1-sol`, `xhigh`) ตามคำขอผู้ใช้ล่าสุด นี่เป็นทางเข้ารอบงาน ไม่เปลี่ยนสัญญา V4 หรือเกณฑ์เผยแพร่
 
 ## 1. เริ่มครั้งเดียว
@@ -16,7 +21,7 @@
 
 - `CANDIDATE_NEEDS_CURRENT_H1` = ฐานกรอบใหญ่เดิมยังไม่หมดอายุและตรวจ hash หลักฐานแล้ว **ยังไม่ใช่การยืนยัน carry**. อ่าน H1 ปิดล่าสุด ตรวจ Critical Zone / structure shift / displacement+retest / post-news abnormal displacement ใหม่ก่อนใช้ หากฐานหมดอายุ ถูกพัก หรือหลักฐานเสีย ต้อง refresh. แค่ H1 checkedAt เดิมเก่าไม่จำเป็นต้องอ่าน W1/D1/H4 ใหม่ทั้งหมด
 - carry-evidence เก็บเวลาและ OHLC เดิม ไม่เก็บ quote. รวม structural bars ที่จะใช้กับ observations ใหม่โดยคงเวลาแท่งเดิม; capturedAt ใหม่คือเวลาที่เก็บชุดหลักฐานรอบนี้จริง ต้องมี quote/H1/M15/M5 ที่อ่านใหม่แยกชัด ห้ามเปลี่ยนเวลาเก่าให้ดูสด
-- ราคาหลัก PEPPERSTONE:XAUUSD เท่านั้น ตรวจ Data Window และเวลาปิด ไม่กะ OHLC จากภาพ ไม่ใช้ OANDA/FMPแทน. M15 เป็น setup/confirmation ขั้นต่ำ, M5 เป็น trigger/retest/fine entry. เก็บเพียง bars ที่พิสูจน์โครงสร้าง/เบรก/รีเทสต์; เพิ่มเมื่อจำเป็นจริง
+- ราคาหลัก PEPPERSTONE:XAUUSD เท่านั้น ตรวจ Data Window และเวลาปิด ไม่กะ OHLC จากภาพ ไม่ใช้ OANDA/FMPแทน. M15 เป็น setup/confirmation ขั้นต่ำ, M5 เป็น trigger/retest/fine entry. เก็บ bars ที่พิสูจน์โซนเหนือ/ใต้ราคา โครงสร้าง และ M15 confirmation ตามชนิดแผน / M5 ที่ตามหลัง; เพิ่มเมื่อจำเป็นจริง
 - บันทึก observations ทุกกรอบที่สำเร็จด้วย `node scripts/record-analysis-evidence.mjs --input <observations.json>` ก่อนลองแก้ source/UI ให้รัน `node scripts/analysis-run-progress.mjs --context <context.json> --stage RETRY --source <PEPPERSTONE|FOREX_FACTORY|DXY|SPDR|EBW|PLAN_REVIEW>` เมื่อ retryAllowed=true ลองแก้ตรงจุดอีก **หนึ่งครั้ง**; false ให้เก็บข้อขาดและไปต่อ ห้ามวน panel/coordinate/reload หลายวิธีซ้ำไปมา Optional EBW ไม่บังคับให้หยุดรายงาน
 - อ่าน Forex Factory ตาม Asia/Bangkok, DXY และข่าวสำคัญก่อนรอบถัดไป; เวลา future = UPCOMING ห้ามมี Actual. **ไม่รอให้ถึงเวลาประกาศ/รอแท่งอนาคตในรอบนี้**. ข่าวที่ยังไม่ออกให้ส่งแผนแบบมีเงื่อนไข/WAIT พร้อมความเสี่ยงก่อนข่าว ตรวจต้นทางเมื่อ Actual ขัดกันหรือยังไม่ถึงเวลา
 - รัน `powershell.exe -NoProfile -File scripts/collect-fmp.ps1 -OutputPath <runDir/fmp.json> -Since <context.newsWindow.from> -Until <context.newsWindow.to>` หนึ่งครั้ง อ่าน summaryPath ที่คืนมาเฉพาะข่าวในช่วงที่เกี่ยวข้อง ไม่อ่านดิบทั้งไฟล์โดยไม่มีเหตุ; ไฟล์เต็มยังเก็บส่วนตัว. Cache calendar 5 นาที/news 10 นาที/Treasury 6 ชั่วโมง ใช้ fetchedAt/data date เดิมและ cacheStatus ไม่เรียกว่าดึงสดเมื่อ HIT. ไม่ carry calendar ข้ามเวลา release; ต้องการอ่านใหม่ใช้ `-ForceRefresh`. FMPเสริมเท่านั้น ไม่เปิด/พิมพ์ credential

@@ -1,5 +1,10 @@
 # XAU Desk — แบบแผนการวิเคราะห์และความเสถียร
 
+## Current V4.2 location extension
+
+For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+
+
 ## เป้าหมาย
 
 ให้ข้อมูลครบตามที่ตรวจได้ ใช้ประกอบการตัดสินใจได้ และส่งรายงานต่อเนื่อง ไม่กำหนดคะแนนขั้นต่ำโดยข้ามข้อจำกัดข้อมูล ไม่รับประกันอัตราชนะ ใช้รายงานเป็น snapshot ตามตารางเดิม ไม่ติดตามแท่งต่อเนื่องระหว่างรอบ
@@ -58,7 +63,7 @@
 
 ## 5. สร้างแผนที่ตรวจต่อได้
 
-แสดงสถานะ เหตุผล กรอบยืนยัน โซนเฝ้าดู เงื่อนไขเบรก/รีเทสต์ เงื่อนไขยกเลิก และข่าวที่ต้องระวังทุกครั้งที่มีหลักฐาน หากโครงสร้าง entry/Stop/TP กับต้นทุนครบ ใช้ WATCH แบบมีเงื่อนไขตามกติกาเดิม; หากไม่ครบใช้ WAIT พร้อมเหตุการณ์ถัดไป ไม่สร้างตัวเลขให้เต็มช่อง
+แสดงสถานะ เหตุผล กรอบยืนยัน โซนเฝ้าดู เงื่อนไขยืนยันตามชนิดแผน (pullback/reaction หรือเบรก/รีเทสต์) เงื่อนไขยกเลิก และข่าวที่ต้องระวังทุกครั้งที่มีหลักฐาน หากโครงสร้าง entry/Stop/TP กับต้นทุนครบ ใช้ WATCH แบบมีเงื่อนไขตามกติกาเดิม; หากไม่ครบใช้ WAIT พร้อมเหตุการณ์ถัดไป ไม่สร้างตัวเลขให้เต็มช่อง
 
 การนำราคาอินดี้มาใช้ต้องตรวจโครงสร้างและเวลาของแผนนั้นก่อน ห้ามยก Signal reference entry เป็นราคาที่เข้าได้ในปัจจุบันโดยอัตโนมัติ Signal TP และ protective anchor เป็นข้อมูลประกอบ ไม่ข้ามการตรวจ spread หรือข่าว
 

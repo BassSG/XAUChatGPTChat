@@ -3,12 +3,12 @@ import {createHash, randomUUID} from 'node:crypto';
 import {join, resolve} from 'node:path';
 import {deskEvidenceReferences,validateDeskV4} from '../src/desk-v4.js';
 import {validateEvidencePack} from '../src/analysis-evidence.js';
-import {DESK_POLICY} from '../src/desk-policy.js';
+import {DESK_POLICY,LOCATION_POLICY} from '../src/desk-policy.js';
 import {RUN_POLICY} from '../src/run-policy.js';
 import {requirePrivatePath} from './fmp-cache.mjs';
 import {bangkok} from './fmp-context.mjs';
 
-export const CONTRACT_FILES = ['FAST_RUN_WORKFLOW.md','SCHEDULE_WORKFLOW.md','V4_REASONING_CONTRACT.md','ANALYSIS_OPERATING_PLAN.md'];
+export const CONTRACT_FILES = ['FAST_RUN_WORKFLOW.md','SCHEDULE_WORKFLOW.md','V4_REASONING_CONTRACT.md','V4_2_LOCATION_CONTRACT.md','ANALYSIS_OPERATING_PLAN.md'];
 export const sha256 = text => createHash('sha256').update(text).digest('hex');
 export function nextScheduledAt(now) {
   const thai=new Date(now+7*3600000),day=Date.UTC(thai.getUTCFullYear(),thai.getUTCMonth(),thai.getUTCDate());
@@ -148,7 +148,8 @@ export async function prepareRun({repo,root,now=Date.now()}) {
     journal:{path:journalPath,indexPath:journalIndexPath,count:index.length,legacySections:index.filter(e=>!e.planId).length,
       pendingCandidates:index.filter(e=>e.planId && e.reviewHint!=='HAS_REVIEW_TEXT').slice(-8),error:journalError},
     browserHints:previous?.browserHints||{chart:chartUrl||report?.evidence?.chartUrl||null,calendar:'https://www.forexfactory.com/calendar',dxy:'https://www.tradingview.com/symbols/TVC-DXY/',spdr:'https://www.spdrgoldshares.com/usa/gld/'},
-    requiredFresh:['PEPPERSTONE closed H1 invalidation check','M15 setup','M5 trigger/retest','Bid/Ask/spread near final snapshot','DXY structural filter','Forex Factory current USD calendar/news'],
+    deskArchitecture:'4.2',newReportPolicy:LOCATION_POLICY,
+    requiredFresh:['PEPPERSTONE closed H1 invalidation check','Location scan above/current/below before archetype selection','M15 confirmation appropriate to selected archetype','M5 subsequent trigger/fine entry','Bid/Ask/spread near final snapshot','DXY structural filter','Forex Factory current USD calendar/news'],
     newsWindow:{from:bangkok(Math.max(now-24*3600000,Math.min(now,Date.parse(report?.snapshotAt)||now-12*3600000))),to:bangkok(nextScheduledAt(now))},
     neverCarryAsLive:['quote','latest H1/M15/M5 confirmation','DXY current value','confirmed news Actual'],
     budget:{...RUN_POLICY,collectUntil:bangkok(now+RUN_POLICY.collectMinutes*60000),targetFinishAt:bangkok(now+RUN_POLICY.targetMinutes*60000)},

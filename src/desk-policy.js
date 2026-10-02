@@ -5,11 +5,19 @@ export const DESK_POLICY = Object.freeze({
   baselineMaxHours: 168, baselineCheckMinutes: 120,
   displacementBodyRatio: 0.7, abnormalRangeMultiple: 1.5
 });
-export function newsEmbargo(events = [], at = Date.now()) {
+// Historical reports keep their published policy. New 4.2 reports name this policy explicitly.
+export const LOCATION_POLICY = Object.freeze({
+  ...DESK_POLICY, id:'XAU_V4_2', minimumNetR:1.1, preferredNetR:1.5,
+  newsBeforeMinutes:120, newsAfterMinutes:120, equalLevelTolerance:0.0012
+});
+export function reportPolicy(report) {
+  return report?.desk?.policyId === LOCATION_POLICY.id ? LOCATION_POLICY : DESK_POLICY;
+}
+export function newsEmbargo(events = [], at = Date.now(), policy = DESK_POLICY) {
   const now = typeof at === 'number' ? at : Date.parse(at);
   return events.filter(e => e.currency === 'USD' && e.impact === 'HIGH' &&
-    Number.isFinite(Date.parse(e.at)) && now >= Date.parse(e.at) - DESK_POLICY.newsBeforeMinutes * 60000 &&
-    now <= Date.parse(e.at) + DESK_POLICY.newsAfterMinutes * 60000);
+    Number.isFinite(Date.parse(e.at)) && now >= Date.parse(e.at) - policy.newsBeforeMinutes * 60000 &&
+    now <= Date.parse(e.at) + policy.newsAfterMinutes * 60000);
 }
 export function assertProductionReport(report) {
   if (report.testOnly || report.dataClass === 'TEST_FIXTURE') {

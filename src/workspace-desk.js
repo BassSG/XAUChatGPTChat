@@ -45,7 +45,7 @@ export function setupWorkspaceDesk() {
     const { page, view } = workspaceRoute(location.hash);
     document.body.dataset.workspacePage = page;
     document.body.dataset.workspaceView = view;
-    show('#overview, .section-heading, #mobile-home', page === 'overview');
+    show('#overview, #overview-location, .section-heading, #mobile-home', page === 'overview');
     show('#analysis', page === 'plan' && view !== 'sequence');
     show('#scenario-plan, #mobile-sequence-empty', page === 'plan' && view === 'sequence');
     show('.desk-rail', page === 'news' || page === 'settings');

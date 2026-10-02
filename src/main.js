@@ -1,6 +1,7 @@
 import "./style.css";
 import "./desk-v4.css";
-import { deskHtml } from "./desk-render.js";
+import { deskHtml,locationHtml } from "./desk-render.js";
+import {reportPolicy} from "./desk-policy.js";
 import { reportState, newsEventState, deliveryState } from "./report-state.js";
 import { readinessItems } from './analysis-readiness.js';
 import { createPlanChart } from "./plan-chart.js";
@@ -105,7 +106,7 @@ function renderNews(report) {
   byId("news-brief-text").textContent = report.newsRisk || (events[0]?.title || "ตรวจข่าวก่อนใช้แผน");
   const briefEvent = events.find((event) => event.state !== "RELEASED") || events[0];
   byId("news-brief-event").hidden = !briefEvent;
-  byId("news-brief-event").textContent = briefEvent ? [briefEvent.title, newsEventState(briefEvent).text, briefEvent.at && formatDate(briefEvent.at)].filter(Boolean).join(" · ") : "";
+  byId("news-brief-event").textContent = briefEvent ? [briefEvent.title, newsEventState(briefEvent,Date.now(),reportPolicy(report)).text, briefEvent.at && formatDate(briefEvent.at)].filter(Boolean).join(" · ") : "";
   if (!hasNews) return;
   byId("news-risk").textContent = report.newsRisk || "ตรวจข่าวก่อนใช้แผน";
   byId("news-context").textContent = Array.isArray(report.contextSignals) ? report.contextSignals.join("\n\n") : (report.contextSignals || "");
@@ -119,7 +120,7 @@ function renderNews(report) {
     title.textContent = textValue(event.title, "ข่าว USD");
     const state = document.createElement("span");
     const announced = event.state === "RELEASED";
-    const eventState = newsEventState(event);
+    const eventState = newsEventState(event,Date.now(),reportPolicy(report));
     state.className = "news-state " + eventState.className;
     state.textContent = eventState.text;
     head.append(title, state);
@@ -194,6 +195,9 @@ function renderIndicatorContext(report) {
 function renderReport(report) {
   if (!report || !report.snapshotAt) return false;
   currentReport = report;
+  for(const id of ['overview-location','mobile-location']){
+    const host=byId(id);if(host){host.innerHTML=locationHtml(report);host.hidden=!host.innerHTML;}
+  }
   let deskHost = byId("desk-v4-content");
   if (!deskHost) { deskHost = document.createElement("div"); deskHost.id = "desk-v4-content"; byId("report-content").prepend(deskHost); }
   deskHost.innerHTML = deskHtml(report); deskHost.hidden = report.schemaVersion !== 4;
@@ -215,7 +219,7 @@ function renderReport(report) {
   byId("report-title").textContent = report.headline || "รายงาน XAU/USD";
   byId("report-summary").textContent = report.summary || "";
   byId("report-bias").textContent = report.bias || report.status || "WAIT";
-  byId("report-entry").textContent = report.entryZone || report.entry || "ยังไม่มีโซนเข้า";
+  byId("report-entry").textContent = (report.status==='WAIT'?report.candidateEntryZone:null) || report.entryZone || report.entry || "ยังไม่มีโซนเข้า";
   byId("report-trigger").textContent = report.trigger || "รอแท่งปิดยืนยัน";
   byId("report-invalidation").textContent = report.invalidation || report.stop || "ดูบทวิเคราะห์เต็ม";
   byId("report-stop").textContent = report.stop || "ดูบทวิเคราะห์เต็ม";

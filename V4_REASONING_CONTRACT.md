@@ -1,5 +1,10 @@
 # XAU/USD Trading Desk V4 — authoritative reasoning contract
 
+## Current V4.2 location extension
+
+For new runs read [V4_2_LOCATION_CONTRACT.md](V4_2_LOCATION_CONTRACT.md) before selecting a scenario. Use schemaVersion 4 with desk.architectureVersion "4.2" and policy XAU_V4_2. Scan above/current/below first, choose a setup archetype, preserve candidate zones in WAIT, and confirm M15 by that archetype. The original break/retest format below describes the legacy branch only. Keep source/evidence/journal/publication gates and existing schedules/model.
+
+
 This contract supersedes earlier indicator-led reasoning instructions. It extends the existing desk; it does not replace collection, evidence, freshness, review, journal or publication controls. Historical V3 reports retain their original interpretation. Schedule times and models remain unchanged.
 
 ## Hierarchy and source roles
@@ -21,7 +26,7 @@ This contract supersedes earlier indicator-led reasoning instructions. It extend
 
 Carry-forward must preserve the original baseline fields, reference its immutable original report by plan ID, snapshot and SHA-256, and perform a fresh H1 invalidation check. The local evidence verifier checks the original archive. Old W1/D1/H4 candles retain their real timestamps; never relabel them as freshly read. Reread when the configured maximum baseline age, refresh time, structural trigger or documented session change requires it. An active carried baseline is not continuous monitoring.
 
-`src/desk-policy.js` is the only numerical policy authority. Initial conservative engineering defaults: seven-day maximum baseline lifetime, H1 check within two hours, minimum estimated net R 1.5, high-impact USD embargo 30 minutes before and after **including released results**, post-news structural review window one hour, displacement body/range ≥0.7 and abnormal range ≥1.5× the cited prior same-frame bar. These are transparent configurable desk rules, not claims of an optimal trading edge. Change the policy ID when changing semantics; regenerate/tests must follow.
+`src/desk-policy.js` is the only numerical policy authority. Historical XAU_V4_1 defaults (new XAU_V4_2 uses the versioned policy in the current extension): seven-day maximum baseline lifetime, H1 check within two hours, minimum estimated net R 1.5, high-impact USD embargo 30 minutes before and after **including released results**, post-news structural review window one hour, displacement body/range ≥0.7 and abnormal range ≥1.5× the cited prior same-frame bar. These are transparent configurable desk rules, not claims of an optimal trading edge. Change the policy ID when changing semantics; regenerate/tests must follow.
 
 ## Re-baseline vs ordinary invalidation
 
@@ -36,7 +41,7 @@ These explicit conservative operational definitions require the analyst to ident
 
 ## Scenarios, locations and risk
 
-At most one PRIMARY followed by one ALTERNATIVE. Each needs a structural reason and actual frame/level evidence. The primary follows HTF. Alternative states the transition from primary; a counter-bias alternative requires REBASELINE_REQUIRED and cannot activate directly. M15/H1 break → M5 retest is the supported visual sequence.
+At most one PRIMARY followed by one ALTERNATIVE. Each needs a structural reason and actual frame/level evidence. The primary follows HTF. Alternative states the transition from primary; a reversal alternative requires REBASELINE_REQUIRED. V4.2 permits a separately justified countertrend scalp Alternative without changing HTF. M15/H1 break → M5 retest is only the break archetype visual sequence.
 
 Separate wait zones (approach and then inspect setup) from no-trade zones/reasons: consolidation midpoint, HTF/M15 conflict, spread abnormal/unverified, shared news embargo, extended entry, missing structural stop, nearby opposing liquidity, insufficient evidence and low net R. Market phase is top-level and independent of indicator phase: TREND_IMPULSE, PULLBACK, CONSOLIDATION, BREAKOUT, RETEST, TRANSITION, REVERSAL_CANDIDATE.
 

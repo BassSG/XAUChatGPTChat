@@ -1,5 +1,6 @@
 import { validateEvidencePack, FRAME_MS, PRIMARY_SYMBOL } from './analysis-evidence.js';
 import { validateScenarioPlan } from './scenario-plan.js';
+import {isLocationDesk,isBreakSetup,selectedScenario} from './scenario-archetypes.js';
 
 // Replay only rules published with the original plan. No rules are inferred from prose.
 export function reviewPlan(report, evidence) {
@@ -7,6 +8,7 @@ export function reviewPlan(report, evidence) {
   validateScenarioPlan(report);
   const result = { planId: report.planId, checkedAt: evidence.capturedAt, outcome: 'ตรวจไม่ได้', evidence: '', timeline: [], simulatedR: null, resultStatus: 'UNVERIFIABLE' };
   const fail = text => ({ ...result, outcome: 'ตรวจไม่ได้', resultStatus: 'UNVERIFIABLE', evidence: text });
+  if(isLocationDesk(report)&&(!isBreakSetup(selectedScenario(report))||report.desk.activeScenarioRole==='ALTERNATIVE'||report.reviewSupport?.mode==='UNSUPPORTED_MANUAL'))return fail('ชนิด setup นี้ยังไม่รองรับ replay ต้องทบทวนด้วยหลักฐานเอง ไม่คำนวณ R และไม่อนุมานกติกาย้อนหลัง');
   const rules = report.reviewRules;
   const scenario = report.scenarioPlan?.scenarios?.find(s => s.side === rules?.side);
   const v4 = report.schemaVersion === 4;

@@ -27,12 +27,12 @@ export function deskSections(report) {
     {id:'no-trade',title:'No-trade · เงื่อนไขงดเปิดเทรด',text:[...new Set([...readiness.reasons.map(r=>NO_TRADE[r]),...d.noTradeZones.filter(z=>z.active).map(z=>(z.low!=null?zone(z)+': ':'')+z.detail)])].join('\n') || 'ไม่พบข้อห้าม ณ snapshot; ยังต้องรอ trigger ตามแผน'},
     {id:'invalidation',title:'เงื่อนไขล้มเหลว / ยกเลิก',text:`Trigger failure: ${rule(d.invalidation.triggerFailure)}\nTactical: ${rule(d.invalidation.tactical)}\nStructural: ${rule(d.invalidation.structural)}\nRe-baseline: ${rule(d.invalidation.rebaseline)}\nActual Stop: ${n(d.invalidation.actualStop)}`},
     {id:'trade',title:'Trade Plan · ต้นทุนและความเสี่ยง',text:[report.entryZone,report.stop,(report.targets||[]).join(' → '),report.riskReward].filter(Boolean).join('\n')},
-    {id:'dxy',title:'DXY · ตัวกรองยืนยัน',text:`${d.dxy.state}\n${d.dxy.structure}\n${d.dxy.reason}`},
+    {id:'dxy',title:'DXY · ตัวกรองยืนยัน',text:`${d.dxy.state}\n${d.dxy.structure}\n${d.dxy.reason}`+(d.dxy.frames?'\n'+d.dxy.frames.map(f=>f.timeframe+': '+f.direction+' · '+f.reason+(f.evidence?.length?' · ปิด '+n(f.evidence.at(-1).bar.close)+' ณ '+f.evidence.at(-1).closedAt:'')).join('\n'):'')},
     {id:'spdr',title:'SPDR · กระแสเงินระยะกลาง',text:`${d.spdr.summary}\n${d.spdr.dataDate || 'ยังไม่ยืนยันวันที่'} · ถือครอง ${n(d.spdr.holdings)} ตัน · เปลี่ยน ${n(d.spdr.dailyChange)} ตัน\n${d.spdr.direction} · ${d.spdr.flowBias}`},
     {id:'news',title:'ข่าว · ภาวะตลาดและความเสี่ยง',text:`${d.news.regime}\n${report.newsRisk}`},
     {id:'secondary',title:'EBW / All Indy · ยืนยันประกอบ',text:report.indicatorContext?.summary || 'ไม่มีค่าที่ตรวจสอบได้; ไม่ใช้แทนโครงสร้างราคา'},
     {id:'conclusion',title:'สรุปใช้งานจริง',text:d.conclusion}
-    ,...(isLocationDesk(report)?[{id:'toolkit',title:'เครื่องมือประกอบ · ใช้เมื่อมีหลักฐาน',text:(d.toolkit?.observations||[]).map(o=>o.name+' '+(o.timeframe||'')+': '+o.state+' · '+o.reason).join('\n')||'ยังไม่มีค่าที่ตรวจได้ ไม่สมมติ EMA / RSI / Stochastic หรือโซนจากอินดิเคเตอร์'},
+    ,...(isLocationDesk(report)?[{id:'toolkit',title:'เครื่องมือประกอบ · ใช้เมื่อมีหลักฐาน',text:(d.toolkit?.observations||[]).map(o=>o.name+' '+(o.timeframe||'')+': '+o.state+(o.state==='OBSERVED'?' · '+JSON.stringify(o.value)+' · '+o.observedAt:'')+' · '+o.reason).join('\n')||'ยังไม่มีค่าที่ตรวจได้ ไม่สมมติ EMA / RSI / Stochastic หรือโซนจากอินดิเคเตอร์'},
       {id:'review',title:'การทบทวนแผน',text:report.reviewSupport?.reason||'ใช้กติกาต้นฉบับและหลักฐานตามลำดับเวลาเท่านั้น'}]:[])
   ];
 }
@@ -48,7 +48,7 @@ export function locationSummary(report){
     ...m.atCandidates.map(c=>'ขณะนี้อยู่ในโซน '+c.side+': '+zone(c)+' · '+align(c)),
     ...(d.activeScenarioRole==='ALTERNATIVE'?['กำลังตรวจแผนสำรองตามเงื่อนไขเปลี่ยนฉาก · Bias กรอบใหญ่ยังเดิม']:[]),
     ...scenarios.map(s=>(s.role==='PRIMARY'?'แผนหลัก':'แผนสำรอง')+': '+scenarioTitle(s)+' · '+zoneText(scenarioZone(s))),
-    'งดเปิดเทรด: '+(d.noTradeZones.filter(z=>z.active).map(z=>(z.low!=null?zone(z)+' · ':'')+z.detail).join(' · ')||'รอเงื่อนไข M15 / ความเสี่ยงครบ'),
+    'งดเปิดเทรด: '+(d.noTradeZones.filter(z=>z.active).map(z=>(z.low!=null?zone(z)+' · ':'')+z.detail).join(' · ')||(report.status==='WAIT'?'รอเงื่อนไข M15 / ความเสี่ยงครบ':'ไม่พบข้อห้าม ณ snapshot · ตรวจ M5 ตามแผน')),
     'โซนเฝ้ารอไม่ใช่จุดเข้าที่เกิดแล้ว'].join('\n');
 }
 export function locationHtml(report){

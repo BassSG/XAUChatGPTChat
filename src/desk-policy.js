@@ -11,7 +11,7 @@ export const LOCATION_POLICY = Object.freeze({
   newsBeforeMinutes:120, newsAfterMinutes:120, equalLevelTolerance:0.0012
 });
 export function reportPolicy(report) {
-  return report?.desk?.policyId === LOCATION_POLICY.id ? LOCATION_POLICY : DESK_POLICY;
+  return report?.schemaVersion===4 && report.desk?.architectureVersion==='4.2' && report.desk.policyId===LOCATION_POLICY.id ? LOCATION_POLICY : DESK_POLICY;
 }
 export function newsEmbargo(events = [], at = Date.now(), policy = DESK_POLICY) {
   const now = typeof at === 'number' ? at : Date.parse(at);

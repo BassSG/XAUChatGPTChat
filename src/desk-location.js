@@ -132,6 +132,7 @@ export function attachLocationScan(report) {
       relationToCurrentPrice:matrix.state!=='AVAILABLE'?'UNKNOWN':matrix.currentPrice<z.low?'ABOVE':matrix.currentPrice>z.high?'BELOW':'AT_ZONE',condition:s.confirmation,evidence:s.levelEvidence};
   });
   if(selected)d.setup.locationRelation=zoneRelation(selected.side,scenarioZone(selected),matrix.currentPrice,setupType(selected),selected.breakState);
+  if(selected&&d.setup.status==='CONFIRMED'&&d.trigger.state==='PENDING')report.waitFor=d.trigger.condition;
   d.locationMatrix=matrix;
   return report;
 }

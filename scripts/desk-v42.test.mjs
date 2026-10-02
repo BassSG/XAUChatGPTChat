@@ -136,6 +136,7 @@ test('Versioned risk/news policy boundaries agree with reasoning, publisher and 
   const localConditional=clone(conditional);delete localConditional.testOnly;delete localConditional.dataClass;assert.equal(validatePublicationEvidence(localConditional),true);
   draft.planLevels.netR=1.09;assert.equal(assembleDeskReport(draft).status,'WAIT');
   assert.equal(reportPolicy(fixtureReport()).id,DESK_POLICY.id);
+  assert.equal(reportPolicy({...conditional,schemaVersion:3}).id,DESK_POLICY.id);
 });
 test('missing Entry/Target/liquidity degrades to useful WAIT without numerical R or invented anchors',()=>{
   for(const mutate of [r=>delete r.planLevels.entry,r=>r.planLevels.targets=[],r=>r.desk.setup.opposingLiquidity='UNKNOWN']){
@@ -160,11 +161,12 @@ test('Private archive verifies XAU refs and auxiliary DXY/toolkit; unavailable t
   const r=watch(),pack=packFor(r);assert.equal(matchReportEvidence(r,pack),true);
   const h=r.desk.baseline.checkEvidence[0],ema={name:'EMA',state:'OBSERVED',symbol:'PEPPERSTONE:XAUUSD',timeframe:'H1',observedAt:r.snapshotAt,parameters:{period:25},value:4292,method:'TEST Data Window',reason:'TEST ONLY',evidence:[h]};
   r.desk.toolkit.observations=[ema];assert.equal(validateDeskV4(r).eligible,true);assert.throws(()=>matchReportEvidence(r,pack),/Toolkit/);
-  pack.context={toolkitObservations:[clone(ema)]};assert.equal(matchReportEvidence(r,pack),true);
+  pack.context={toolkitObservations:[clone(ema)]};assert.equal(matchReportEvidence(r,pack),true);assert.ok(deskBody(r).includes('EMA H1: OBSERVED · 4292'));
   ema.state='UNAVAILABLE';assert.throws(()=>validateDeskV4(r),/unavailable toolkit/);
   r.desk.toolkit.observations=[];const f={timeframe:'H1',direction:'UP',reason:'TEST closes',sourceUrl:'https://www.tradingview.com/symbols/TVC-DXY/',evidence:[0,1].map((i)=>({symbol:'TVC:DXY',timeframe:'H1',closedAt:new Date(Date.parse(h.closedAt)-(1-i)*3600000).toISOString(),bar:{open:100+i,high:102+i,low:99+i,close:101+i}}))};
   Object.assign(r.desk.dxy,{symbol:'TVC:DXY',state:'CONFIRM',timeframe:'H1',observedAt:r.snapshotAt,sourceUrl:f.sourceUrl,frames:[f],assessment:{xauSide:'SELL',supportingFrames:['H1'],contradictoryFrames:[],reason:'TEST ONLY'}});
   validateDeskV4(r);assert.throws(()=>matchReportEvidence(r,pack),/DXY/);pack.context.dxyFrames=[clone(f)];assert.equal(matchReportEvidence(r,pack),true);
+  assert.ok(deskBody(r).includes('H1: UP'));assert.ok(deskBody(r).includes(f.evidence.at(-1).closedAt));
   r.desk.dxy.state='NEUTRAL';assert.throws(()=>validateDeskV4(r),/filter differs/);
 });
 test('new setup replay explicitly manual/unscored, legacy reports retain original schema semantics',async()=>{

@@ -53,7 +53,7 @@ export function practicalBrief(report){
   const selected=selectedScenario(report)||primary;
   const primaryText=primary?scenarioTitle(primary)+' '+zoneText(scenarioZone(primary)):'รอโครงสร้างที่มีหลักฐาน';
   return {bias:d.baseline.bias,phase:phase[d.phase.name]||d.phase.name,
-    location:m?.state==='AVAILABLE'?'ราคา '+n(m.currentPrice)+' · '+({BELOW_SELL_ZONE:'อยู่ใต้โซนเฝ้าขาย',ABOVE_BUY_ZONE:'อยู่เหนือโซนเฝ้าซื้อ',IN_ZONE:'อยู่ในโซนเฝ้ารอ',PASSED_ZONE:'เลยโซนแล้ว',WAITING_BREAK_BELOW:'รอฐานด้านล่างเสีย',WAITING_BREAK_ABOVE:'รอผ่านแนวต้านด้านบน'}[d.setup.locationRelation]||'ตรวจตำแหน่งตามแผน'):m?.reason||'ยังไม่มีราคาหลัก',
+    location:m?.state==='AVAILABLE'?'ราคาในรายงาน '+n(m.currentPrice)+' · '+({BELOW_SELL_ZONE:'อยู่ใต้โซนเฝ้าขาย',ABOVE_BUY_ZONE:'อยู่เหนือโซนเฝ้าซื้อ',IN_ZONE:'อยู่ในโซนเฝ้ารอ',PASSED_ZONE:'เลยโซนแล้ว',WAITING_BREAK_BELOW:'รอฐานด้านล่างเสีย',WAITING_BREAK_ABOVE:'รอผ่านแนวต้านด้านบน'}[d.setup.locationRelation]||'ตรวจตำแหน่งตามแผน'):m?.reason||'ยังไม่มีราคาหลัก',
     primary:primaryText,confirmation:primary?scenarioSteps(primary).join(' → '):report.waitFor,
     activeRole:selected?.role||'PRIMARY',activePlan:selected?scenarioTitle(selected)+' '+zoneText(scenarioZone(selected)):'พักแผนเพื่อรอโครงสร้าง',
     activeConfirmation:selected?scenarioSteps(selected).join(' → '):report.waitFor,

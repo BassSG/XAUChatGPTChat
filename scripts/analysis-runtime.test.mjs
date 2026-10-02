@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
-import {baselineCandidate,journalIndex,runBudget,recordRunStage,prepareRun,acknowledgeContracts,CONTRACT_FILES,sha256,nextScheduledAt} from './analysis-runtime.mjs';
+import {baselineCandidate,journalIndex,runBudget,recordRunStage,claimRunTask,runStatus,prepareRun,acknowledgeContracts,CONTRACT_FILES,sha256,nextScheduledAt} from './analysis-runtime.mjs';
 import {collectFmpEndpoint,usableCache,requirePrivatePath} from './fmp-cache.mjs';
 import {fixtureReport} from './fixtures/desk-v4-fixture.mjs';
 import {deskEvidenceReferences} from '../src/desk-v4.js';
@@ -69,7 +69,93 @@ test('contract hash is acknowledged only after use; unchanged contract avoids re
   await acknowledgeContracts(first.context);
   assert.equal((await prepareRun(s)).context.contractsChanged,false);
   await writeFile(join(s.repo,'V4_REASONING_CONTRACT.md'),'CHANGED TEST CONTRACT');
-  assert.equal((await prepareRun(s)).context.contractsChanged,true);
+  const changed=(await prepareRun(s)).context;
+  assert.equal(changed.contractsChanged,true);assert.deepEqual(changed.changedContracts,['V4_REASONING_CONTRACT.md']);
+});
+
+test('a baseline due within the report budget is refreshed upfront, not extended during assembly',()=>{
+  const r=candidateFixture(),now=Date.now();
+  r.desk.baseline.refreshAt=new Date(now+RUN_POLICY.targetMinutes*60000).toISOString();
+  assert.equal(baselineCandidate(r,now).reason,'REFRESH_DUE_DURING_RUN');
+});
+test('v1 contract acknowledgement migrates from its verified context without rereading unchanged documents',async t=>{
+  const s=await sandbox(t),first=await prepareRun(s);
+  await writeFile(join(s.root,'startup-state.json'),JSON.stringify({contractHash:first.context.contractHash,
+    acknowledgedAt:first.context.startedAt,contextPath:first.contextPath}));
+  await writeFile(join(s.repo,'FAST_RUN_WORKFLOW.md'),'UPDATED FAST ONLY');
+  assert.deepEqual((await prepareRun(s)).context.changedContracts,['FAST_RUN_WORKFLOW.md']);
+});
+test('v1 acknowledgement with altered private contract hashes requires all contract reads',async t=>{
+  const s=await sandbox(t),first=await prepareRun(s);
+  await writeFile(join(s.root,'startup-state.json'),JSON.stringify({contractHash:first.context.contractHash,
+    acknowledgedAt:first.context.startedAt,contextPath:first.contextPath}));
+  first.context.contracts[0].sha256='0'.repeat(64);
+  await writeFile(first.contextPath,JSON.stringify(first.context));
+  await writeFile(join(s.repo,'FAST_RUN_WORKFLOW.md'),'UPDATED FAST ONLY');
+  assert.deepEqual((await prepareRun(s)).context.changedContracts,CONTRACT_FILES);
+});
+test('expired baseline exposes verified historical observations without approving carry or a live quote',async t=>{
+  const s=await sandbox(t);s.r.desk.baseline.refreshAt=new Date(s.now-30000).toISOString();
+  await writeFile(s.originalPath,JSON.stringify(s.r));await writeFile(s.reportPath,JSON.stringify(s.r));
+  const c=(await prepareRun(s)).context;
+  assert.equal(c.baseline.state,'REFRESH_REQUIRED');assert.equal(c.baseline.baseline,undefined);
+  assert.equal(c.carryEvidence.path,null);assert.equal(c.carryLevels,null);
+  assert.equal(c.historicalStructure.carryApproved,false);
+  const pack=JSON.parse(await readFile(c.historicalStructure.evidencePath,'utf8'));
+  assert.deepEqual(pack.frames.W1,s.pack.frames.W1);assert.equal(pack.quote,undefined);
+  assert.equal(pack.capturedAt,s.pack.capturedAt);assert.equal(c.historicalStructure.originalSnapshotAt,s.r.snapshotAt);
+});
+test('corrupt expired structural evidence is never offered as historical reuse',async t=>{
+  const s=await sandbox(t);s.now=Date.parse(s.r.desk.baseline.refreshAt)+1000;
+  await writeFile(join(s.base,'outputs/analysis-evidence',s.r.evidenceArchive.sha256+'.json'),'{}');
+  const c=(await prepareRun(s)).context;
+  assert.equal(c.historicalStructure,null);assert.equal(c.baseline.state,'REFRESH_REQUIRED');
+});
+const taskProgress=()=>({version:2,startedAt:'2026-10-02T19:00:00+07:00',phase:'COLLECTING',events:[]});
+const taskNow=Date.parse('2026-10-02T19:01:00+07:00');
+test('each timeframe is claimed once and blocked repeats do not consume a legitimate source retry',()=>{
+  const p=taskProgress();
+  assert.equal(claimRunTask(p,'H1',taskNow).allowed,true);
+  assert.equal(claimRunTask(p,'H1',taskNow+1000).reason,'TASK_ALREADY_ATTEMPTED');
+  assert.equal(claimRunTask(p,'M15',taskNow+2000).allowed,true);
+  assert.equal(claimRunTask(p,'H1',taskNow+3000,{retry:true}).allowed,true);
+  assert.equal(claimRunTask(p,'M15',taskNow+4000,{retry:true}).reason,'RETRY_LIMIT');
+  assert.equal(claimRunTask(p,'M5',taskNow+5000).allowed,true);
+  assert.throws(()=>claimRunTask(p,'OANDA',taskNow),/known run task/);
+});
+test('finalization is persistent even before eight minutes and closes optional reads and retries',()=>{
+  const p=taskProgress();claimRunTask(p,'DXY',taskNow);
+  recordRunStage(p,'CONTEXT',taskNow+1000);
+  const restored=JSON.parse(JSON.stringify(p));
+  assert.equal(claimRunTask(restored,'SPDR',taskNow+2000).reason,'COLLECTION_CLOSED');
+  assert.equal(claimRunTask(restored,'DXY',taskNow+3000,{retry:true}).reason,'COLLECTION_CLOSED');
+  assert.equal(recordRunStage(restored,'RETRY',taskNow+4000,'DXY').retryAllowed,false);
+  assert.equal(runStatus(restored,taskNow+5000).phase,'FINALIZING');
+});
+test('deadline also latches closure without relying on late PRIMARY or CONTEXT logs',()=>{
+  const p=taskProgress(),deadline=Date.parse(p.startedAt)+RUN_POLICY.collectMinutes*60000;
+  assert.equal(claimRunTask(p,'EBW',deadline).reason,'COLLECTION_CLOSED');
+  assert.equal(p.phase,'FINALIZING');
+  // Even a later clock correction must not reopen an already closed collection.
+  assert.equal(claimRunTask(p,'H1',taskNow).reason,'COLLECTION_CLOSED');
+});
+test('freshness refresh, assembly repair and publication have finite independent budgets',()=>{
+  const p=taskProgress();recordRunStage(p,'CONTEXT',taskNow);
+  assert.equal(claimRunTask(p,'SNAPSHOT_REFRESH',taskNow).allowed,true);
+  assert.equal(claimRunTask(p,'SNAPSHOT_REFRESH',taskNow+1000).allowed,false);
+  assert.equal(claimRunTask(p,'FINALIZE',taskNow+2000).allowed,true);
+  assert.equal(claimRunTask(p,'FINALIZE',taskNow+3000).allowed,true);
+  assert.equal(claimRunTask(p,'FINALIZE',taskNow+4000).allowed,false);
+  assert.equal(claimRunTask(p,'PUBLISH',taskNow+5000).allowed,true);
+  assert.equal(claimRunTask(p,'PUBLISH',taskNow+6000).allowed,false);
+  assert.equal(claimRunTask(p,'VERIFY_PUBLICATION',taskNow+7000).allowed,true);
+  assert.equal(claimRunTask(p,'VERIFY_PUBLICATION',taskNow+8000).allowed,true);
+  assert.equal(claimRunTask(p,'VERIFY_PUBLICATION',taskNow+9000).allowed,false);
+});
+test('completed runs deny any new collection, refresh, assembly or publication',()=>{
+  const p=taskProgress();recordRunStage(p,'FAILED',taskNow);
+  for(const task of ['H1','SNAPSHOT_REFRESH','FINALIZE','PUBLISH'])
+    assert.equal(claimRunTask(p,task,taskNow+1000).reason,'RUN_FINISHED');
 });
 test('corrupt structural archive or changed original forces HTF refresh without invented observations',async t=>{
   const s=await sandbox(t);

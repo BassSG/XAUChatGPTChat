@@ -1,4 +1,24 @@
-# Scheduled analysis efficiency review — 2026-09-30
+# Scheduled analysis efficiency review
+
+## Current runtime repair — 2026-10-02
+
+The prior 2026-09-30 changes below are historical. The genuine latest run took 3,642 seconds including publication verification; the old timer only returned advice and did not persist a closed collection phase. Repeated assembly/freshness reads and an HTTP413 Worker repair extended that live-report run. The transport repair is already deployed; it is separate from the runtime changes here.
+
+- RUN_POLICY version 2 and STEP claims persist completion of collection batches and close collection at eight minutes or CONTEXT/FINALIZING. Completed batches cannot silently start again. One source retry, one final snapshot refresh, two assembly attempts, one publication and two verification checks are bounded independently.
+- changedContracts lists only changed documents. CONTRACTS_READ acknowledges actual reading before publication; READY remains supported for older runs. V1 acknowledged hashes migrate from their matching private context. Preparing a context alone never acknowledges unread rules.
+- Expired/due-soon baselines require refresh upfront. Hash-verified historical W1/D1 observations are available for context with original timestamps and carryApproved=false; no expired baseline, quote or current confirmation is silently reused.
+- finalize-analysis-run.mjs combines existing assembly/comparison, immutable archive, evidence/replay/publication validation and deterministic PNG rendering. Successful identical input reuses the same image but rechecks current freshness. Identical failed input is not repeatedly executed. Visual inspection and journal updates remain required before the unchanged publisher.
+- Analysis schedules do not repair repository code, run development suites or redeploy old commits while preparing live reports. A publication failure still produces the verified report/image in Codex with the real failure stated.
+
+Verification: npm run test:all passed 176 tests (157 main, 3 manual, 11 release, 5 transport), zero failures; npm run build passed. Sixteen added runtime/bundle regression cases include real private WAIT/WATCH PNG generation, unchanged-image reuse, fixture rejection, evidence mismatch, finite repair loops and original V1 acknowledgement migration. Existing V3/V4 rendering, news, risk, replay and Worker gates remain intact.
+
+Measured private smoke checks during concurrent regression tests: startup 416 ms; WAIT artifact bundle 4,767 ms; WATCH artifact bundle 4,938 ms; reused bundle verification 1,463 / 1,380 ms. These exclude live browser collection, analyst draft preparation, visual review, journal and deployment. A genuine historical production report was rejected by the original 15-minute publication freshness gate. No test report or image was published.
+
+All three existing weekday schedules retain 09:00 / 14:30 / 19:00, the same target chat, and gpt-6.1-sol / xhigh. Existing-chat scheduling follows [OpenAI scheduled-task documentation](https://learn.chatgpt.com/docs/automations?surface=app).
+
+Remaining limit: task claims guide and guard the scheduled agent's execution but cannot forcibly interrupt a model or an already-running browser tool. End-to-end timing and token savings still require the next genuine run; do not guarantee a twelve-minute finish from these utility timings.
+
+## Historical review — 2026-09-30
 
 ## Findings and changes
 

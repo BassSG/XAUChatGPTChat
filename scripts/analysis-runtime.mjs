@@ -35,6 +35,7 @@ export function baselineCandidate(report, now) {
   if (report.testOnly || report.dataClass === 'TEST_FIXTURE') return {state:'REFRESH_REQUIRED',reason:'TEST_REPORT'};
   if (b.status !== 'ACTIVE' || report.desk.rebaseline?.state === 'REQUIRED') return {state:'REFRESH_REQUIRED',reason:'SUSPENDED_OR_REBASELINE'};
   if (!Number.isFinite(created) || created > now || now-created > DESK_POLICY.baselineMaxHours*3600000 || !Number.isFinite(refresh) || now>=refresh) return {state:'REFRESH_REQUIRED',reason:'EXPIRED_OR_INVALID_TIME'};
+  if(refresh<=now+RUN_POLICY.targetMinutes*60000) return {state:'REFRESH_REQUIRED',reason:'REFRESH_DUE_DURING_RUN'};
   return {
     state:'CANDIDATE_NEEDS_CURRENT_H1', reason:'ORIGINAL_HTF_NOT_EXPIRED',
     baseline:structuredClone(b),
@@ -63,29 +64,78 @@ export function journalIndex(text) {
   }
   return [...entries.values()];
 }
-export function runBudget(startedAt, now) {
+export function runBudget(startedAt, now, finalizing=false) {
+  if(!Number.isFinite(Date.parse(startedAt)) || !Number.isFinite(now)) throw new Error('Valid run timestamps required');
   const elapsed=Math.max(0,now-Date.parse(startedAt));
+  const closed=finalizing || elapsed>=RUN_POLICY.collectMinutes*60000;
   return {elapsedSeconds:Math.floor(elapsed/1000),
-    mode:elapsed>=RUN_POLICY.collectMinutes*60000?'FINALIZE_AVAILABLE':'COLLECT',
+    mode:closed?'FINALIZE_AVAILABLE':'COLLECT',
     targetExceeded:elapsed>=RUN_POLICY.targetMinutes*60000,
-    action:elapsed>=RUN_POLICY.collectMinutes*60000?'Stop optional reads/retries; assemble verified information, refresh final quote/calendar if accessible, journal, PNG, publish. Never bypass freshness/evidence gates.':'Collect primary inputs; one focused retry per blocked source.'};
+    action:closed?'Collection is closed. Finalize verified information; one final snapshot refresh only. Send Codex output even if publication fails. Never bypass freshness/evidence gates or repair repository code in an analysis run.':'Collect each required task once; one focused retry per blocked source.'};
+}
+export const RUN_TASKS=Object.freeze({
+  HTF_REFRESH:'PEPPERSTONE',H1:'PEPPERSTONE',M15:'PEPPERSTONE',M5:'PEPPERSTONE',
+  FOREX_FACTORY:'FOREX_FACTORY',DXY:'DXY',FMP:'FMP',SPDR:'SPDR',EBW:'EBW',
+  TOOLKIT:'PEPPERSTONE',PLAN_REVIEW:'PLAN_REVIEW',
+  SNAPSHOT_REFRESH:null,FINALIZE:null,PUBLISH:null,VERIFY_PUBLICATION:null
+});
+const COLLECTION_TASKS=Object.keys(RUN_TASKS).filter(task=>RUN_TASKS[task]);
+export function runStatus(progress,now) {
+  const finished=Boolean(progress.finishedAt);
+  const finalizing=finished || ['FINALIZING','READY'].includes(progress.phase) ||
+    (progress.events||[]).some(e=>['CONTEXT','FINALIZING','ARTIFACTS','READY'].includes(e.stage));
+  const budget=runBudget(progress.startedAt,now,finalizing);
+  return {...budget,phase:finished?'FINISHED':budget.mode==='COLLECT'?'COLLECTING':progress.phase==='READY'?'READY':'FINALIZING',
+    collectionClosed:finished || budget.mode!=='COLLECT',
+    attemptedTasks:[...new Set((progress.events||[]).filter(e=>e.stage==='STEP' && e.allowed).map(e=>e.task))],
+    nextAction:finished?'STOP':budget.mode==='COLLECT'?'COLLECT_ONCE':'FINALIZE_EXISTING_EVIDENCE'};
+}
+// Persistent task claims are an agent execution guard, not market evidence or a trading gate.
+// Browser tools cannot be forcibly interrupted by this local script.
+export function claimRunTask(progress,task,now,{retry=false}={}) {
+  if(!Object.hasOwn(RUN_TASKS,task)) throw new Error('Use a known run task');
+  progress.events ||= [];
+  const status=runStatus(progress,now);
+  if(status.collectionClosed && !progress.finishedAt) progress.phase=status.phase;
+  const used=progress.events.filter(e=>e.stage==='STEP' && e.task===task && e.allowed).length;
+  const source=RUN_TASKS[task],retryUsed=progress.events.filter(e=>e.source===source &&
+    ((e.stage==='RETRY' && e.retryAllowed)||(e.stage==='STEP' && e.retry && e.allowed))).length;
+  const limits={SNAPSHOT_REFRESH:RUN_POLICY.snapshotRefreshes,FINALIZE:RUN_POLICY.finalizeAttempts,
+    PUBLISH:RUN_POLICY.publicationAttempts,VERIFY_PUBLICATION:RUN_POLICY.publicationChecks};
+  let reason='TASK_GRANTED';
+  if(progress.finishedAt) reason='RUN_FINISHED';
+  else if(COLLECTION_TASKS.includes(task) && status.collectionClosed) reason='COLLECTION_CLOSED';
+  else if(retry && (!source || !used || retryUsed>=RUN_POLICY.retryPerSource)) reason='RETRY_LIMIT';
+  else if(!retry && used>=(limits[task]||1)) reason='TASK_ALREADY_ATTEMPTED';
+  const event={stage:'STEP',task,source,retry,at:bangkok(now),...status,
+    allowed:reason==='TASK_GRANTED',reason,attempt:used+(reason==='TASK_GRANTED'?1:0)};
+  if(event.allowed && ['FINALIZE','SNAPSHOT_REFRESH','PUBLISH'].includes(task)) {
+    progress.phase='FINALIZING';
+    Object.assign(event,runStatus(progress,now));
+  }
+  progress.events.push(event);
+  return event;
 }
 export function recordRunStage(progress, stage, now, source=null) {
-  const budget=runBudget(progress.startedAt,now),event={stage,at:bangkok(now),...budget};
+  progress.events ||= [];
+  if(['CONTEXT','FINALIZING','ARTIFACTS'].includes(stage) && !progress.finishedAt) progress.phase='FINALIZING';
+  if(stage==='READY' && !progress.finishedAt) progress.phase='READY';
+  const budget=runStatus(progress,now),event={stage,at:bangkok(now),...budget};
+  if(budget.collectionClosed && !progress.finishedAt) progress.phase=budget.phase;
   if(stage==='RETRY') {
-    if(!['PEPPERSTONE','FOREX_FACTORY','DXY','SPDR','EBW','PLAN_REVIEW'].includes(source)) throw new Error('Use a known source for retry accounting');
-    const used=progress.events.filter(e=>e.stage==='RETRY' && e.source===source && e.retryAllowed).length;
+    if(!['PEPPERSTONE','FOREX_FACTORY','DXY','FMP','SPDR','EBW','PLAN_REVIEW'].includes(source)) throw new Error('Use a known source for retry accounting');
+    const used=progress.events.filter(e=>e.source===source && ((e.stage==='RETRY' && e.retryAllowed)||(e.stage==='STEP' && e.retry && e.allowed))).length;
     Object.assign(event,{source,retryAllowed:used<RUN_POLICY.retryPerSource && budget.mode==='COLLECT',
       retryReason:budget.mode!=='COLLECT'?'COLLECTION_BUDGET':used>=RUN_POLICY.retryPerSource?'RETRY_LIMIT':'ONE_FOCUSED_RETRY'});
   }
   progress.events.push(event);
-  if(['PUBLISHED','FAILED'].includes(stage)) {progress.finishedAt=bangkok(now);progress.totalSeconds=budget.elapsedSeconds;progress.result=stage;}
+  if(['PUBLISHED','FAILED'].includes(stage)) {progress.phase='FINISHED';progress.finishedAt=bangkok(now);progress.totalSeconds=budget.elapsedSeconds;progress.result=stage;}
   return event;
 }
 export async function acknowledgeContracts(context) {
   const statePath=resolve(context.runDir,'../../startup-state.json');
   const previous=await readJson(statePath) || {};
-  await savePrivateJson(statePath,{...previous,contractHash:context.contractHash,acknowledgedAt:bangkok(Date.now())});
+  await savePrivateJson(statePath,{...previous,contractHash:context.contractHash,contracts:context.contracts.map(({name,sha256})=>({name,sha256})),acknowledgedAt:bangkok(Date.now())});
 }
 export async function prepareRun({repo,root,now=Date.now()}) {
   requirePrivatePath(root,repo);
@@ -94,6 +144,18 @@ export async function prepareRun({repo,root,now=Date.now()}) {
   const contractHash=sha256(JSON.stringify(contracts.map(({name,sha256})=>({name,sha256}))));
   const previous=await readJson(join(root,'startup-state.json'));
   const changed=previous?.contractHash!==contractHash;
+  let acknowledged=previous?.contracts||[];
+  // Migrate v1 acknowledgement from its hash-matching private context. A missing
+  // or corrupt context still requires full reads; no unchecked hash is trusted.
+  if(!acknowledged.length && previous?.acknowledgedAt && previous.contextPath) {
+    try {
+      requirePrivatePath(previous.contextPath,repo);
+      const old=await readJson(previous.contextPath),list=old?.contracts?.map(({name,sha256})=>({name,sha256}));
+      if(old?.contractHash===previous.contractHash && list?.length===CONTRACT_FILES.length &&
+        sha256(JSON.stringify(list))===previous.contractHash) acknowledged=list;
+    } catch {/* Fall back to reading all contracts. */}
+  }
+  const changedContracts=changed?contracts.filter(c=>!acknowledged.some(p=>p.name===c.name && p.sha256===c.sha256)).map(c=>c.name):[];
   const reportPath=join(repo,'public/reports/latest.json');
   let report=null,reportHash=null;
   try { report=json(await readFile(reportPath,'utf8'));reportHash=sha256(JSON.stringify(report)); } catch { /* A missing latest report requires initial collection. */ }
@@ -103,8 +165,8 @@ export async function prepareRun({repo,root,now=Date.now()}) {
   const journalIndexPath=join(runDir,'journal-index.json');
   await savePrivateJson(journalIndexPath,{path:journalPath,entries:index,error:journalError});
   const candidate=baselineCandidate(report,now);
-  let carryEvidencePath=null, evidenceError=null, originalCapture=null, chartUrl=null;
-  if(candidate.state==='CANDIDATE_NEEDS_CURRENT_H1') {
+  let carryEvidencePath=null, evidenceError=null, originalCapture=null, chartUrl=null,historicalStructure=null;
+  if(report?.schemaVersion===4 && !report.testOnly && report.dataClass!=='TEST_FIXTURE') {
     try {
       validateDeskV4(report);
       const b=report.desk.baseline;
@@ -131,9 +193,17 @@ export async function prepareRun({repo,root,now=Date.now()}) {
       const carried={version:pack.version,symbol:pack.symbol,capturedAt:pack.capturedAt,chartUrl:pack.chartUrl,method:pack.method,frames,
         gaps:[...pack.gaps,'Historical structural observations only; read new H1/M15/M5 and quote for this run.']};
       validateEvidencePack(carried);
-      carryEvidencePath=join(runDir,'carry-evidence.json');
-      await savePrivateJson(carryEvidencePath,carried);
-      originalCapture=pack.capturedAt; chartUrl=pack.chartUrl;
+      const structuralPath=join(runDir,candidate.state==='CANDIDATE_NEEDS_CURRENT_H1'?'carry-evidence.json':'historical-evidence.json');
+      await savePrivateJson(structuralPath,carried);
+      chartUrl=pack.chartUrl;
+      if(candidate.state==='CANDIDATE_NEEDS_CURRENT_H1') {
+        carryEvidencePath=structuralPath;originalCapture=pack.capturedAt;
+      } else {
+        historicalStructure={state:'HISTORICAL_ONLY',carryApproved:false,originalSnapshotAt:report.snapshotAt,
+          baseline:structuredClone(b),dailySR:structuredClone(report.desk.dailySR),
+          evidencePath:structuralPath,originalCapturedAt:pack.capturedAt,
+          instruction:'These are dated, hash-verified observations, not an active baseline. Refresh current H1/H4 first, then establish a valid new baseline. Reuse W1/D1 observations only when still structurally relevant; never extend an expired baseline or relabel old bars as fresh.'};
+      }
     } catch { candidate.state='REFRESH_REQUIRED';candidate.reason='PRIVATE_STRUCTURAL_EVIDENCE_UNVERIFIABLE';delete candidate.baseline;evidenceError='Re-read HTF: original hash/references could not be verified'; }
   }
   if(candidate.baseline) {
@@ -145,9 +215,9 @@ export async function prepareRun({repo,root,now=Date.now()}) {
   const supplemental=await supplementalContext({repo,root,now,report});
   const browserHints={...(previous?.browserHints||{chart:chartUrl||report?.evidence?.chartUrl||null,calendar:'https://www.forexfactory.com/calendar',dxy:'https://www.tradingview.com/symbols/TVC-DXY/',spdr:'https://www.spdrgoldshares.com/usa/gld/'})};
   if(supplemental.indicatorVerification?.chartUrl)browserHints.chart=supplemental.indicatorVerification.chartUrl;
-  const context={version:1,startedAt:bangkok(now),contractHash,contractsChanged:changed,contracts,
+  const context={version:2,startedAt:bangkok(now),contractHash,contractsChanged:changed,changedContracts,contracts,
     latest:{path:reportPath,schemaVersion:report?.schemaVersion??null,planId:report?.planId??null,snapshotAt:report?.snapshotAt??null,status:report?.status??null,sha256:reportHash},
-    baseline:candidate,carryEvidence:{path:carryEvidencePath,originalCapturedAt:originalCapture,error:evidenceError},
+    baseline:candidate,carryEvidence:{path:carryEvidencePath,originalCapturedAt:originalCapture,error:evidenceError},historicalStructure,
     carryLevels:candidate.baseline?report.desk.dailySR:null,
     journal:{path:journalPath,indexPath:journalIndexPath,count:index.length,legacySections:index.filter(e=>!e.planId).length,
       pendingCandidates:index.filter(e=>e.planId && e.reviewHint!=='HAS_REVIEW_TEXT').slice(-8),error:journalError},
@@ -160,7 +230,7 @@ export async function prepareRun({repo,root,now=Date.now()}) {
     progressPath:join(runDir,'progress.json'),runDir};
   const contextPath=join(runDir,'context.json');
   await savePrivateJson(contextPath,context);
-  await savePrivateJson(context.progressPath,{version:1,startedAt:context.startedAt,events:[],tokens:null,tokenNote:'Token usage is not exposed by this runner; never invent savings.'});
-  await savePrivateJson(join(root,'startup-state.json'),{...previous,version:1,preparedContractHash:contractHash,preparedAt:context.startedAt,contextPath,browserHints:context.browserHints});
+  await savePrivateJson(context.progressPath,{version:2,startedAt:context.startedAt,phase:'COLLECTING',events:[],tokens:null,tokenNote:'Token usage is not exposed by this runner; never invent savings.'});
+  await savePrivateJson(join(root,'startup-state.json'),{...previous,version:2,contracts:acknowledged,preparedContractHash:contractHash,preparedAt:context.startedAt,contextPath,browserHints:context.browserHints});
   return {contextPath,context};
 }

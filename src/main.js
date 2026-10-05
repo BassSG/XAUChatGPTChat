@@ -21,6 +21,7 @@ let currentReport = null;
 let latestRunFailure = null;
 function renderRunFailure() {
   const view=runFailureView(latestRunFailure,currentReport);
+  if(view && byId('delivery-note'))byId('delivery-note').hidden=true;
   for(const id of ['run-failure-desktop','run-failure-mobile']) {
     const node=byId(id);if(!node)continue;
     node.hidden=!view;

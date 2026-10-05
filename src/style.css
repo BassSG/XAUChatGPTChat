@@ -738,3 +738,5 @@ html[data-text-size="largest"] { --read-body: 24px; --read-small: 22px; --read-l
 .readiness-row span { color: #cad8dc; }
 .workspace-app .mobile-home-lead .delivery-note, .delivery-note { margin: 12px 0; padding: 12px 15px; border-left: 3px solid #edba74; background: #392b1d; color: #ffe1b2; font-size: 15px; line-height: 1.7; }
 @media(max-width:650px) { .readiness-row { grid-template-columns: minmax(0,1fr); gap: 3px; } }
+/* Operational failure notice keeps the previous valid analysis available. */
+.run-failure-notice:not([hidden]) { padding: 14px 16px; border: 1px solid #c88b3d; border-radius: 12px; background: #3b2a18; color: #ffe2a8; font-size: 1rem; line-height: 1.65; overflow-wrap: anywhere; }

@@ -12,11 +12,28 @@ import { setupMobileDesk, refreshMobileDesk } from "./mobile-desk.js";
 import "./mobile-desk.css";
 import { setupWorkspaceDesk } from "./workspace-desk.js";
 import "./workspace-desk.css";
+import {runFailureView} from './analysis-run-state.js';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const byId = (id) => document.getElementById(id);
 let currentReport = null;
+let latestRunFailure = null;
+function renderRunFailure() {
+  const view=runFailureView(latestRunFailure,currentReport);
+  for(const id of ['run-failure-desktop','run-failure-mobile']) {
+    const node=byId(id);if(!node)continue;
+    node.hidden=!view;
+    if(view)node.textContent=view.title+' — '+view.message;
+  }
+}
+async function loadRunFailure() {
+  if(!API_BASE)return;
+  try {
+    const response=await fetch(API_BASE+'/api/analysis-runs/latest',{cache:'no-store',signal:AbortSignal.timeout(8000)});
+    if(response.ok){latestRunFailure=(await response.json()).run;renderRunFailure();}
+  }catch{/* Report loading remains available when the status service is offline. */}
+}
 let toastTimer = 0;
 let installPrompt = null;
 let historyReports = [];
@@ -406,6 +423,7 @@ function escapeHTML(value) {
 }
 
 async function loadReports() {
+  if(API_BASE)void loadRunFailure();
   let workerOnline = false;
   let workerReport = null;
   let pagesReport = null;
@@ -417,6 +435,7 @@ async function loadReports() {
     else pagesReport = report;
     const selected = chooseLatestReport({ worker: workerReport, pages: pagesReport, current: currentReport });
     if (selected && selected !== currentReport) renderReport(selected);
+    renderRunFailure();
   });
 
   const label = byId("connection-label");

@@ -13,6 +13,15 @@ New runs follow [V4_3_SOURCE_ALIGNMENT.md](V4_3_SOURCE_ALIGNMENT.md), building o
 
 ใช้ context เดียวจาก prepare ตลอดรอบ ห้ามเรียก prepare ใหม่เพื่อเริ่มนับเวลาใหม่ เก็บข้อมูลเป็นชุดต่อกรอบเวลา ไม่เรียก guard ต่อแท่ง
 
+### Failure notifications (5 Oct 2026)
+
+- WAIT and incomplete plan review still publish normally when the verified report passes the gates. Neither disables Web Push.
+- Evidence matching compares object content and equivalent timestamp instants (for example `.630` and `.63`), preserving exact facts, numbers and array order. Immutable archives and freshness gates remain unchanged.
+- After the second failed finalization, the finalizer queues an operational failure alert automatically. `analysis-run-progress.mjs --stage FAILED` also queues it for publication failures; the same run ID prevents repeated alerts. `publish-report.ps1` queues failures when its input directory contains the run context.
+- This alert contains only run ID, original start time and an allowlisted failure category. It stores no market report, raw error, local path or secret. Do not replace an invalid report with fabricated data or change an old snapshot to publish it.
+- QUEUED means GitHub Actions accepted the job, not that a device received Push. Check the matching **Notify analysis run failure** job and its delivery counts; report queue/delivery failures in Codex. No extra desktop background process or recurring polling is needed.
+- The app shows a separate failure notice while preserving the last valid analysis. Successful later reports clear it. Normal report transport retries only failed Push endpoints, up to three attempts; successful endpoints are not sent again. Zero registered devices, expired devices and partial failures no longer count as a successful notification step.
+
 ก่อนเริ่มแต่ละชุด ให้ขอสิทธิ์จากตัวกันงานซ้ำ:
 
     node scripts/analysis-run-progress.mjs --context <context.json> --stage STEP --task <TASK>

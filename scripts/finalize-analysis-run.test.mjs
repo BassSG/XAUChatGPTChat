@@ -63,6 +63,17 @@ test('an unchanged invalid draft is not rerun; two changed failed attempts close
   const progress=JSON.parse(await readFile(join(s.runDir,'progress.json'),'utf8'));
   assert.equal(progress.events.filter(e=>e.task==='FINALIZE' && e.allowed).length,2);
 });
+test('an unrepaired production failure queues an operational alert only after the second attempt; fixtures never notify',async t=>{
+  const s=await workspace(t);let calls=0;
+  delete s.draft.testOnly;delete s.draft.dataClass;s.draft.desk.setup.timeframe='M5';await writeFile(s.inputPath,JSON.stringify(s.draft));
+  const notifyFailure=async()=>{calls++;return {state:'QUEUED',deliveryVerified:false};};
+  const first=await finalizeAnalysisRun({...s,testMode:false,notifyFailure});assert.equal(first.ok,false);assert.equal(calls,0);
+  s.draft.waitFor+=' local correction';await writeFile(s.inputPath,JSON.stringify(s.draft));
+  const second=await finalizeAnalysisRun({...s,testMode:false,notifyFailure});assert.equal(second.ok,false);assert.equal(calls,1);assert.equal(second.failureNotification.state,'QUEUED');assert.equal(second.publicationAttempted,false);
+  const fixture=await workspace(t);fixture.draft.desk.setup.timeframe='M5';await writeFile(fixture.inputPath,JSON.stringify(fixture.draft));
+  await finalizeAnalysisRun({...fixture,notifyFailure});fixture.draft.waitFor+=' correction';await writeFile(fixture.inputPath,JSON.stringify(fixture.draft));
+  await finalizeAnalysisRun({...fixture,notifyFailure});assert.equal(calls,1);
+});
 test('reused images still pass current validation and an input-only change cannot bypass validation',async t=>{
   const s=await workspace(t);
   const first=await finalizeAnalysisRun(s);assert.equal(first.ok,true,first.error);

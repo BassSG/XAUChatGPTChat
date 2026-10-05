@@ -1,0 +1,39 @@
+name: Notify analysis run failure
+run-name: Analysis status ${{ inputs.runId }}
+on:
+  workflow_dispatch:
+    inputs:
+      runId:
+        description: Analysis run ID (no local paths)
+        required: true
+        type: string
+      startedAt:
+        description: Original run start timestamp
+        required: true
+        type: string
+      code:
+        description: Public failure category
+        required: true
+        type: choice
+        options: [EVIDENCE_MISMATCH, VALIDATION_FAILED, SOURCE_UNAVAILABLE, PUBLICATION_FAILED, DELIVERY_FAILED]
+permissions:
+  contents: read
+concurrency:
+  group: analysis-status-${{ inputs.runId }}
+  cancel-in-progress: false
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Store status and send failure alert
+        env:
+          WORKER_URL: ${{ vars.XAU_WORKER_URL }}
+          REPORT_TOKEN: ${{ secrets.XAU_REPORT_TOKEN }}
+          RUN_ID: ${{ inputs.runId }}
+          RUN_STARTED_AT: ${{ inputs.startedAt }}
+          FAILURE_CODE: ${{ inputs.code }}
+        run: node scripts/send-worker-publication.mjs --failure

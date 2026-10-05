@@ -9,6 +9,7 @@ import {validateEvidencePack,matchReportEvidence} from '../src/analysis-evidence
 import {claimRunTask,recordRunStage,savePrivateJson,sha256} from './analysis-runtime.mjs';
 import {requirePrivatePath} from './fmp-cache.mjs';
 import {RUN_POLICY} from '../src/run-policy.js';
+import {queueAnalysisFailure,failureCode} from './notify-analysis-failure.mjs';
 
 const scriptRepo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const readJson=async path=>JSON.parse((await readFile(path,'utf8')).replace(/^\uFEFF/,''));
@@ -30,7 +31,7 @@ export async function executeScript(name,args,{repo=scriptRepo,timeoutMs=RUN_POL
   });
 }
 export async function finalizeAnalysisRun({contextPath,inputPath,observationsPath,testMode=false,
-  archiveRoot,execute=executeScript,now=()=>Date.now(),repo=scriptRepo}) {
+  archiveRoot,execute=executeScript,now=()=>Date.now(),repo=scriptRepo,notifyFailure=queueAnalysisFailure}) {
   for(const path of [contextPath,inputPath,observationsPath]) requirePrivatePath(resolve(path),repo);
   const context=await readJson(contextPath);
   requirePrivatePath(context.runDir,repo);requirePrivatePath(context.progressPath,repo);
@@ -101,9 +102,17 @@ export async function finalizeAnalysisRun({contextPath,inputPath,observationsPat
     recordRunStage(updated,'ARTIFACTS',now());await savePrivateJson(context.progressPath,updated);
     return result;
   } catch(error) {
-    // No publisher, git command or code-repair path exists in this utility.
+    // Failed market evidence never reaches the publisher. Operational failure
+    // metadata can notify separately, only once the bounded repair loop ends.
     const result={ok:false,fingerprint,step,error:error.message,steps,claimed,
       totalMs:Math.round(performance.now()-started),publicationAttempted:false};
+    if(!testMode && claimed){
+      const progress=await readJson(context.progressPath);
+      if(progress.events.filter(e=>e.task==='FINALIZE'&&e.allowed).length>=RUN_POLICY.finalizeAttempts){
+        try {result.failureNotification=await notifyFailure(context,{code:failureCode(step,error.message)});}
+        catch {result.failureNotification={state:'QUEUE_FAILED',deliveryVerified:false};}
+      }
+    }
     await savePrivateJson(resultPath,result);
     return result;
   }

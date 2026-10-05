@@ -64,33 +64,18 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Publish the report and send mobile alerts
+        id: report-publish
         if: steps.report-change.outputs.changed == 'true' && !contains(github.event.head_commit.message, '[skip notify]')
         env:
           WORKER_URL: ${{ vars.XAU_WORKER_URL }}
           REPORT_TOKEN: ${{ secrets.XAU_REPORT_TOKEN }}
         run: |
-          node --input-type=module <<'NODE'
-          import { readFile } from "node:fs/promises";
-
-          if (!process.env.WORKER_URL || !process.env.REPORT_TOKEN) {
-            throw new Error("XAU_WORKER_URL and XAU_REPORT_TOKEN must be configured.");
-          }
-
-          const report = JSON.parse(await readFile("public/reports/latest.json", "utf8"));
-          if (!report.snapshotAt) {
-            console.log("No generated analysis yet; skipping.");
-            process.exit(0);
-          }
-
-          const response = await fetch(process.env.WORKER_URL.replace(/\/$/, "") + "/api/admin/reports", {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer " + process.env.REPORT_TOKEN,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(report)
-          });
-          const result = await response.json().catch(() => ({}));
-          if (!response.ok) throw new Error("Report publish failed with HTTP " + response.status + ": " + (result.error || "unknown error"));
-          console.log(JSON.stringify(result));
-          NODE
+          node scripts/send-worker-publication.mjs
+      - name: Notify publication failure without publishing invalid analysis
+        if: failure() && steps.report-change.outputs.changed == 'true' && !contains(github.event.head_commit.message, '[skip notify]')
+        env:
+          WORKER_URL: ${{ vars.XAU_WORKER_URL }}
+          REPORT_TOKEN: ${{ secrets.XAU_REPORT_TOKEN }}
+          RUN_ID: release-${{ github.run_id }}
+          FAILURE_CODE: ${{ steps.report-publish.outputs.failureCode || 'PUBLICATION_FAILED' }}
+        run: node scripts/send-worker-publication.mjs --failure --from-report

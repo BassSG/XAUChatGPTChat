@@ -5,6 +5,13 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+trap {
+  $failureContext = Join-Path (Split-Path -Parent $ReportPath) 'context.json'
+  if (Test-Path -LiteralPath $failureContext -PathType Leaf) {
+    node (Join-Path $PSScriptRoot 'notify-analysis-failure.mjs') --context $failureContext --code PUBLICATION_FAILED
+  }
+  throw
+}
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $reportDirectory = Join-Path $repoRoot 'public\reports'
 $archiveDirectory = Join-Path $reportDirectory 'archive'

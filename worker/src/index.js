@@ -2,6 +2,8 @@ import { validatePublicationEvidence } from '../../src/report-accuracy.js';
 import { sendPushNotification, rawPayload } from "@mmmike/web-push/send";
 import { handleManualAnalysis } from "./manual-analysis.js";
 import { readReportRequest } from "./report-request.js";
+import { deliverPush } from './push-delivery.js';
+import { validateRunFailure, RUN_FAILURE_TEXT } from '../../src/analysis-run-state.js';
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" };
 
@@ -108,6 +110,27 @@ async function route(request, env, url) {
   if (path.startsWith('/api/manual-analysis/')) return handleManualAnalysis(request, env);
   if (method === "GET" && path === "/api/health") {
     return json({ ok: true, service: "xauchatgptchat-api", time: new Date().toISOString() });
+  }
+
+  if (method === 'GET' && path === '/api/analysis-runs/latest') {
+    const row=await env.DB.prepare('SELECT run_id,started_at,code,created_at FROM analysis_run_status ORDER BY started_at DESC LIMIT 1').first();
+    return json({run:row?{runId:row.run_id,startedAt:row.started_at,status:'FAILED',code:row.code,createdAt:row.created_at}:null});
+  }
+  if (method === 'POST' && path === '/api/admin/analysis-runs') {
+    if(!env.REPORT_TOKEN || readBearer(request)!==env.REPORT_TOKEN)return json({error:'Unauthorized.'},401);
+    let failure;
+    try {failure=validateRunFailure(await readReportRequest(request));}
+    catch {return json({error:'Invalid analysis run status.'},400);}
+    await env.DB.prepare('INSERT INTO analysis_run_status (run_id,started_at,code,created_at) VALUES (?,?,?,?) ON CONFLICT(run_id) DO NOTHING')
+      .bind(failure.runId,failure.startedAt,failure.code,new Date().toISOString()).run();
+    const original=await env.DB.prepare('SELECT started_at,code FROM analysis_run_status WHERE run_id=?').bind(failure.runId).first();
+    if(original.started_at!==failure.startedAt || original.code!==failure.code)return json({error:'Run status is immutable.'},409);
+    const notifications=await deliverPush(env,'run:'+failure.runId,{
+      title:'XAU Desk · รายงานยังเผยแพร่ไม่สำเร็จ',
+      body:RUN_FAILURE_TEXT[failure.code]+'. รายงานบนเว็บยังเป็นรอบก่อน ดูบทวิเคราะห์รอบนี้ใน Codex',
+      url:env.APP_URL+'#overview',tag:'xau-desk-run-'+failure.runId
+    },{send:sendOne});
+    return json({ok:true,runId:failure.runId,notifications});
   }
 
   if (method === "GET" && path === "/api/push/public-key") {
@@ -242,15 +265,12 @@ async function route(request, env, url) {
       "SELECT id, report_json FROM reports WHERE snapshot_at = ? ORDER BY created_at DESC LIMIT 5"
     ).bind(snapshotAt).all();
     const existing = (duplicate.results || []).find((row) => row.report_json === JSON.stringify(body));
-    if (existing) return json({ ok: true, duplicate: true, reportId: existing.id, notifications: { skipped: true } });
-    const id = crypto.randomUUID();
+    const id = existing?.id || crypto.randomUUID();
     const createdAt = new Date().toISOString();
-    await env.DB.prepare(
+    if (!existing) await env.DB.prepare(
       "INSERT INTO reports (id, snapshot_at, status, headline, summary, report_json, image_url, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     ).bind(id, snapshotAt, status, headline, summary, JSON.stringify(body), imageUrl, createdAt).run();
 
-    const subscriptionsResult = await env.DB.prepare("SELECT endpoint, p256dh, auth FROM push_subscriptions").all();
-    const subscriptions = subscriptionsResult.results || [];
     const notification = {
       title: "XAU Desk · " + status,
       body: notificationText(body, summary),
@@ -258,32 +278,8 @@ async function route(request, env, url) {
       tag: "xau-desk-brief-" + id,
       image: imageUrl || undefined
     };
-    let delivered = 0;
-    let failed = 0;
-    let removed = 0;
-    for (let offset = 0; offset < subscriptions.length; offset += 5) {
-      const group = subscriptions.slice(offset, offset + 5);
-      const results = await Promise.all(group.map(async (stored) => {
-        const sub = {
-          endpoint: stored.endpoint,
-          keys: { p256dh: stored.p256dh, auth: stored.auth }
-        };
-        try {
-          const ok = await sendOne(env, sub, notification);
-          return { endpoint: stored.endpoint, ok, gone: !ok };
-        } catch {
-          return { endpoint: stored.endpoint, ok: false, gone: false };
-        }
-      }));
-      for (const result of results) {
-        if (result.ok) delivered += 1;
-        else if (result.gone) {
-          removed += 1;
-          await env.DB.prepare("DELETE FROM push_subscriptions WHERE endpoint = ?").bind(result.endpoint).run();
-        } else failed += 1;
-      }
-    }
-    return json({ ok: true, reportId: id, notifications: { registered: subscriptions.length, delivered, failed, removed } }, 201);
+    const notifications=await deliverPush(env,'report:'+id,notification,{send:sendOne});
+    return json({ ok: true, duplicate:Boolean(existing), reportId:id, notifications }, existing?200:201);
   }
 
   return json({ error: "Not found." }, 404);

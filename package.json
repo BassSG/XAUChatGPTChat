@@ -13,7 +13,7 @@
     "test:release": "node --test scripts/release-validation.test.mjs",
     "test:browser": "node scripts/browser-release-smoke.mjs",
     "test:all": "npm test && npm run test:manual && npm run test:release && npm run test:transport",
-    "test:transport": "node --test scripts/report-transport.test.mjs",
+    "test:transport": "node --test scripts/report-transport.test.mjs scripts/analysis-delivery.test.mjs",
     "test:v42": "node --test scripts/desk-v42.test.mjs",
     "test:v43": "node --test scripts/desk-v43.test.mjs"
   },

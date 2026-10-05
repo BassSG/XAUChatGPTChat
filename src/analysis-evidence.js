@@ -4,6 +4,17 @@ export const FRAME_MS = { M5: 300000, M15: 900000, H1: 3600000, H4:14400000, D1:
 const requireValue = (ok, message) => { if (!ok) throw new Error(message); };
 const instant = value => typeof value === 'string' && /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? Date.parse(value) : NaN;
 
+// JSON key order and equivalent ISO timestamp spellings are serialization details.
+// Keep array order and every observed value exact; never rewrite the stored archive.
+const TIME_FIELDS = new Set(['checkedAt','verifiedAt','observedAt','closedAt','openedAt','capturedAt','eventAt']);
+function comparable(value, key = '') {
+  if (TIME_FIELDS.has(key) && Number.isFinite(instant(value))) return new Date(instant(value)).toISOString();
+  if (Array.isArray(value)) return value.map(item => comparable(item));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map(k => [k, comparable(value[k], k)]));
+  return value;
+}
+export const sameRecordedContext = (a, b) => JSON.stringify(comparable(a)) === JSON.stringify(comparable(b));
+
 // Recorded observations remain separate from interpretations and public chart data.
 export function validateEvidencePack(pack) {
   requireValue([1,2].includes(pack?.version) && pack.symbol === PRIMARY_SYMBOL, 'Evidence must use Pepperstone and version 1');
@@ -84,17 +95,17 @@ export function matchReportEvidence(report, pack) {
     if(report.desk?.architectureVersion==='4.3'){
       for(const [field,value]of [['indicatorVerification',report.desk.indicatorVerification],['ammSource',report.desk.amm.source],['spdrHistory',report.desk.spdr.history||[]],['newsContext',report.desk.news.context||[]],['dxyConditions',report.desk.dxy.conditions||[]]]){
         if(value?.state==='UNAVAILABLE'||Array.isArray(value)&&!value.length)continue;
-        requireValue(JSON.stringify(pack.context?.[field])===JSON.stringify(value),'Source/context differs from private archive: '+field);
+        requireValue(sameRecordedContext(pack.context?.[field],value),'Source/context differs from private archive: '+field);
       }
     }
     // Auxiliary context is archived privately; it never supplies XAU execution prices.
     for(const frame of report.desk?.dxy?.frames||[]){
       if(frame.direction==='UNAVAILABLE')continue;
-      requireValue((pack.context?.dxyFrames||[]).some(f=>JSON.stringify(f)===JSON.stringify(frame)),'DXY structure differs from archived context');
+      requireValue((pack.context?.dxyFrames||[]).some(f=>sameRecordedContext(f,frame)),'DXY structure differs from archived context');
     }
     for(const item of report.desk?.toolkit?.observations||[]){
       if(item.state!=='OBSERVED')continue;
-      requireValue((pack.context?.toolkitObservations||[]).some(o=>JSON.stringify(o)===JSON.stringify(item)),'Toolkit observation differs from archived context');
+      requireValue((pack.context?.toolkitObservations||[]).some(o=>sameRecordedContext(o,item)),'Toolkit observation differs from archived context');
     }
     const refs = [...deskEvidenceReferences(report.desk), ...deskEvidenceReferences(report.scenarioPlan)];
     for (const ref of refs) {

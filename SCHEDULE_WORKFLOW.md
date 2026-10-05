@@ -145,4 +145,8 @@ Write each frame as `<frame>.json` in one temporary chart-data directory. Its re
 
 Publish via `scripts/render-analysis-image.mjs` and `scripts/publish-report.ps1` at the absolute paths in the scheduled task. Add `-ChartDataDirectory` only when the report contains a validated `chartPlan`. After publication, inspect the deployment and Worker result when accessible. A push request accepted by the service does not prove that the user read it. If publication fails, still send the full report and image in Codex and state what failed.
 
+### Operational failure alerts
+
+Follow the failure-notification section of FAST_RUN_WORKFLOW.md. Finalizer exhaustion and the terminal FAILED progress stage queue a separate status alert through `.github/workflows/analysis-status.yml`; publisher exceptions also queue it when the private run context is available. No invalid or stale market report is uploaded by this path. Run metadata is allowlisted and deduplicated by run ID. The app keeps the previous valid report and labels the latest failed run separately. Check the status workflow's Push delivery receipt; QUEUED is not delivered, and service acceptance is not proof of physical device display. Report transport has bounded retries with per-device delivery state. Never suppress notification solely because a report is WAIT or priorReview is UNVERIFIABLE.
+
 Never submit a trading order. Never alter a persistent TradingView layout. Never include personal information or secrets in the public report, image, or repository.

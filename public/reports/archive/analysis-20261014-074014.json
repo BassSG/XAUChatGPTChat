@@ -1,0 +1,2117 @@
+{
+    "schemaVersion":  4,
+    "snapshotAt":  "2026-10-14T14:40:14+07:00",
+    "planId":  "20261014-1440-W1",
+    "status":  "WAIT",
+    "headline":  "WAIT — รอเด้งขึ้นไปขาย 4,147.55–4,149.07",
+    "summary":  "SELL · พักตัวสวนภาพใหญ่\nกำลังตรวจ แผนหลัก: รอเด้งขึ้นไปขาย 4,147.55–4,149.07\nยืนยัน: โซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน\nงดเข้า: ยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop; All Indy H4 runtime error ไม่ใช้ค่าที่ว่าง …\nสำรอง: ซื้อจากแนวรับ · scalp สวนแนวโน้ม 4,143.31–4,144.46 · ใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก แล…",
+    "waitFor":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31",
+    "validUntil":  "2026-10-14T19:00:00+07:00",
+    "newsRisk":  "Bowman16:40 LOW ตามFF; FMPให้MEDIUMจึงยึดFFและติดตามคำแถลง. CPI19:30 HIGH ยังไม่มีActual คาดCore m/m0.2%, Core y/y2.5%, CPI m/m0.6%, CPI y/y3.6%. ใช้policyกลาง XAU_V4_2 พักเปิด17:30–21:30 และตรวจฐานใหม่หลังข่าวหากdisplacementผิดปกติ ไม่รอข่าวในรอบนี้",
+    "newsEvents":  [
+                       {
+                           "title":  "FOMC Member Bowman Speaks",
+                           "at":  "2026-10-14T16:40:00+07:00",
+                           "currency":  "USD",
+                           "impact":  "LOW",
+                           "state":  "UPCOMING",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                       },
+                       {
+                           "title":  "Core CPI m/m",
+                           "at":  "2026-10-14T19:30:00+07:00",
+                           "currency":  "USD",
+                           "impact":  "HIGH",
+                           "state":  "UPCOMING",
+                           "forecast":  "0.2%",
+                           "previous":  "0.3%",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                       },
+                       {
+                           "title":  "Core CPI y/y",
+                           "at":  "2026-10-14T19:30:00+07:00",
+                           "currency":  "USD",
+                           "impact":  "HIGH",
+                           "state":  "UPCOMING",
+                           "forecast":  "2.5%",
+                           "previous":  "2.4%",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                       },
+                       {
+                           "title":  "CPI m/m",
+                           "at":  "2026-10-14T19:30:00+07:00",
+                           "currency":  "USD",
+                           "impact":  "HIGH",
+                           "state":  "UPCOMING",
+                           "forecast":  "0.6%",
+                           "previous":  "0.4%",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                       },
+                       {
+                           "title":  "CPI y/y",
+                           "at":  "2026-10-14T19:30:00+07:00",
+                           "currency":  "USD",
+                           "impact":  "HIGH",
+                           "state":  "UPCOMING",
+                           "forecast":  "3.6%",
+                           "previous":  "3.4%",
+                           "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                       }
+                   ],
+    "sources":  [
+                    {
+                        "name":  "TradingView PEPPERSTONE:XAUUSD W1/D1/H4/H1/M15/M5ปิดจริงและquote14:40:14",
+                        "url":  "https://www.tradingview.com/chart/tWIhhRSx/?symbol=PEPPERSTONE%3AXAUUSD"
+                    },
+                    {
+                        "name":  "Forex Factory14 ต.ค.ตรวจ14:33:17เวลาแสดงตรงGMT+7 ไม่มีCPIActual",
+                        "url":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                    },
+                    {
+                        "name":  "TVC:DXY102.126 as-of14:32 quoteonly",
+                        "url":  "https://www.tradingview.com/symbols/TVC-DXY/"
+                    },
+                    {
+                        "name":  "FMP calendar/newsMISS14:32:08.646 TreasuryHITต้นฉบับ09:08:24.458วันที่13 ต.ค.",
+                        "url":  "https://site.financialmodelingprep.com/developer/docs/stable/treasury-rates"
+                    },
+                    {
+                        "name":  "SPDR cacheHITต้นฉบับ09:08:26.538 holdings12 ต.ค.",
+                        "url":  "https://www.spdrgoldshares.com/usa/gld/"
+                    }
+                ],
+    "dataQuality":  {
+                        "status":  "PARTIAL",
+                        "priceSource":  "PEPPERSTONE:XAUUSD",
+                        "priceAt":  "2026-10-14T14:40:14+07:00",
+                        "detail":  "อ่านใหม่ได้ W1 สัปดาห์5–9 ต.ค., D1 วันที่12/13 ต.ค., H4 ปิด13:00, H1 ปิด14:00, M15 ปิด14:30 และ M5 ปิด14:35 พร้อม quote. ยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop. All Indy runtime error บน H4; ไม่ใช้ output ว่างเป็นข้อมูล"
+                    },
+    "evidence":  {
+                     "symbol":  "PEPPERSTONE:XAUUSD",
+                     "chartUrl":  "https://www.tradingview.com/chart/tWIhhRSx/?symbol=PEPPERSTONE%3AXAUUSD",
+                     "observedAt":  "2026-10-14T14:40:14+07:00",
+                     "marketState":  "OPEN",
+                     "spreadAssessment":  "NORMAL",
+                     "quote":  {
+                                   "symbol":  "PEPPERSTONE:XAUUSD",
+                                   "at":  "2026-10-14T14:40:14+07:00",
+                                   "bid":  4146.64,
+                                   "ask":  4146.75,
+                                   "spread":  0.11
+                               },
+                     "bars":  {
+                                  "H1":  {
+                                             "openedAt":  "2026-10-14T13:00:00+07:00",
+                                             "closedAt":  "2026-10-14T14:00:00+07:00",
+                                             "open":  4148.72,
+                                             "high":  4163.42,
+                                             "low":  4145.33,
+                                             "close":  4147.55,
+                                             "symbol":  "PEPPERSTONE:XAUUSD",
+                                             "timeframe":  "H1"
+                                         },
+                                  "M15":  {
+                                              "openedAt":  "2026-10-14T14:15:00+07:00",
+                                              "closedAt":  "2026-10-14T14:30:00+07:00",
+                                              "open":  4148.99,
+                                              "high":  4149.07,
+                                              "low":  4143.34,
+                                              "close":  4146.31,
+                                              "symbol":  "PEPPERSTONE:XAUUSD",
+                                              "timeframe":  "M15"
+                                          },
+                                  "M5":  {
+                                             "openedAt":  "2026-10-14T14:30:00+07:00",
+                                             "closedAt":  "2026-10-14T14:35:00+07:00",
+                                             "open":  4146.5,
+                                             "high":  4148.06,
+                                             "low":  4143.31,
+                                             "close":  4146.87,
+                                             "symbol":  "PEPPERSTONE:XAUUSD",
+                                             "timeframe":  "M5"
+                                         }
+                              },
+                     "newsCheck":  {
+                                       "status":  "OK",
+                                       "checkedAt":  "2026-10-14T14:33:17+07:00",
+                                       "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026"
+                                   }
+                 },
+    "indicatorContext":  {
+                             "status":  "UNAVAILABLE",
+                             "name":  "EBW 1.10.10 FAST + All Indy 1.2.4.1 FAST",
+                             "symbol":  "PEPPERSTONE:XAUUSD",
+                             "observedAt":  "2026-10-14T14:40:14+07:00",
+                             "summary":  "บนกราฟจริงเปลี่ยนเป็น EBW1.10.10 FAST(3000) และ ALL1.2.4.1 FAST(5000). H1 ปิด14:00 RSI37.79 K36.76/D58.80; M15 ปิด14:30 RSI40.38 K14.52/D19.43; M5 ปิด14:35 RSI40.06 K29.09/D24.79. All Indy บน H4 แสดง Runtime error/outputว่าง แต่ H1/M15/M5 อ่านค่าที่ปิดได้. ยังไม่ยืนยัน Inputs/source ทั้งชุด ไม่ใช้คะแนนอินดี้แทนโครงสร้าง",
+                             "frames":  [
+
+                                        ]
+                         },
+    "planLevels":  null,
+    "priorReview":  {
+                        "planId":  "20261014-0913-W1",
+                        "outcome":  "ตรวจไม่ได้",
+                        "resultStatus":  "UNVERIFIABLE",
+                        "checkedAt":  "2026-10-14T14:40:14+07:00",
+                        "simulatedR":  null,
+                        "timeline":  [
+
+                                     ],
+                        "evidence":  "แผนเช้าเผยแพร่จริง09:21:33.315 หมดอายุ14:30 WAITไม่มีEntry/Stop/Rและไม่มีreviewDefinitionตัวเลขครบ. H4 09–13 high4170.54ผ่านโซนขายเช้า4166.30–4166.54 แต่เริ่มก่อนเผยแพร่ จึงพิสูจน์เวลาแตะหลังส่ง/ลำดับM15M5ไม่ได้. M15 14:15–14:30low4143.34ต่ำกว่าฐานเช้า4144.46และclose4146.31อยู่ในโซน4144.46–4148 ไม่ใช่แท่งบวกรับเหนือ4148. ไม่มีลำดับM15/M5ครบ09:21–14:30ให้สรุปtriggerหรือR จึงตรวจไม่ได้ ไม่นับชนะ/ผลเทรดจริง แผนเก่าอื่นยังขาดลำดับครบ"
+                    },
+    "desk":  {
+                 "policyId":  "XAU_V4_2",
+                 "hierarchy":  [
+                                   "XAU_HTF",
+                                   "DAILY_SR",
+                                   "AMM",
+                                   "M15_SETUP",
+                                   "M5_TRIGGER",
+                                   "DXY_FILTER"
+                               ],
+                 "tacticalState":  "ACTIVE",
+                 "baseline":  {
+                                  "id":  "20261014-1440-REFRESH",
+                                  "status":  "ACTIVE",
+                                  "mode":  "REFRESH",
+                                  "bias":  "SELL",
+                                  "createdAt":  "2026-10-14T14:40:14+07:00",
+                                  "checkedAt":  "2026-10-14T14:40:14+07:00",
+                                  "refreshAt":  "2026-10-14T19:00:00+07:00",
+                                  "refreshReason":  "ฐานเช้าหมดอายุ จัดฐานใหม่จาก W1/D1/H4/H1 ที่อ่านจริง. W1 ล่าสุดปิดบวกในกรอบกว้าง แต่ D1 ล่าสุดปิดอ่อนลง และ H4/H1 บ่ายขายกลับ จึง SELL เฉพาะการแก้ตัวระยะวัน ไม่อ้างทุกกรอบเป็นขาลง. ไม่ยืดวันฐานเก่า",
+                                  "invalidation":  "H1 ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พัก SELL ระยะวัน; ยอมรับใต้ฐาน H4เช้า4,144.46หรือเกิด displacement/retest/แรงผิดปกติหลัง CPI ต้องประเมินฐานใหม่",
+                                  "checkEvidence":  [
+                                                        {
+                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                            "timeframe":  "H1",
+                                                            "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                            "bar":  {
+                                                                        "open":  4148.72,
+                                                                        "high":  4163.42,
+                                                                        "low":  4145.33,
+                                                                        "close":  4147.55
+                                                                    }
+                                                        }
+                                                    ],
+                                  "frames":  {
+                                                 "W1":  {
+                                                            "structure":  "สัปดาห์5–9 ต.ค. ปิด10 ต.ค.05:00 O4,135.39 H4,207.73 L4,066.35 C4,194.35 บวก55.21จากcloseสัปดาห์ก่อน4,139.14. เป็นการฟื้นในกรอบกว้าง ไม่ยืนยันเทรนด์ลงทุกกรอบ; W1 สัปดาห์12 ต.ค.ยังไม่ปิด",
+                                                            "evidence":  [
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "W1",
+                                                                                 "closedAt":  "2026-10-10T05:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4135.39,
+                                                                                             "high":  4207.73,
+                                                                                             "low":  4066.35,
+                                                                                             "close":  4194.35
+                                                                                         }
+                                                                             }
+                                                                         ]
+                                                        },
+                                                 "D1":  {
+                                                            "structure":  "12 ต.ค.ปิด13 ต.ค.05:00 O4,191.33 H4,217.22 L4,154.79 C4,171.88; 13 ต.ค.ปิด14 ต.ค.05:00 O4,173.58 H4,200.58 L4,146.74 C4,160.85. ยอด/ฐาน/close ต่ำลงจากวันก่อน แสดงการอ่อนตัวระยะวันสวนการฟื้นของ W1",
+                                                            "evidence":  [
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "D1",
+                                                                                 "closedAt":  "2026-10-13T05:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4191.33,
+                                                                                             "high":  4217.22,
+                                                                                             "low":  4154.79,
+                                                                                             "close":  4171.88
+                                                                                         }
+                                                                             },
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "D1",
+                                                                                 "closedAt":  "2026-10-14T05:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4173.58,
+                                                                                             "high":  4200.58,
+                                                                                             "low":  4146.74,
+                                                                                             "close":  4160.85
+                                                                                         }
+                                                                             }
+                                                                         ]
+                                                        },
+                                                 "H4":  {
+                                                            "structure":  "09:00–13:00 O4,155.12 H4,170.54 L4,148.40 C4,148.97 ขึ้นเหนือโซนขายเช้าแล้วกลับปิดใกล้ low และต่ำกว่าclose H4เช้า4,155.09. เป็นการขายกลับ ไม่ใช้ high ที่แตะเป็น H1 acceptance ขึ้น",
+                                                            "evidence":  [
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "H4",
+                                                                                 "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4161.79,
+                                                                                             "high":  4166.3,
+                                                                                             "low":  4144.46,
+                                                                                             "close":  4155.09
+                                                                                         }
+                                                                             },
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "H4",
+                                                                                 "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4155.12,
+                                                                                             "high":  4170.54,
+                                                                                             "low":  4148.4,
+                                                                                             "close":  4148.97
+                                                                                         }
+                                                                             }
+                                                                         ]
+                                                        },
+                                                 "H1":  {
+                                                            "structure":  "13:00–14:00 O4,148.72 H4,163.42 L4,145.33 C4,147.55 เด้งขึ้นแล้วขายกลับ ปิดลบและใกล้ low; ใช้close4,147.55เป็นขอบ reclaimใกล้ ไม่แทน structural trend จากอินดี้",
+                                                            "evidence":  [
+                                                                             {
+                                                                                 "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                 "timeframe":  "H1",
+                                                                                 "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                                 "bar":  {
+                                                                                             "open":  4148.72,
+                                                                                             "high":  4163.42,
+                                                                                             "low":  4145.33,
+                                                                                             "close":  4147.55
+                                                                                         }
+                                                                             }
+                                                                         ]
+                                                        }
+                                             }
+                              },
+                 "xauSummary":  "ข้อเท็จจริง: snapshot14:40:14 Bid4,146.64 Ask4,146.75 spread0.11 ราคากลาง4,146.695; เทียบBidเช้า4,161.24 ลด14.60 เป็นสองsnapshot ไม่ใช่ผลเทรด. H4 ปิด13:00ขึ้นถึง4,170.54แล้วกลับปิด4,148.97; H1 ปิด14:00C4,147.55. M15 14:15–14:30 O4,148.99 H4,149.07 L4,143.34 C4,146.31 ปิดลบต่ำกว่าโซนใกล้4,147.55–4,149.07 เป็น rejection ที่สังเกตจริง. M5 14:30–14:35แตะ4,148.06แล้วปิด4,146.87 แต่เป็นแท่งบวก ไม่ครบ trigger แบบปิดลบที่กำหนด. ข้ออนุมาน: ให้รอขายเมื่อเด้งกลับโซนใกล้ พร้อม Stop/R ผ่าน ห้ามรอหลุด4,143.34แล้วขายไล่เพราะฐาน4,143.31อยู่ติดกัน. ซื้อฐานล่างเป็นสำรองหลังยืนยันใหม่",
+                 "dailySR":  {
+                                 "role":  "LOCATION_MAP",
+                                 "summary":  "โซนขายใกล้4,147.55–4,149.07 อิง close H1 กับhigh M15ที่ปฏิเสธแล้ว; ฐาน4,143.31–4,144.46 อิงlow M5บ่ายกับH4เช้า; โซนบนใหญ่4,163.42–4,170.54 อิงhigh H1/H4 เป็นอุปสรรคถัดไป ไม่เพิ่มเป็นฉากที่3. ทั้งหมดเป็นแผนที่ตำแหน่ง ไม่ใช่ Supply/Demand ของ AMM",
+                                 "levels":  [
+                                                {
+                                                    "id":  "afternoon-near-upper",
+                                                    "type":  "TACTICAL",
+                                                    "status":  "TESTED",
+                                                    "side":  "SELL",
+                                                    "low":  4147.55,
+                                                    "high":  4149.07,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.72,
+                                                                                     "high":  4163.42,
+                                                                                     "low":  4145.33,
+                                                                                     "close":  4147.55
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.99,
+                                                                                     "high":  4149.07,
+                                                                                     "low":  4143.34,
+                                                                                     "close":  4146.31
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "afternoon-lower",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "TESTED",
+                                                    "side":  "BUY",
+                                                    "low":  4143.31,
+                                                    "high":  4144.46,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4161.79,
+                                                                                     "high":  4166.3,
+                                                                                     "low":  4144.46,
+                                                                                     "close":  4155.09
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M5",
+                                                                         "closedAt":  "2026-10-14T14:35:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4146.5,
+                                                                                     "high":  4148.06,
+                                                                                     "low":  4143.31,
+                                                                                     "close":  4146.87
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "afternoon-major-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "TESTED",
+                                                    "side":  "SELL",
+                                                    "low":  4163.42,
+                                                    "high":  4170.54,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.72,
+                                                                                     "high":  4163.42,
+                                                                                     "low":  4145.33,
+                                                                                     "close":  4147.55
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4155.12,
+                                                                                     "high":  4170.54,
+                                                                                     "low":  4148.4,
+                                                                                     "close":  4148.97
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "afternoon-critical",
+                                                    "type":  "CRITICAL",
+                                                    "status":  "ACTIVE",
+                                                    "low":  4170.54,
+                                                    "high":  4170.54,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4155.12,
+                                                                                     "high":  4170.54,
+                                                                                     "low":  4148.4,
+                                                                                     "close":  4148.97
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-0-morning-20261014-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "SELL",
+                                                    "low":  4166.3,
+                                                    "high":  4166.54,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.26,
+                                                                                     "high":  4166.54,
+                                                                                     "low":  4148,
+                                                                                     "close":  4160.85
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4161.79,
+                                                                                     "high":  4166.3,
+                                                                                     "low":  4144.46,
+                                                                                     "close":  4155.09
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-1-morning-20261014-lower",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4144.46,
+                                                    "high":  4148,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.26,
+                                                                                     "high":  4166.54,
+                                                                                     "low":  4148,
+                                                                                     "close":  4160.85
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4161.79,
+                                                                                     "high":  4166.3,
+                                                                                     "low":  4144.46,
+                                                                                     "close":  4155.09
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4154.86,
+                                                                                     "high":  4166.3,
+                                                                                     "low":  4144.46,
+                                                                                     "close":  4155.09
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-2-morning-20261014-critical",
+                                                    "type":  "CRITICAL",
+                                                    "status":  "HISTORICAL",
+                                                    "low":  4166.54,
+                                                    "high":  4166.54,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.26,
+                                                                                     "high":  4166.54,
+                                                                                     "low":  4148,
+                                                                                     "close":  4160.85
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-3-historical-20261014-0-morning-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "SELL",
+                                                    "low":  4173.36,
+                                                    "high":  4180.28,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T17:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.23,
+                                                                                     "high":  4192.99,
+                                                                                     "low":  4168.62,
+                                                                                     "close":  4173.36
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T21:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4173.37,
+                                                                                     "high":  4180.28,
+                                                                                     "low":  4154.79,
+                                                                                     "close":  4171.73
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-4-historical-20261014-1-morning-lower",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4150.86,
+                                                    "high":  4154.79,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-13T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4157.51,
+                                                                                     "high":  4169.99,
+                                                                                     "low":  4150.86,
+                                                                                     "close":  4164.98
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T21:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4173.37,
+                                                                                     "high":  4180.28,
+                                                                                     "low":  4154.79,
+                                                                                     "close":  4171.73
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-5-historical-20261014-2-morning-critical",
+                                                    "type":  "CRITICAL",
+                                                    "status":  "HISTORICAL",
+                                                    "low":  4180.28,
+                                                    "high":  4180.28,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T21:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4173.37,
+                                                                                     "high":  4180.28,
+                                                                                     "low":  4154.79,
+                                                                                     "close":  4171.73
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-6-historical-20261014-3-historical-3-evening-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "SELL",
+                                                    "low":  4173.36,
+                                                    "high":  4177.65,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T17:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.23,
+                                                                                     "high":  4192.99,
+                                                                                     "low":  4168.62,
+                                                                                     "close":  4173.36
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T19:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4177.21,
+                                                                                     "high":  4177.65,
+                                                                                     "low":  4167.45,
+                                                                                     "close":  4168.35
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-7-historical-20261014-4-historical-4-evening-lower",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4167.45,
+                                                    "high":  4168.62,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T19:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4177.21,
+                                                                                     "high":  4177.65,
+                                                                                     "low":  4167.45,
+                                                                                     "close":  4168.35
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T17:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.23,
+                                                                                     "high":  4192.99,
+                                                                                     "low":  4168.62,
+                                                                                     "close":  4173.36
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-8-historical-20261014-5-historical-5-evening-critical",
+                                                    "type":  "CRITICAL",
+                                                    "status":  "HISTORICAL",
+                                                    "low":  4167.45,
+                                                    "high":  4168.62,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T19:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4177.21,
+                                                                                     "high":  4177.65,
+                                                                                     "low":  4167.45,
+                                                                                     "close":  4168.35
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T17:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.23,
+                                                                                     "high":  4192.99,
+                                                                                     "low":  4168.62,
+                                                                                     "close":  4173.36
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-9-historical-20261014-6-historical-6-morning-base",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4200.04,
+                                                    "high":  4202.47,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4209.3,
+                                                                                     "high":  4217.22,
+                                                                                     "low":  4200.04,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-12T08:45:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4207.58,
+                                                                                     "high":  4210.75,
+                                                                                     "low":  4200.04,
+                                                                                     "close":  4202.47
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4202.48,
+                                                                                     "high":  4213.62,
+                                                                                     "low":  4201.82,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-10-historical-20261014-7-historical-7-morning-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "SELL",
+                                                    "low":  4213.62,
+                                                    "high":  4217.22,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.33,
+                                                                                     "high":  4217.22,
+                                                                                     "low":  4184.59,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4209.3,
+                                                                                     "high":  4217.22,
+                                                                                     "low":  4200.04,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4202.48,
+                                                                                     "high":  4213.62,
+                                                                                     "low":  4201.82,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-11-historical-20261014-8-historical-8-deep-h4-base",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4184.59,
+                                                    "high":  4191.33,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4191.33,
+                                                                                     "high":  4217.22,
+                                                                                     "low":  4184.59,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-12-historical-20261014-9-historical-9-morning-critical",
+                                                    "type":  "CRITICAL",
+                                                    "status":  "HISTORICAL",
+                                                    "low":  4200.04,
+                                                    "high":  4200.04,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-12T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4209.3,
+                                                                                     "high":  4217.22,
+                                                                                     "low":  4200.04,
+                                                                                     "close":  4211.69
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-12T08:45:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4207.58,
+                                                                                     "high":  4210.75,
+                                                                                     "low":  4200.04,
+                                                                                     "close":  4202.47
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-13-historical-20261014-10-historical-10-old-daily-upper",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "SELL",
+                                                    "low":  4226.69,
+                                                    "high":  4226.69,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "D1",
+                                                                         "closedAt":  "2026-10-03T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4176.3,
+                                                                                     "high":  4226.69,
+                                                                                     "low":  4125.12,
+                                                                                     "close":  4139.14
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                },
+                                                {
+                                                    "id":  "historical-afternoon-14-historical-20261014-11-historical-11-old-daily-base",
+                                                    "type":  "STRUCTURAL",
+                                                    "status":  "HISTORICAL",
+                                                    "side":  "BUY",
+                                                    "low":  4176.3,
+                                                    "high":  4184.73,
+                                                    "evidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "D1",
+                                                                         "closedAt":  "2026-10-03T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4176.3,
+                                                                                     "high":  4226.69,
+                                                                                     "low":  4125.12,
+                                                                                     "close":  4139.14
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "D1",
+                                                                         "closedAt":  "2026-10-07T05:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4143.29,
+                                                                                     "high":  4184.73,
+                                                                                     "low":  4104.84,
+                                                                                     "close":  4164.04
+                                                                                 }
+                                                                     }
+                                                                 ]
+                                                }
+                                            ]
+                             },
+                 "amm":  {
+                             "role":  "SCENARIO_REFINER",
+                             "zones":  [
+
+                                       ],
+                             "summary":  "ยังไม่มีสูตร/output AMM ต้นฉบับยืนยัน ไม่ใช้เป้าEBWหรือnearestsupportแทน",
+                             "source":  {
+                                            "state":  "UNAVAILABLE",
+                                            "reason":  "สูตร/output AMM ต้นฉบับยังขาด"
+                                        }
+                         },
+                 "phase":  {
+                               "name":  "PULLBACK",
+                               "location":  "EDGE",
+                               "reason":  "W1 ฟื้นในกรอบใหญ่ แต่ D1/H4/H1 ระยะวันขายกลับ ราคาใกล้ฐานเช้า จึงรอเด้งขาย/รับสวนที่ฐาน ไม่ไล่ขายลงปลายทาง"
+                           },
+                 "setup":  {
+                               "timeframe":  "M15",
+                               "side":  "SELL",
+                               "status":  "CONFIRMED",
+                               "priceLocation":  "APPROACHING",
+                               "opposingLiquidity":  "TOO_CLOSE",
+                               "locationRelation":  "BELOW_SELL_ZONE",
+                               "reason":  "M15 ปิด14:30แตะโซน4,147.55–4,149.07และปิดลบต่ำกว่า4,147.55จริง แต่ฐาน4143.31–4144.46อยู่ใกล้ ต้องไม่ขายไล่และต้องประเมินRจากEntry/Stopจริง",
+                               "evidence":  [
+                                                {
+                                                    "symbol":  "PEPPERSTONE:XAUUSD",
+                                                    "timeframe":  "M15",
+                                                    "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                    "bar":  {
+                                                                "open":  4148.99,
+                                                                "high":  4149.07,
+                                                                "low":  4143.34,
+                                                                "close":  4146.31
+                                                            }
+                                                }
+                                            ]
+                           },
+                 "trigger":  {
+                                 "timeframe":  "M5",
+                                 "state":  "PENDING",
+                                 "condition":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31"
+                             },
+                 "waitZones":  [
+                                   {
+                                       "side":  "SELL",
+                                       "purpose":  "SELL_PULLBACK",
+                                       "priority":  "PRIMARY",
+                                       "sourceLayer":  "DAILY_SR",
+                                       "setupType":  "PULLBACK_CONTINUATION",
+                                       "low":  4147.55,
+                                       "high":  4149.07,
+                                       "relationToCurrentPrice":  "ABOVE",
+                                       "condition":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31",
+                                       "evidence":  [
+                                                        {
+                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                            "timeframe":  "H1",
+                                                            "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                            "bar":  {
+                                                                        "open":  4148.72,
+                                                                        "high":  4163.42,
+                                                                        "low":  4145.33,
+                                                                        "close":  4147.55
+                                                                    }
+                                                        },
+                                                        {
+                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                            "timeframe":  "M15",
+                                                            "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                            "bar":  {
+                                                                        "open":  4148.99,
+                                                                        "high":  4149.07,
+                                                                        "low":  4143.34,
+                                                                        "close":  4146.31
+                                                                    }
+                                                        }
+                                                    ]
+                                   },
+                                   {
+                                       "side":  "BUY",
+                                       "purpose":  "BUY_PULLBACK",
+                                       "priority":  "ALTERNATIVE",
+                                       "sourceLayer":  "DAILY_SR",
+                                       "setupType":  "SUPPORT_REACTION_SCALP",
+                                       "low":  4143.31,
+                                       "high":  4144.46,
+                                       "relationToCurrentPrice":  "BELOW",
+                                       "condition":  "ใช้เมื่อไม่มี Sell ค้างและราคาทดสอบ4,143.31–4,144.46 แล้ว M15 ปิดบวกเหนือ4,144.46ใหม่ จากนั้น M5 ผ่าน high ของแท่งยืนยันและรีเทสรับอยู่ ซื้อสวนระยะสั้น",
+                                       "evidence":  [
+                                                        {
+                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                            "timeframe":  "H4",
+                                                            "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                            "bar":  {
+                                                                        "open":  4161.79,
+                                                                        "high":  4166.3,
+                                                                        "low":  4144.46,
+                                                                        "close":  4155.09
+                                                                    }
+                                                        },
+                                                        {
+                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                            "timeframe":  "M5",
+                                                            "closedAt":  "2026-10-14T14:35:00+07:00",
+                                                            "bar":  {
+                                                                        "open":  4146.5,
+                                                                        "high":  4148.06,
+                                                                        "low":  4143.31,
+                                                                        "close":  4146.87
+                                                                    }
+                                                        }
+                                                    ]
+                                   }
+                               ],
+                 "noTradeZones":  [
+                                      {
+                                          "reason":  "INSUFFICIENT_EVIDENCE",
+                                          "active":  true,
+                                          "detail":  "ยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop; All Indy H4 runtime error ไม่ใช้ค่าที่ว่าง"
+                                      },
+                                      {
+                                          "reason":  "MISSING_STOP",
+                                          "active":  true,
+                                          "detail":  "high M15 4,149.07เป็น anchorประเมิน ยังไม่ยืนยัน swing Stop; ต้องโครงสร้างจริงและspreadตอนเข้า"
+                                      },
+                                      {
+                                          "reason":  "OPPOSING_LIQUIDITY",
+                                          "active":  true,
+                                          "detail":  "ฐาน4,144.46–4,143.31อยู่ใกล้ การขายเมื่อหลุดlow M15 4,143.34จะเหลือระยะเพียง0.03ถึง4,143.31 จึงห้ามใช้เป็นจุดขายไล่"
+                                      },
+                                      {
+                                          "reason":  "HTF_M15_CONFLICT",
+                                          "active":  true,
+                                          "detail":  "W1ล่าสุดฟื้น แต่ D1/H4/H1ระยะวันอ่อนตัว แผนSELLเป็นการแก้ตัวในกรอบใหญ่ ต้องจำกัดตามโครงสร้าง"
+                                      },
+                                      {
+                                          "reason":  "NEWS_EMBARGO",
+                                          "active":  false,
+                                          "detail":  "CPI19:30 HIGH ยังไม่ออก; ตาม policy XAU_V4_2พักเปิด17:30–21:30 แผนตำแหน่งถึง19:00แต่ไม่อนุญาตเปิดช่วงพัก"
+                                      }
+                                  ],
+                 "invalidation":  {
+                                      "triggerFailure":  {
+                                                             "timeframe":  "M5",
+                                                             "price":  4147.55,
+                                                             "evidence":  [
+                                                                              {
+                                                                                  "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                  "timeframe":  "H1",
+                                                                                  "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                                  "bar":  {
+                                                                                              "open":  4148.72,
+                                                                                              "high":  4163.42,
+                                                                                              "low":  4145.33,
+                                                                                              "close":  4147.55
+                                                                                          }
+                                                                              }
+                                                                          ],
+                                                             "condition":  "M5ทดสอบโซนแล้วไม่ปิดลบต่ำกว่า4,147.55 หรือรีเทสกลับยืนเหนือ ให้ถือว่าทริกเกอร์ขายยังไม่ผ่าน ไม่ใช้ไส้ต่ำกว่า4,143.34แทน"
+                                                         },
+                                      "tactical":  {
+                                                       "timeframe":  "M15",
+                                                       "price":  4149.07,
+                                                       "evidence":  [
+                                                                        {
+                                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                            "timeframe":  "M15",
+                                                                            "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                            "bar":  {
+                                                                                        "open":  4148.99,
+                                                                                        "high":  4149.07,
+                                                                                        "low":  4143.34,
+                                                                                        "close":  4146.31
+                                                                                    }
+                                                                        }
+                                                                    ],
+                                                       "condition":  "M15 ปิดเหนือ4,149.07ยกเลิกขายใกล้; ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน"
+                                                   },
+                                      "structural":  {
+                                                         "timeframe":  "H1",
+                                                         "price":  4170.54,
+                                                         "evidence":  [
+                                                                          {
+                                                                              "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                              "timeframe":  "H4",
+                                                                              "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                              "bar":  {
+                                                                                          "open":  4155.12,
+                                                                                          "high":  4170.54,
+                                                                                          "low":  4148.4,
+                                                                                          "close":  4148.97
+                                                                                      }
+                                                                          }
+                                                                      ],
+                                                         "condition":  "H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักSELLระยะวัน; ไม่ใช้แค่ไส้แตะ"
+                                                     },
+                                      "actualStop":  null,
+                                      "rebaseline":  {
+                                                         "timeframe":  "H1",
+                                                         "condition":  "acceptanceผ่านCritical, displacement+confirmedretest, structure shift หรือ postnews abnormal displacement ให้พักtacticsแล้วตั้งฐานใหม่"
+                                                     }
+                                  },
+                 "dxy":  {
+                             "role":  "CONFIRMATION_FILTER",
+                             "state":  "UNAVAILABLE",
+                             "symbol":  "TVC:DXY",
+                             "checkedAt":  "2026-10-14T14:32:59+07:00",
+                             "sourceUrl":  "https://www.tradingview.com/symbols/TVC-DXY/",
+                             "structure":  "DXY102.126 as-of14:32 GMT+7 ลด0.089(-0.09%)จากpreviousclose102.215; dayrange102.075–102.212กำลังก่อตัว ไม่ใช่แท่งปิด",
+                             "reason":  "ดอลลาร์อ่อนรายวันแต่ทองอ่อนจากsnapshotเช้า แสดงว่าquoteDXYอย่างเดียวไม่ยืนยันBUY; ไม่มีโครงสร้างDXYปิดจึงไม่ให้CONFIRM/CONTRADICT",
+                             "frames":  [
+
+                                        ],
+                             "conditions":  [
+
+                                            ],
+                             "assessment":  {
+                                                "xauSide":  "SELL",
+                                                "supportingFrames":  [
+
+                                                                     ],
+                                                "contradictoryFrames":  [
+
+                                                                        ],
+                                                "reason":  "Quoteรายวันเท่านั้น โครงสร้างclosedDXYขาด"
+                                            }
+                         },
+                 "spdr":  {
+                              "role":  "MEDIUM_TERM_FLOW",
+                              "measure":  "GOLD_HOLDINGS_TONNES",
+                              "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/",
+                              "dataDate":  "2026-10-12",
+                              "holdings":  1055.41,
+                              "previousDate":  "2026-10-09",
+                              "previousHoldings":  1053.13,
+                              "dailyChange":  2.28,
+                              "direction":  "UP",
+                              "flowBias":  "MIXED",
+                              "period":  "2026-09-09 → 2026-10-12",
+                              "flowEvidence":  "ผลต่าง holdings ตามวันที่มีหลักฐาน ไม่อ้างว่าข้อมูลต่อเนื่องครบทุกวัน",
+                              "history":  [
+                                              {
+                                                  "dataDate":  "2026-09-09",
+                                                  "holdings":  1050.63,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-10",
+                                                  "holdings":  1050.28,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-11",
+                                                  "holdings":  1047.42,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-14",
+                                                  "holdings":  1047.42,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-15",
+                                                  "holdings":  1050.28,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-16",
+                                                  "holdings":  1051.99,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-17",
+                                                  "holdings":  1052.84,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-18",
+                                                  "holdings":  1057.12,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-21",
+                                                  "holdings":  1055.41,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-22",
+                                                  "holdings":  1055.98,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-23",
+                                                  "holdings":  1056.84,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-24",
+                                                  "holdings":  1054.55,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-25",
+                                                  "holdings":  1054.55,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-28",
+                                                  "holdings":  1058.83,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-29",
+                                                  "holdings":  1057.41,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-09-30",
+                                                  "holdings":  1055.7,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-01",
+                                                  "holdings":  1056.55,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-02",
+                                                  "holdings":  1055.7,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-05",
+                                                  "holdings":  1056.27,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-06",
+                                                  "holdings":  1059.97,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-07",
+                                                  "holdings":  1061.11,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-08",
+                                                  "holdings":  1055.41,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-09",
+                                                  "holdings":  1053.13,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              },
+                                              {
+                                                  "dataDate":  "2026-10-12",
+                                                  "holdings":  1055.41,
+                                                  "checkedAt":  "2026-10-14T09:08:26.538+07:00",
+                                                  "sourceUrl":  "https://www.spdrgoldshares.com/usa/gld/"
+                                              }
+                                          ],
+                              "summary":  "SPDR cache HIT คงcheckedAt14 ต.ค.09:08:26.538; holdingsล่าสุด12 ต.ค.1,055.41ตัน เพิ่ม2.28ตันจาก9 ต.ค. ไม่อ้างว่าfetchสดบ่ายหรือมีholdings14 ต.ค. เป็นflowระยะกลาง",
+                              "flowAssessment":  {
+                                                     "state":  "AVAILABLE",
+                                                     "direction":  "UP",
+                                                     "flowBias":  "MIXED",
+                                                     "netChange":  4.78,
+                                                     "observations":  24,
+                                                     "period":  "2026-09-09 → 2026-10-12",
+                                                     "reason":  "ผลต่าง holdings ตามวันที่มีหลักฐาน ไม่อ้างว่าข้อมูลต่อเนื่องครบทุกวัน"
+                                                 },
+                              "changeFromDate":  "2026-10-09"
+                          },
+                 "news":  {
+                              "role":  "REGIME_EVENT_RISK",
+                              "policyId":  "XAU_V4_2",
+                              "regime":  "ช่วงยุโรปก่อน CPI สหรัฐ",
+                              "summary":  "Bowman16:40 LOW ตามFF; FMPให้MEDIUMจึงยึดFFและติดตามคำแถลง. CPI19:30 HIGH ยังไม่มีActual คาดCore m/m0.2%, Core y/y2.5%, CPI m/m0.6%, CPI y/y3.6%. ใช้policyกลาง XAU_V4_2 พักเปิด17:30–21:30 และตรวจฐานใหม่หลังข่าวหากdisplacementผิดปกติ ไม่รอข่าวในรอบนี้",
+                              "context":  [
+                                              {
+                                                  "kind":  "EVENT",
+                                                  "checkedAt":  "2026-10-14T14:33:17+07:00",
+                                                  "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026",
+                                                  "eventTitle":  "Core CPI m/m",
+                                                  "eventAt":  "2026-10-14T19:30:00+07:00",
+                                                  "fact":  "FF CPI19:30 HIGHทั้ง4รายการ Actualว่าง; forecast0.2/2.5/0.6/3.6%ตามลำดับ",
+                                                  "interpretation":  "ยังไม่ประกาศ ไม่ใช้forecastเป็นActual",
+                                                  "goldMechanism":  "ผลCPIอาจเปลี่ยนดอลลาร์/ยีลด์และทำให้ระดับทองใช้ต่อไม่ได้",
+                                                  "monitor":  "พักเปิด17:30–21:30ตามpolicyกลาง และประเมินโครงสร้างใหม่เมื่อมีแรงผิดปกติ"
+                                              },
+                                              {
+                                                  "kind":  "EVENT",
+                                                  "checkedAt":  "2026-10-14T14:33:17+07:00",
+                                                  "sourceUrl":  "https://www.forexfactory.com/calendar?day=oct14.2026",
+                                                  "eventTitle":  "FOMC Member Bowman Speaks",
+                                                  "eventAt":  "2026-10-14T16:40:00+07:00",
+                                                  "fact":  "FF Bowman16:40 LOW; FMP14:32ให้MEDIUM เวลา16:40ตรงกัน",
+                                                  "interpretation":  "ความสำคัญต่างกัน ใช้FFเป็นหลัก ยังไม่มีคำแถลงจริง",
+                                                  "goldMechanism":  "ถ้อยแถลงFedอาจทำให้ราคากระชากก่อนCPI",
+                                                  "monitor":  "ตรวจspread/โครงสร้างก่อนเข้า ไม่เดาhawk/dove"
+                                              },
+                                              {
+                                                  "kind":  "YIELD",
+                                                  "checkedAt":  "2026-10-14T09:08:24.458+07:00",
+                                                  "dataDate":  "2026-10-13",
+                                                  "sourceUrl":  "https://site.financialmodelingprep.com/developer/docs/stable/treasury-rates",
+                                                  "fact":  "FMP Treasury cacheHITบ่าย คงเวลาต้นฉบับ09:08:24.458; ล่าสุด13 ต.ค.2Y4.79%/10Y5.21% ลด1/3bpเทียบ9 ต.ค.",
+                                                  "interpretation":  "ข้อมูลรายวัน ไม่ใช่ยีลด์สดบ่าย",
+                                                  "goldMechanism":  "ยีลด์ลดอาจช่วยทองแต่ราคาเช้า–บ่ายอ่อนตัว จึงไม่อ้างเหตุเดียว",
+                                                  "monitor":  "ดูปฏิกิริยาต่อCPIโดยไม่ใช้เป็นtriggerM5"
+                                              },
+                                              {
+                                                  "kind":  "HEADLINE",
+                                                  "checkedAt":  "2026-10-14T14:32:08.646+07:00",
+                                                  "dataDate":  "2026-10-14",
+                                                  "sourceUrl":  "https://site.financialmodelingprep.com/developer/docs/stable/news-general",
+                                                  "fact":  "FMPnewsMISS14:32มีหัวข้อทอง/ดอลลาร์ก่อนCPI แต่timestampไม่มีoffsetยืนยันและยังไม่อ่านบทความต้นทาง",
+                                                  "interpretation":  "ยังไม่ยืนยันสาเหตุราคา/เวลาข่าวจากหัวข้อ",
+                                                  "goldMechanism":  "ใช้เป็นรายการติดตามเท่านั้น ไม่เอาราคาหรือแนวรับของบทความมาปนPepperstone",
+                                                  "monitor":  "คงข่าวUNVERIFIEDเมื่อขาดต้นทาง ไม่ใช้เปิดเทรด"
+                                              }
+                                          ]
+                          },
+                 "risk":  {
+                              "stopBasis":  "STRUCTURE_FIRST",
+                              "stopEvidence":  [
+
+                                               ],
+                              "targetEvidence":  [
+
+                                                 ],
+                              "quality":  "UNAVAILABLE"
+                          },
+                 "rebaseline":  {
+                                    "state":  "STABLE",
+                                    "signals":  [
+
+                                                ],
+                                    "reasons":  [
+
+                                                ]
+                                },
+                 "entryIdea":  "ขายจากโซน4,147.55–4,149.07หลัง M5ครบและStop/Rจริงผ่าน เป้าประเมิน4,144.46แล้ว4,143.31. สำรองรับฐาน4,143.31–4,144.46หลัง M15/M5ใหม่ มอง4,147.55แล้ว4,149.07. โซนบนใหญ่4,163.42–4,170.54เป็นอุปสรรคถัดไป ไม่ใช่แผนที่3. Stopขายเหนือยอดกลับตัวจริง Stopซื้อใต้ฐานกลับตัวจริง เผื่อspreadตอนเข้า(snapshot0.11). ยังไม่มี pivot/Entry/Stopครบ จึงไม่คำนวณRหรือบีบStopเพื่อผ่านเกณฑ์",
+                 "conclusion":  "WAIT — ยังไม่มี Stop ตามโครงสร้าง · สภาพคล่องฝั่งตรงข้ามใกล้เกินไป · หลักฐานยังไม่พอ · M15 ขัดโครงสร้างใหญ่\nขั้นต่อไป: M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31\nแผนหลัก: รอเด้งขึ้นไปขาย 4,147.55–4,149.07 · M15 ยืนยันแล้ว · M5 ตามเงื่อนไข\nแผนสำรอง: ซื้อจากแนวรับ · scalp สวนแนวโน้ม 4,143.31–4,144.46 · ยังต้องยืนยัน M15",
+                 "architectureVersion":  "4.3",
+                 "activeScenarioRole":  "PRIMARY",
+                 "scenarioSelection":  {
+                                           "mode":  "ANALYST",
+                                           "reason":  "เลือกขายจากขอบ reclaim ใกล้ที่ M15ยืนยันแล้ว ตามความอ่อนตัว D1/H4/H1; W1ฟื้นและฐานใกล้เป็นเหตุระวัง สำรองซื้อเมื่อฐานรับใหม่ ไม่เพิ่มฉากขายไล่หลุดฐาน"
+                                       },
+                 "toolkit":  {
+                                 "observations":  [
+                                                      {
+                                                          "id":  "TOOLS-UNVERIFIED",
+                                                          "name":  "EMA",
+                                                          "state":  "UNAVAILABLE",
+                                                          "reason":  "ยังไม่ยืนยันpivot/EMA/FVG/BOS/CHOCHครบ ใช้ OHLCจริงที่ระบุ ไม่ตั้งชื่อSupply/AMMจากภาพ"
+                                                      }
+                                                  ]
+                             },
+                 "indicatorVerification":  {
+                                               "state":  "UNAVAILABLE",
+                                               "symbol":  "PEPPERSTONE:XAUUSD",
+                                               "chartUrl":  "https://www.tradingview.com/chart/tWIhhRSx/?symbol=PEPPERSTONE%3AXAUUSD",
+                                               "reason":  "Profileเปลี่ยนเป็นEBW1.10.10FAST(3000)/AllIndy1.2.4.1FAST(5000). Inputs/sourceทั้งชุดยังไม่ยืนยัน; H4AllIndyRuntimeerror. อ่านค่าบนH1/M15/M5ที่ปิดจริงได้เป็นรอง"
+                                           },
+                 "reviewDefinition":  {
+                                          "m5":  {
+                                                     "confirmation":  "TOUCH_THEN_DIRECTIONAL_CLOSE",
+                                                     "price":  4147.55,
+                                                     "zone":  {
+                                                                  "low":  4147.55,
+                                                                  "high":  4149.07
+                                                              },
+                                                     "reason":  "หลังเผยแพร่ต้องกลับทดสอบโซนขายแล้วปิดลบต่ำกว่า4,147.55 ไม่ใช้ M5เก่าหรือขายไล่หลุดฐาน"
+                                                 },
+                                          "invalidation":  {
+                                                               "timeframe":  "M15",
+                                                               "direction":  "ABOVE",
+                                                               "price":  4149.07
+                                                           }
+                                      },
+                 "locationMatrix":  {
+                                        "state":  "AVAILABLE",
+                                        "reason":  "สำรวจระดับที่มีหลักฐาน; candidate ยังไม่ใช่จุดเข้า",
+                                        "currentPrice":  4146.695,
+                                        "quoteAt":  "2026-10-14T14:40:14+07:00",
+                                        "aboveCandidates":  [
+                                                                {
+                                                                    "id":  "SR:afternoon-major-upper",
+                                                                    "side":  "SELL",
+                                                                    "low":  4163.42,
+                                                                    "high":  4170.54,
+                                                                    "type":  "STRUCTURAL",
+                                                                    "sourceFrame":  "H4",
+                                                                    "sourceLayer":  "DAILY_SR",
+                                                                    "sourceId":  "afternoon-major-upper",
+                                                                    "status":  "TESTED",
+                                                                    "relationToCurrentPrice":  "ABOVE",
+                                                                    "distance":  16.725000000000364,
+                                                                    "htfAlignment":  "WITH_TREND",
+                                                                    "phaseAlignment":  "FIT",
+                                                                    "opposingLiquidity":  "UNKNOWN",
+                                                                    "stopAnchorAvailable":  true,
+                                                                    "targetAnchorAvailable":  true,
+                                                                    "stopAnchor":  {
+                                                                                       "price":  4170.54,
+                                                                                       "kind":  "OBSERVED_EXTREMUM_CANDIDATE",
+                                                                                       "evidence":  [
+                                                                                                        {
+                                                                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                            "timeframe":  "H4",
+                                                                                                            "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                                            "bar":  {
+                                                                                                                        "open":  4155.12,
+                                                                                                                        "high":  4170.54,
+                                                                                                                        "low":  4148.4,
+                                                                                                                        "close":  4148.97
+                                                                                                                    }
+                                                                                                        }
+                                                                                                    ]
+                                                                                   },
+                                                                    "targetAnchor":  {
+                                                                                         "price":  4149.07,
+                                                                                         "kind":  "OBSERVED_OPPOSING_LEVEL",
+                                                                                         "evidence":  [
+                                                                                                          {
+                                                                                                              "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                              "timeframe":  "M15",
+                                                                                                              "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                                              "bar":  {
+                                                                                                                          "open":  4148.99,
+                                                                                                                          "high":  4149.07,
+                                                                                                                          "low":  4143.34,
+                                                                                                                          "close":  4146.31
+                                                                                                                      }
+                                                                                                          }
+                                                                                                      ]
+                                                                                     },
+                                                                    "evidence":  [
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "H1",
+                                                                                         "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4148.72,
+                                                                                                     "high":  4163.42,
+                                                                                                     "low":  4145.33,
+                                                                                                     "close":  4147.55
+                                                                                                 }
+                                                                                     },
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "H4",
+                                                                                         "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4155.12,
+                                                                                                     "high":  4170.54,
+                                                                                                     "low":  4148.4,
+                                                                                                     "close":  4148.97
+                                                                                                 }
+                                                                                     }
+                                                                                 ],
+                                                                    "selectedForScenario":  null
+                                                                },
+                                                                {
+                                                                    "id":  "SR:afternoon-critical",
+                                                                    "side":  "SELL",
+                                                                    "low":  4170.54,
+                                                                    "high":  4170.54,
+                                                                    "type":  "CRITICAL",
+                                                                    "sourceFrame":  "H4",
+                                                                    "sourceLayer":  "DAILY_SR",
+                                                                    "sourceId":  "afternoon-critical",
+                                                                    "status":  "ACTIVE",
+                                                                    "relationToCurrentPrice":  "ABOVE",
+                                                                    "distance":  23.845000000000255,
+                                                                    "htfAlignment":  "WITH_TREND",
+                                                                    "phaseAlignment":  "FIT",
+                                                                    "opposingLiquidity":  "UNKNOWN",
+                                                                    "stopAnchorAvailable":  true,
+                                                                    "targetAnchorAvailable":  true,
+                                                                    "stopAnchor":  {
+                                                                                       "price":  4170.54,
+                                                                                       "kind":  "OBSERVED_EXTREMUM_CANDIDATE",
+                                                                                       "evidence":  [
+                                                                                                        {
+                                                                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                            "timeframe":  "H4",
+                                                                                                            "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                                            "bar":  {
+                                                                                                                        "open":  4155.12,
+                                                                                                                        "high":  4170.54,
+                                                                                                                        "low":  4148.4,
+                                                                                                                        "close":  4148.97
+                                                                                                                    }
+                                                                                                        }
+                                                                                                    ]
+                                                                                   },
+                                                                    "targetAnchor":  {
+                                                                                         "price":  4149.07,
+                                                                                         "kind":  "OBSERVED_OPPOSING_LEVEL",
+                                                                                         "evidence":  [
+                                                                                                          {
+                                                                                                              "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                              "timeframe":  "M15",
+                                                                                                              "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                                              "bar":  {
+                                                                                                                          "open":  4148.99,
+                                                                                                                          "high":  4149.07,
+                                                                                                                          "low":  4143.34,
+                                                                                                                          "close":  4146.31
+                                                                                                                      }
+                                                                                                          }
+                                                                                                      ]
+                                                                                     },
+                                                                    "evidence":  [
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "H4",
+                                                                                         "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4155.12,
+                                                                                                     "high":  4170.54,
+                                                                                                     "low":  4148.4,
+                                                                                                     "close":  4148.97
+                                                                                                 }
+                                                                                     }
+                                                                                 ],
+                                                                    "selectedForScenario":  null
+                                                                },
+                                                                {
+                                                                    "id":  "SR:afternoon-near-upper",
+                                                                    "side":  "SELL",
+                                                                    "low":  4147.55,
+                                                                    "high":  4149.07,
+                                                                    "type":  "TACTICAL",
+                                                                    "sourceFrame":  "H1",
+                                                                    "sourceLayer":  "DAILY_SR",
+                                                                    "sourceId":  "afternoon-near-upper",
+                                                                    "status":  "TESTED",
+                                                                    "relationToCurrentPrice":  "ABOVE",
+                                                                    "distance":  0.8550000000004729,
+                                                                    "htfAlignment":  "WITH_TREND",
+                                                                    "phaseAlignment":  "FIT",
+                                                                    "opposingLiquidity":  "UNKNOWN",
+                                                                    "stopAnchorAvailable":  true,
+                                                                    "targetAnchorAvailable":  true,
+                                                                    "stopAnchor":  {
+                                                                                       "price":  4149.07,
+                                                                                       "kind":  "OBSERVED_EXTREMUM_CANDIDATE",
+                                                                                       "evidence":  [
+                                                                                                        {
+                                                                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                            "timeframe":  "M15",
+                                                                                                            "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                                            "bar":  {
+                                                                                                                        "open":  4148.99,
+                                                                                                                        "high":  4149.07,
+                                                                                                                        "low":  4143.34,
+                                                                                                                        "close":  4146.31
+                                                                                                                    }
+                                                                                                        }
+                                                                                                    ]
+                                                                                   },
+                                                                    "targetAnchor":  {
+                                                                                         "price":  4144.46,
+                                                                                         "kind":  "OBSERVED_OPPOSING_LEVEL",
+                                                                                         "evidence":  [
+                                                                                                          {
+                                                                                                              "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                              "timeframe":  "H4",
+                                                                                                              "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                                                              "bar":  {
+                                                                                                                          "open":  4161.79,
+                                                                                                                          "high":  4166.3,
+                                                                                                                          "low":  4144.46,
+                                                                                                                          "close":  4155.09
+                                                                                                                      }
+                                                                                                          }
+                                                                                                      ]
+                                                                                     },
+                                                                    "evidence":  [
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "H1",
+                                                                                         "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4148.72,
+                                                                                                     "high":  4163.42,
+                                                                                                     "low":  4145.33,
+                                                                                                     "close":  4147.55
+                                                                                                 }
+                                                                                     },
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "M15",
+                                                                                         "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4148.99,
+                                                                                                     "high":  4149.07,
+                                                                                                     "low":  4143.34,
+                                                                                                     "close":  4146.31
+                                                                                                 }
+                                                                                     }
+                                                                                 ],
+                                                                    "selectedForScenario":  "PRIMARY"
+                                                                }
+                                                            ],
+                                        "atCandidates":  [
+
+                                                         ],
+                                        "belowCandidates":  [
+                                                                {
+                                                                    "id":  "SR:afternoon-lower",
+                                                                    "side":  "BUY",
+                                                                    "low":  4143.31,
+                                                                    "high":  4144.46,
+                                                                    "type":  "STRUCTURAL",
+                                                                    "sourceFrame":  "H4",
+                                                                    "sourceLayer":  "DAILY_SR",
+                                                                    "sourceId":  "afternoon-lower",
+                                                                    "status":  "TESTED",
+                                                                    "relationToCurrentPrice":  "BELOW",
+                                                                    "distance":  2.2349999999996726,
+                                                                    "htfAlignment":  "OPPOSING",
+                                                                    "phaseAlignment":  "REVIEW_REQUIRED",
+                                                                    "opposingLiquidity":  "UNKNOWN",
+                                                                    "stopAnchorAvailable":  false,
+                                                                    "targetAnchorAvailable":  false,
+                                                                    "stopAnchor":  null,
+                                                                    "targetAnchor":  null,
+                                                                    "evidence":  [
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "H4",
+                                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4161.79,
+                                                                                                     "high":  4166.3,
+                                                                                                     "low":  4144.46,
+                                                                                                     "close":  4155.09
+                                                                                                 }
+                                                                                     },
+                                                                                     {
+                                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                         "timeframe":  "M5",
+                                                                                         "closedAt":  "2026-10-14T14:35:00+07:00",
+                                                                                         "bar":  {
+                                                                                                     "open":  4146.5,
+                                                                                                     "high":  4148.06,
+                                                                                                     "low":  4143.31,
+                                                                                                     "close":  4146.87
+                                                                                                 }
+                                                                                     }
+                                                                                 ],
+                                                                    "selectedForScenario":  "ALTERNATIVE"
+                                                                }
+                                                            ],
+                                        "continuationLevels":  [
+
+                                                               ],
+                                        "criticalLevels":  [
+                                                               {
+                                                                   "id":  "afternoon-critical",
+                                                                   "type":  "CRITICAL",
+                                                                   "status":  "ACTIVE",
+                                                                   "low":  4170.54,
+                                                                   "high":  4170.54,
+                                                                   "evidence":  [
+                                                                                    {
+                                                                                        "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                        "timeframe":  "H4",
+                                                                                        "closedAt":  "2026-10-14T13:00:00+07:00",
+                                                                                        "bar":  {
+                                                                                                    "open":  4155.12,
+                                                                                                    "high":  4170.54,
+                                                                                                    "low":  4148.4,
+                                                                                                    "close":  4148.97
+                                                                                                }
+                                                                                    }
+                                                                                ]
+                                                               }
+                                                           ]
+                                    },
+                 "zoneEvidence":  [
+                                      {
+                                          "candidateId":  "SR:afternoon-major-upper",
+                                          "items":  [
+
+                                                    ],
+                                          "reason":  "ความซ้อนทับของตำแหน่งที่สังเกต ไม่ใช่คะแนนโหวตหรือ entry signal"
+                                      },
+                                      {
+                                          "candidateId":  "SR:afternoon-critical",
+                                          "items":  [
+
+                                                    ],
+                                          "reason":  "ความซ้อนทับของตำแหน่งที่สังเกต ไม่ใช่คะแนนโหวตหรือ entry signal"
+                                      },
+                                      {
+                                          "candidateId":  "SR:afternoon-near-upper",
+                                          "items":  [
+
+                                                    ],
+                                          "reason":  "ความซ้อนทับของตำแหน่งที่สังเกต ไม่ใช่คะแนนโหวตหรือ entry signal"
+                                      },
+                                      {
+                                          "candidateId":  "SR:afternoon-lower",
+                                          "items":  [
+
+                                                    ],
+                                          "reason":  "ความซ้อนทับของตำแหน่งที่สังเกต ไม่ใช่คะแนนโหวตหรือ entry signal"
+                                      }
+                                  ],
+                 "planning":  {
+                                  "rows":  [
+                                               {
+                                                   "role":  "PRIMARY",
+                                                   "side":  "SELL",
+                                                   "setupType":  "PULLBACK_CONTINUATION",
+                                                   "title":  "รอเด้งขึ้นไปขาย",
+                                                   "zone":  {
+                                                                "low":  4147.55,
+                                                                "high":  4149.07
+                                                            },
+                                                   "confirmation":  "โซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน",
+                                                   "transition":  "แผนหลักตามโครงสร้างใหญ่",
+                                                   "state":  "WATCH_LOCATION",
+                                                   "stopAnchor":  {
+                                                                      "state":  "EXTREMUM_CANDIDATE",
+                                                                      "price":  4149.07,
+                                                                      "evidence":  [
+                                                                                       {
+                                                                                           "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                           "timeframe":  "M15",
+                                                                                           "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                           "bar":  {
+                                                                                                       "open":  4148.99,
+                                                                                                       "high":  4149.07,
+                                                                                                       "low":  4143.34,
+                                                                                                       "close":  4146.31
+                                                                                                   }
+                                                                                       }
+                                                                                   ],
+                                                                      "reason":  "มี high/low ที่สังเกตแล้ว แต่ยังไม่มีแท่งรอบข้างพอยืนยัน swing"
+                                                                  },
+                                                   "targetCandidates":  [
+                                                                            {
+                                                                                "price":  4144.46,
+                                                                                "evidence":  [
+                                                                                                 {
+                                                                                                     "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                     "timeframe":  "H4",
+                                                                                                     "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                                                     "bar":  {
+                                                                                                                 "open":  4161.79,
+                                                                                                                 "high":  4166.3,
+                                                                                                                 "low":  4144.46,
+                                                                                                                 "close":  4155.09
+                                                                                                             }
+                                                                                                 },
+                                                                                                 {
+                                                                                                     "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                     "timeframe":  "M5",
+                                                                                                     "closedAt":  "2026-10-14T14:35:00+07:00",
+                                                                                                     "bar":  {
+                                                                                                                 "open":  4146.5,
+                                                                                                                 "high":  4148.06,
+                                                                                                                 "low":  4143.31,
+                                                                                                                 "close":  4146.87
+                                                                                                             }
+                                                                                                 }
+                                                                                             ],
+                                                                                "levelId":  "afternoon-lower"
+                                                                            }
+                                                                        ],
+                                                   "entry":  null,
+                                                   "actualStop":  null,
+                                                   "targets":  [
+
+                                                               ],
+                                                   "netR":  null,
+                                                   "invalidation":  "M15 ปิดเหนือ4,149.07ยกเลิกจังหวะขายใกล้; H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักฐาน SELLและประเมินใหม่",
+                                                   "dxyFilter":  "ดอลลาร์อ่อนรายวันแต่ทองอ่อนจากsnapshotเช้า แสดงว่าquoteDXYอย่างเดียวไม่ยืนยันBUY; ไม่มีโครงสร้างDXYปิดจึงไม่ให้CONFIRM/CONTRADICT",
+                                                   "reason":  "โซน/แนวเป้าหมายเพื่อเตรียมแผน ยังไม่ใช่ Entry / Stop / TP พร้อมใช้"
+                                               },
+                                               {
+                                                   "role":  "ALTERNATIVE",
+                                                   "side":  "BUY",
+                                                   "setupType":  "SUPPORT_REACTION_SCALP",
+                                                   "title":  "ซื้อจากแนวรับ · scalp สวนแนวโน้ม",
+                                                   "zone":  {
+                                                                "low":  4143.31,
+                                                                "high":  4144.46
+                                                            },
+                                                   "confirmation":  "รอลงเข้าโซน 4,143.31–4,144.46 → M15 ปิดปฏิเสธโซน → M5 หาจังหวะ",
+                                                   "transition":  "ใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก และฐานล่างรับอยู่ด้วย M15บวกใหม่และM5ครบ ไม่มีSellค้าง; ไม่ให้น้ำหนักเท่าขายระยะวัน",
+                                                   "state":  "WATCH_LOCATION",
+                                                   "stopAnchor":  {
+                                                                      "state":  "UNAVAILABLE",
+                                                                      "price":  null,
+                                                                      "evidence":  [
+
+                                                                                   ],
+                                                                      "reason":  "ยังไม่มีหลักฐาน structural swing นอกโซน"
+                                                                  },
+                                                   "targetCandidates":  [
+                                                                            {
+                                                                                "price":  4147.55,
+                                                                                "evidence":  [
+                                                                                                 {
+                                                                                                     "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                     "timeframe":  "H1",
+                                                                                                     "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                                                     "bar":  {
+                                                                                                                 "open":  4148.72,
+                                                                                                                 "high":  4163.42,
+                                                                                                                 "low":  4145.33,
+                                                                                                                 "close":  4147.55
+                                                                                                             }
+                                                                                                 },
+                                                                                                 {
+                                                                                                     "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                                     "timeframe":  "M15",
+                                                                                                     "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                                     "bar":  {
+                                                                                                                 "open":  4148.99,
+                                                                                                                 "high":  4149.07,
+                                                                                                                 "low":  4143.34,
+                                                                                                                 "close":  4146.31
+                                                                                                             }
+                                                                                                 }
+                                                                                             ],
+                                                                                "levelId":  "afternoon-near-upper"
+                                                                            }
+                                                                        ],
+                                                   "entry":  null,
+                                                   "actualStop":  null,
+                                                   "targets":  [
+
+                                                               ],
+                                                   "netR":  null,
+                                                   "invalidation":  "M15 ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน; H1 acceptanceต่ำกว่าฐาน H4เช้า4,144.46ให้พักฉากเพื่อประเมินใหม่",
+                                                   "dxyFilter":  "ดอลลาร์อ่อนรายวันแต่ทองอ่อนจากsnapshotเช้า แสดงว่าquoteDXYอย่างเดียวไม่ยืนยันBUY; ไม่มีโครงสร้างDXYปิดจึงไม่ให้CONFIRM/CONTRADICT",
+                                                   "reason":  "โซน/แนวเป้าหมายเพื่อเตรียมแผน ยังไม่ใช่ Entry / Stop / TP พร้อมใช้"
+                                               }
+                                           ],
+                                  "note":  "แยกโซนเตรียมแผนกับแผนพร้อมใช้; swing ที่สังเกตไม่เท่ากับ actual Stop"
+                              },
+                 "practical":  {
+                                   "bias":  "SELL",
+                                   "phase":  "พักตัวสวนภาพใหญ่",
+                                   "location":  "ราคาในรายงาน 4,146.695 · อยู่ใต้โซนเฝ้าขาย",
+                                   "primary":  "รอเด้งขึ้นไปขาย 4,147.55–4,149.07",
+                                   "confirmation":  "โซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน",
+                                   "activeRole":  "PRIMARY",
+                                   "activePlan":  "รอเด้งขึ้นไปขาย 4,147.55–4,149.07",
+                                   "activeConfirmation":  "โซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน",
+                                   "alternative":  "ซื้อจากแนวรับ · scalp สวนแนวโน้ม 4,143.31–4,144.46 · ใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก และฐานล่างรับอยู่ด้วย M15บวกใหม่และM5ครบ ไม่มีSellค้าง; ไม่ให้น้ำหนักเท่าขายระยะวัน",
+                                   "avoid":  "ยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop; All Indy H4 runtime error ไม่ใช้ค่าที่ว่าง · high M15 4,149.07เป็น anchorประเมิน ยังไม่ยืนยัน swing Stop; ต้องโครงสร้างจริงและspreadตอนเข้า · ฐาน4,144.46–4,143.31อยู่ใกล้ การขายเมื่อหลุดlow M15 4,143.34จะเหลือระยะเพียง0.03ถึง4,143.31 จึงห้ามใช้เป็นจุดขายไล่ · W1ล่าสุดฟื้น แต่ D1/H4/H1ระยะวันอ่อนตัว แผนSELLเป็นการแก้ตัวในกรอบใหญ่ ต้องจำกัดตามโครงสร้าง",
+                                   "cancellation":  "M15 ปิดเหนือ4,149.07ยกเลิกจังหวะขายใกล้; H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักฐาน SELLและประเมินใหม่",
+                                   "changed":  "เปลี่ยนฐานโครงสร้าง 20261014-0913-REFRESH → 20261014-1440-REFRESH\nแผนหลักเปลี่ยน SELL 4,166.3–4,166.54 → SELL 4,147.55–4,149.07\nแผนหลัก M15 PENDING → OBSERVED\nแผนสำรองเปลี่ยน BUY 4,144.46–4,148 → BUY 4,143.31–4,144.46\nทบทวนข้อห้ามเข้าใหม่: INSUFFICIENT_EVIDENCE, MISSING_STOP, OPPOSING_LIQUIDITY, HTF_M15_CONFLICT",
+                                   "next":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31",
+                                   "asOf":  "2026-10-14T14:40:14+07:00"
+                               }
+             },
+    "observationsSummary":  "ข้อเท็จจริง: snapshot14:40:14 Bid4,146.64 Ask4,146.75 spread0.11 ราคากลาง4,146.695; เทียบBidเช้า4,161.24 ลด14.60 เป็นสองsnapshot ไม่ใช่ผลเทรด. H4 ปิด13:00ขึ้นถึง4,170.54แล้วกลับปิด4,148.97; H1 ปิด14:00C4,147.55. M15 14:15–14:30 O4,148.99 H4,149.07 L4,143.34 C4,146.31 ปิดลบต่ำกว่าโซนใกล้4,147.55–4,149.07 เป็น rejection ที่สังเกตจริง. M5 14:30–14:35แตะ4,148.06แล้วปิด4,146.87 แต่เป็นแท่งบวก ไม่ครบ trigger แบบปิดลบที่กำหนด. ข้ออนุมาน: ให้รอขายเมื่อเด้งกลับโซนใกล้ พร้อม Stop/R ผ่าน ห้ามรอหลุด4,143.34แล้วขายไล่เพราะฐาน4,143.31อยู่ติดกัน. ซื้อฐานล่างเป็นสำรองหลังยืนยันใหม่",
+    "planState":  "รอเงื่อนไขครบ",
+    "bias":  "SELL · W1 ฟื้นในกรอบใหญ่ แต่ D1/H4/H1 ระยะวันขายกลับ ราคาใกล้ฐานเช้า จึงรอเด้งขาย/รับสวนที่ฐาน ไม่ไล่ขายลงปลายทาง",
+    "entryZone":  "รอโครงสร้างและเงื่อนไขครบก่อนกำหนดจุดเข้า",
+    "trigger":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31",
+    "invalidation":  "M15 ปิดเหนือ4,149.07ยกเลิกขายใกล้; ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน",
+    "stop":  "ยังไม่มี Stop พร้อมใช้",
+    "targets":  [
+
+                ],
+    "riskReward":  "ยังไม่คำนวณ R:R เพราะ Entry / Stop / Target ไม่ครบพร้อมใช้",
+    "scenarioPlan":  {
+                         "symbol":  "PEPPERSTONE:XAUUSD",
+                         "asOf":  "2026-10-14T14:40:14+07:00",
+                         "scenarios":  [
+                                           {
+                                               "role":  "PRIMARY",
+                                               "side":  "SELL",
+                                               "setupType":  "PULLBACK_CONTINUATION",
+                                               "trendRelationship":  "WITH_TREND",
+                                               "candidateId":  "SR:afternoon-near-upper",
+                                               "zone":  {
+                                                            "low":  4147.55,
+                                                            "high":  4149.07
+                                                        },
+                                               "sourceFrame":  "H1",
+                                               "sourceLayer":  "DAILY_SR",
+                                               "levelEvidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H1",
+                                                                         "closedAt":  "2026-10-14T14:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.72,
+                                                                                     "high":  4163.42,
+                                                                                     "low":  4145.33,
+                                                                                     "close":  4147.55
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M15",
+                                                                         "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4148.99,
+                                                                                     "high":  4149.07,
+                                                                                     "low":  4143.34,
+                                                                                     "close":  4146.31
+                                                                                 }
+                                                                     }
+                                                                 ],
+                                               "setupFrame":  "M15",
+                                               "triggerFrame":  "M5",
+                                               "m15Confirmation":  {
+                                                                       "type":  "REJECTION_CLOSE",
+                                                                       "state":  "OBSERVED",
+                                                                       "evidence":  [
+                                                                                        {
+                                                                                            "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                                            "timeframe":  "M15",
+                                                                                            "closedAt":  "2026-10-14T14:30:00+07:00",
+                                                                                            "bar":  {
+                                                                                                        "open":  4148.99,
+                                                                                                        "high":  4149.07,
+                                                                                                        "low":  4143.34,
+                                                                                                        "close":  4146.31
+                                                                                                    }
+                                                                                        }
+                                                                                    ]
+                                                                   },
+                                               "structuralReason":  "D1/H4/H1 ระยะวันขายกลับ; M15 ปฏิเสธขอบ reclaim ใกล้แล้ว จึงรอ M5 หาจังหวะจากโซน ไม่เข้าเพราะคะแนน SELL และไม่ไล่ลงใกล้ฐาน",
+                                               "confirmation":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31",
+                                               "invalidation":  "M15 ปิดเหนือ4,149.07ยกเลิกจังหวะขายใกล้; H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักฐาน SELLและประเมินใหม่",
+                                               "evidence":  "M15 ปิด14:30เป็นแท่งลบC4,146.31ต่ำกว่าขอบล่าง4,147.55หลังhigh4,149.07แตะโซน"
+                                           },
+                                           {
+                                               "role":  "ALTERNATIVE",
+                                               "side":  "BUY",
+                                               "setupType":  "SUPPORT_REACTION_SCALP",
+                                               "trendRelationship":  "COUNTERTREND_SCALP",
+                                               "candidateId":  "SR:afternoon-lower",
+                                               "zone":  {
+                                                            "low":  4143.31,
+                                                            "high":  4144.46
+                                                        },
+                                               "sourceFrame":  "H4",
+                                               "sourceLayer":  "DAILY_SR",
+                                               "levelEvidence":  [
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "H4",
+                                                                         "closedAt":  "2026-10-14T09:00:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4161.79,
+                                                                                     "high":  4166.3,
+                                                                                     "low":  4144.46,
+                                                                                     "close":  4155.09
+                                                                                 }
+                                                                     },
+                                                                     {
+                                                                         "symbol":  "PEPPERSTONE:XAUUSD",
+                                                                         "timeframe":  "M5",
+                                                                         "closedAt":  "2026-10-14T14:35:00+07:00",
+                                                                         "bar":  {
+                                                                                     "open":  4146.5,
+                                                                                     "high":  4148.06,
+                                                                                     "low":  4143.31,
+                                                                                     "close":  4146.87
+                                                                                 }
+                                                                     }
+                                                                 ],
+                                               "setupFrame":  "M15",
+                                               "triggerFrame":  "M5",
+                                               "m15Confirmation":  {
+                                                                       "type":  "REJECTION_CLOSE",
+                                                                       "state":  "PENDING",
+                                                                       "evidence":  [
+
+                                                                                    ]
+                                                                   },
+                                               "activateWhen":  "COUNTERTREND_CONFIRMED",
+                                               "transition":  "ใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก และฐานล่างรับอยู่ด้วย M15บวกใหม่และM5ครบ ไม่มีSellค้าง; ไม่ให้น้ำหนักเท่าขายระยะวัน",
+                                               "structuralReason":  "ขยายฐานH4เช้า4,144.46ด้วยlow M5บ่าย4,143.31ที่อ่านจริง ซื้อสวนได้เฉพาะมี reaction ไม่รับมีดและไม่ยืนยันจากM5ตัวเดียว",
+                                               "confirmation":  "ใช้เมื่อไม่มี Sell ค้างและราคาทดสอบ4,143.31–4,144.46 แล้ว M15 ปิดบวกเหนือ4,144.46ใหม่ จากนั้น M5 ผ่าน high ของแท่งยืนยันและรีเทสรับอยู่ ซื้อสวนระยะสั้น",
+                                               "invalidation":  "M15 ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน; H1 acceptanceต่ำกว่าฐาน H4เช้า4,144.46ให้พักฉากเพื่อประเมินใหม่",
+                                               "evidence":  "M15ล่าสุดปิดลบ แม้มีไส้รับฐาน ยังไม่ใช่ bullish rejection ตามเงื่อนไขใหม่"
+                                           }
+                                       ]
+                     },
+    "decision":  {
+                     "reason":  "DATA_MISSING",
+                     "missing":  [
+                                     "ยังไม่มี Stop ตามโครงสร้าง",
+                                     "สภาพคล่องฝั่งตรงข้ามใกล้เกินไป",
+                                     "หลักฐานยังไม่พอ",
+                                     "M15 ขัดโครงสร้างใหญ่"
+                                 ],
+                     "nextAction":  "M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31"
+                 },
+    "candidateEntryZone":  "แผนหลัก: รอเด้งขึ้นไปขาย 4,147.55–4,149.07 · M15 ยืนยันแล้ว · M5 ตามเงื่อนไข\nแผนสำรอง: ซื้อจากแนวรับ · scalp สวนแนวโน้ม 4,143.31–4,144.46 · ยังต้องยืนยัน M15",
+    "reviewSupport":  {
+                          "mode":  "ARCHETYPE_REPLAY_V3",
+                          "reason":  "ตรวจชนิด M15 → M5 ของฉากที่เลือก ณ เผยแพร่ ด้วยกติกาเดิมและ receipt; ไม่เปิดแผนสำรองย้อนหลัง ไม่ใช่ Pine fill หรือผลบัญชีผู้ใช้"
+                      },
+    "reviewRules":  {
+                        "version":  3,
+                        "scenarioRole":  "PRIMARY",
+                        "side":  "SELL",
+                        "setupType":  "PULLBACK_CONTINUATION",
+                        "selectedAt":  "2026-10-14T14:40:14+07:00",
+                        "activation":  "SELECTED_AT_PUBLICATION",
+                        "m15":  {
+                                    "type":  "REJECTION_CLOSE",
+                                    "zone":  {
+                                                 "low":  4147.55,
+                                                 "high":  4149.07
+                                             },
+                                    "breakPrice":  null,
+                                    "acceptancePrice":  null,
+                                    "breakFrame":  null
+                                },
+                        "m5":  {
+                                   "confirmation":  "TOUCH_THEN_DIRECTIONAL_CLOSE",
+                                   "price":  4147.55,
+                                   "zone":  {
+                                                "low":  4147.55,
+                                                "high":  4149.07
+                                            },
+                                   "reason":  "หลังเผยแพร่ต้องกลับทดสอบโซนขายแล้วปิดลบต่ำกว่า4,147.55 ไม่ใช้ M5เก่าหรือขายไล่หลุดฐาน"
+                               },
+                        "invalidation":  {
+                                             "timeframe":  "M15",
+                                             "direction":  "ABOVE",
+                                             "price":  4149.07
+                                         },
+                        "entry":  "NEXT_M5_OPEN_WITHIN_ZONE",
+                        "exit":  "FULL_AT_TP1_OR_STOP",
+                        "executionSource":  "DESK_RULE_V3_NOT_PINE_FILL",
+                        "stopTiming":  "UNAVAILABLE"
+                    },
+    "priceMap":  {
+                     "banner":  "WAIT — รอเด้งขึ้นไปขาย 4,147.55–4,149.07",
+                     "levels":  [
+                                    {
+                                        "kind":  "CURRENT",
+                                        "price":  "4146.695",
+                                        "label":  "ราคาที่สังเกต ณ snapshot · ไม่ใช่ราคาสดต่อเนื่อง"
+                                    },
+                                    {
+                                        "kind":  "CANDIDATE",
+                                        "side":  "SELL",
+                                        "price":  "4,163.42–4,170.54",
+                                        "low":  4163.42,
+                                        "high":  4170.54,
+                                        "label":  "โซนเฝ้าขายด้านบน · ยังไม่ใช่ Entry",
+                                        "candidateId":  "SR:afternoon-major-upper"
+                                    },
+                                    {
+                                        "kind":  "CANDIDATE",
+                                        "side":  "BUY",
+                                        "price":  "4,143.31–4,144.46",
+                                        "low":  4143.31,
+                                        "high":  4144.46,
+                                        "label":  "โซนเฝ้าซื้อด้านล่าง · ยังไม่ใช่ Entry",
+                                        "candidateId":  "SR:afternoon-lower"
+                                    },
+                                    {
+                                        "kind":  "CRITICAL",
+                                        "price":  "4,170.54–4,170.54",
+                                        "low":  4170.54,
+                                        "high":  4170.54,
+                                        "label":  "Critical · เฝ้าการเปลี่ยนโครงสร้าง",
+                                        "sourceId":  "afternoon-critical"
+                                    }
+                                ],
+                     "scenarios":  [
+
+                                   ],
+                     "context":  "Bowman16:40 LOW ตามFF; FMPให้MEDIUMจึงยึดFFและติดตามคำแถลง. CPI19:30 HIGH ยังไม่มีActual คาดCore m/m0.2%, Core y/y2.5%, CPI m/m0.6%, CPI y/y3.6%. ใช้policyกลาง XAU_V4_2 พักเปิด17:30–21:30 และตรวจฐานใหม่หลังข่าวหากdisplacementผิดปกติ ไม่รอข่าวในรอบนี้"
+                 },
+    "body":  "XAU/USD — WAIT\nข้อมูล snapshot 2026-10-14T14:40:14+07:00 · PEPPERSTONE:XAUUSD\n\nBias / Phase\nSELL · PULLBACK\nW1 ฟื้นในกรอบใหญ่ แต่ D1/H4/H1 ระยะวันขายกลับ ราคาใกล้ฐานเช้า จึงรอเด้งขาย/รับสวนที่ฐาน ไม่ไล่ขายลงปลายทาง\n\nXAU/USD · โครงสร้างกรอบใหญ่\nข้อเท็จจริง: snapshot14:40:14 Bid4,146.64 Ask4,146.75 spread0.11 ราคากลาง4,146.695; เทียบBidเช้า4,161.24 ลด14.60 เป็นสองsnapshot ไม่ใช่ผลเทรด. H4 ปิด13:00ขึ้นถึง4,170.54แล้วกลับปิด4,148.97; H1 ปิด14:00C4,147.55. M15 14:15–14:30 O4,148.99 H4,149.07 L4,143.34 C4,146.31 ปิดลบต่ำกว่าโซนใกล้4,147.55–4,149.07 เป็น rejection ที่สังเกตจริง. M5 14:30–14:35แตะ4,148.06แล้วปิด4,146.87 แต่เป็นแท่งบวก ไม่ครบ trigger แบบปิดลบที่กำหนด. ข้ออนุมาน: ให้รอขายเมื่อเด้งกลับโซนใกล้ พร้อม Stop/R ผ่าน ห้ามรอหลุด4,143.34แล้วขายไล่เพราะฐาน4,143.31อยู่ติดกัน. ซื้อฐานล่างเป็นสำรองหลังยืนยันใหม่\nW1: สัปดาห์5–9 ต.ค. ปิด10 ต.ค.05:00 O4,135.39 H4,207.73 L4,066.35 C4,194.35 บวก55.21จากcloseสัปดาห์ก่อน4,139.14. เป็นการฟื้นในกรอบกว้าง ไม่ยืนยันเทรนด์ลงทุกกรอบ; W1 สัปดาห์12 ต.ค.ยังไม่ปิด\nD1: 12 ต.ค.ปิด13 ต.ค.05:00 O4,191.33 H4,217.22 L4,154.79 C4,171.88; 13 ต.ค.ปิด14 ต.ค.05:00 O4,173.58 H4,200.58 L4,146.74 C4,160.85. ยอด/ฐาน/close ต่ำลงจากวันก่อน แสดงการอ่อนตัวระยะวันสวนการฟื้นของ W1\nH4: 09:00–13:00 O4,155.12 H4,170.54 L4,148.40 C4,148.97 ขึ้นเหนือโซนขายเช้าแล้วกลับปิดใกล้ low และต่ำกว่าclose H4เช้า4,155.09. เป็นการขายกลับ ไม่ใช้ high ที่แตะเป็น H1 acceptance ขึ้น\nH1: 13:00–14:00 O4,148.72 H4,163.42 L4,145.33 C4,147.55 เด้งขึ้นแล้วขายกลับ ปิดลบและใกล้ low; ใช้close4,147.55เป็นขอบ reclaimใกล้ ไม่แทน structural trend จากอินดี้\n\nตำแหน่งราคา / โซนที่ควรรอ\nราคา ณ snapshot 4,146.695 · BELOW_SELL_ZONE\nเฝ้าขายด้านบน: 4,163.42–4,170.54 · ตามแนวโน้ม\nเฝ้าซื้อด้านล่าง: 4,143.31–4,144.46 · สวนแนวโน้ม · โซนประกอบ\nแผนหลัก: รอเด้งขึ้นไปขาย · 4,147.55–4,149.07\nแผนสำรอง: ซื้อจากแนวรับ · scalp สวนแนวโน้ม · 4,143.31–4,144.46\nงดเปิดเทรด: ยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop; All Indy H4 runtime error ไม่ใช้ค่าที่ว่าง · high M15 4,149.07เป็น anchorประเมิน ยังไม่ยืนยัน swing Stop; ต้องโครงสร้างจริงและspreadตอนเข้า · ฐาน4,144.46–4,143.31อยู่ใกล้ การขายเมื่อหลุดlow M15 4,143.34จะเหลือระยะเพียง0.03ถึง4,143.31 จึงห้ามใช้เป็นจุดขายไล่ · W1ล่าสุดฟื้น แต่ D1/H4/H1ระยะวันอ่อนตัว แผนSELLเป็นการแก้ตัวในกรอบใหญ่ ต้องจำกัดตามโครงสร้าง\nโซนเฝ้ารอไม่ใช่จุดเข้าที่เกิดแล้ว\n\nแผนผังระดับราคา · โซนเฝ้ารอ\n4146.695 · ราคาที่สังเกต ณ snapshot · ไม่ใช่ราคาสดต่อเนื่อง\n4,163.42–4,170.54 · โซนเฝ้าขายด้านบน · ยังไม่ใช่ Entry\n4,143.31–4,144.46 · โซนเฝ้าซื้อด้านล่าง · ยังไม่ใช่ Entry\n4,170.54–4,170.54 · Critical · เฝ้าการเปลี่ยนโครงสร้าง\n\nระดับที่ใช้ต่อ / Re-baseline\n20261014-1440-REFRESH · REFRESH · ACTIVE\nฐานเช้าหมดอายุ จัดฐานใหม่จาก W1/D1/H4/H1 ที่อ่านจริง. W1 ล่าสุดปิดบวกในกรอบกว้าง แต่ D1 ล่าสุดปิดอ่อนลง และ H4/H1 บ่ายขายกลับ จึง SELL เฉพาะการแก้ตัวระยะวัน ไม่อ้างทุกกรอบเป็นขาลง. ไม่ยืดวันฐานเก่า\nยกเลิกฐาน: H1 ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พัก SELL ระยะวัน; ยอมรับใต้ฐาน H4เช้า4,144.46หรือเกิด displacement/retest/แรงผิดปกติหลัง CPI ต้องประเมินฐานใหม่\nRe-baseline: STABLE\n\nDaily SR · แผนที่ตำแหน่งราคา\nโซนขายใกล้4,147.55–4,149.07 อิง close H1 กับhigh M15ที่ปฏิเสธแล้ว; ฐาน4,143.31–4,144.46 อิงlow M5บ่ายกับH4เช้า; โซนบนใหญ่4,163.42–4,170.54 อิงhigh H1/H4 เป็นอุปสรรคถัดไป ไม่เพิ่มเป็นฉากที่3. ทั้งหมดเป็นแผนที่ตำแหน่ง ไม่ใช่ Supply/Demand ของ AMM\nTACTICAL · TESTED · 4,147.55–4,149.07\nSTRUCTURAL · TESTED · 4,143.31–4,144.46\nSTRUCTURAL · TESTED · 4,163.42–4,170.54\nCRITICAL · ACTIVE · 4,170.54–4,170.54\nSTRUCTURAL · HISTORICAL · 4,166.3–4,166.54\nSTRUCTURAL · HISTORICAL · 4,144.46–4,148\nCRITICAL · HISTORICAL · 4,166.54–4,166.54\nSTRUCTURAL · HISTORICAL · 4,173.36–4,180.28\nSTRUCTURAL · HISTORICAL · 4,150.86–4,154.79\nCRITICAL · HISTORICAL · 4,180.28–4,180.28\nSTRUCTURAL · HISTORICAL · 4,173.36–4,177.65\nSTRUCTURAL · HISTORICAL · 4,167.45–4,168.62\nCRITICAL · HISTORICAL · 4,167.45–4,168.62\nSTRUCTURAL · HISTORICAL · 4,200.04–4,202.47\nSTRUCTURAL · HISTORICAL · 4,213.62–4,217.22\nSTRUCTURAL · HISTORICAL · 4,184.59–4,191.33\nCRITICAL · HISTORICAL · 4,200.04–4,200.04\nSTRUCTURAL · HISTORICAL · 4,226.69–4,226.69\nSTRUCTURAL · HISTORICAL · 4,176.3–4,184.73\n\nAMM · โซนประกอบแผน\nยังไม่มีสูตร/output AMM ต้นฉบับยืนยัน ไม่ใช้เป้าEBWหรือnearestsupportแทน\n\n\nแนวคิดเข้า / M15 → M5\nขายจากโซน4,147.55–4,149.07หลัง M5ครบและStop/Rจริงผ่าน เป้าประเมิน4,144.46แล้ว4,143.31. สำรองรับฐาน4,143.31–4,144.46หลัง M15/M5ใหม่ มอง4,147.55แล้ว4,149.07. โซนบนใหญ่4,163.42–4,170.54เป็นอุปสรรคถัดไป ไม่ใช่แผนที่3. Stopขายเหนือยอดกลับตัวจริง Stopซื้อใต้ฐานกลับตัวจริง เผื่อspreadตอนเข้า(snapshot0.11). ยังไม่มี pivot/Entry/Stopครบ จึงไม่คำนวณRหรือบีบStopเพื่อผ่านเกณฑ์\nM15 CONFIRMED: M15 ปิด14:30แตะโซน4,147.55–4,149.07และปิดลบต่ำกว่า4,147.55จริง แต่ฐาน4143.31–4144.46อยู่ใกล้ ต้องไม่ขายไล่และต้องประเมินRจากEntry/Stopจริง\nM5 PENDING: M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31\n\nแผนหลัก · SELL\nD1/H4/H1 ระยะวันขายกลับ; M15 ปฏิเสธขอบ reclaim ใกล้แล้ว จึงรอ M5 หาจังหวะจากโซน ไม่เข้าเพราะคะแนน SELL และไม่ไล่ลงใกล้ฐาน\nรอเด้งขึ้นไปขาย · โซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน\nM15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31\nยกเลิกฉาก: M15 ปิดเหนือ4,149.07ยกเลิกจังหวะขายใกล้; H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักฐาน SELLและประเมินใหม่\n\nแผนสำรอง · BUY\nขยายฐานH4เช้า4,144.46ด้วยlow M5บ่าย4,143.31ที่อ่านจริง ซื้อสวนได้เฉพาะมี reaction ไม่รับมีดและไม่ยืนยันจากM5ตัวเดียว\nใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก และฐานล่างรับอยู่ด้วย M15บวกใหม่และM5ครบ ไม่มีSellค้าง; ไม่ให้น้ำหนักเท่าขายระยะวัน\nซื้อจากแนวรับ · scalp สวนแนวโน้ม · รอลงเข้าโซน 4,143.31–4,144.46 → M15 ปิดปฏิเสธโซน → M5 หาจังหวะ\nใช้เมื่อไม่มี Sell ค้างและราคาทดสอบ4,143.31–4,144.46 แล้ว M15 ปิดบวกเหนือ4,144.46ใหม่ จากนั้น M5 ผ่าน high ของแท่งยืนยันและรีเทสรับอยู่ ซื้อสวนระยะสั้น\nยกเลิกฉาก: M15 ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน; H1 acceptanceต่ำกว่าฐาน H4เช้า4,144.46ให้พักฉากเพื่อประเมินใหม่\n\nWait zone · พื้นที่รอตรวจ setup\nSELL 4,147.55–4,149.07 PRIMARY: M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31\nBUY 4,143.31–4,144.46 ALTERNATIVE: ใช้เมื่อไม่มี Sell ค้างและราคาทดสอบ4,143.31–4,144.46 แล้ว M15 ปิดบวกเหนือ4,144.46ใหม่ จากนั้น M5 ผ่าน high ของแท่งยืนยันและรีเทสรับอยู่ ซื้อสวนระยะสั้น\n\nNo-trade · เงื่อนไขงดเปิดเทรด\nยังไม่มี Stop ตามโครงสร้าง\nสภาพคล่องฝั่งตรงข้ามใกล้เกินไป\nหลักฐานยังไม่พอ\nM15 ขัดโครงสร้างใหญ่\nยังขาด DXY closed structure, AMM/source/Inputs และ pivot Stop; All Indy H4 runtime error ไม่ใช้ค่าที่ว่าง\nhigh M15 4,149.07เป็น anchorประเมิน ยังไม่ยืนยัน swing Stop; ต้องโครงสร้างจริงและspreadตอนเข้า\nฐาน4,144.46–4,143.31อยู่ใกล้ การขายเมื่อหลุดlow M15 4,143.34จะเหลือระยะเพียง0.03ถึง4,143.31 จึงห้ามใช้เป็นจุดขายไล่\nW1ล่าสุดฟื้น แต่ D1/H4/H1ระยะวันอ่อนตัว แผนSELLเป็นการแก้ตัวในกรอบใหญ่ ต้องจำกัดตามโครงสร้าง\n\nเงื่อนไขล้มเหลว / ยกเลิก\nTrigger failure: M5: M5ทดสอบโซนแล้วไม่ปิดลบต่ำกว่า4,147.55 หรือรีเทสกลับยืนเหนือ ให้ถือว่าทริกเกอร์ขายยังไม่ผ่าน ไม่ใช้ไส้ต่ำกว่า4,143.34แทน · 4,147.55\nTactical: M15: M15 ปิดเหนือ4,149.07ยกเลิกขายใกล้; ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน · 4,149.07\nStructural: H1: H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักSELLระยะวัน; ไม่ใช้แค่ไส้แตะ · 4,170.54\nRe-baseline: H1: acceptanceผ่านCritical, displacement+confirmedretest, structure shift หรือ postnews abnormal displacement ให้พักtacticsแล้วตั้งฐานใหม่\nActual Stop: ยังไม่ยืนยัน\n\nตารางแผน · โซน เป้าหมาย และความเสี่ยง\nรอเด้งขึ้นไปขาย · แผนหลัก\nโซนขาย 4,147.55–4,149.07 → M15 ปิดปฏิเสธโซนยืนยันแล้ว → รอ M5 ตามแผน\nแผนหลักตามโครงสร้างใหญ่\nโซนเฝ้ารอ 4,147.55–4,149.07\nแนวเป้าประเมิน 4,144.46\nจุดโครงสร้างประเมิน 4,149.07 · มี high/low ที่สังเกตแล้ว แต่ยังไม่มีแท่งรอบข้างพอยืนยัน swing\nยกเลิก: M15 ปิดเหนือ4,149.07ยกเลิกจังหวะขายใกล้; H1ยอมรับเหนือ4,170.54พร้อมโครงสร้างเปลี่ยนให้พักฐาน SELLและประเมินใหม่\nโซน/แนวเป้าหมายเพื่อเตรียมแผน ยังไม่ใช่ Entry / Stop / TP พร้อมใช้\n\nซื้อจากแนวรับ · scalp สวนแนวโน้ม · แผนสำรอง\nรอลงเข้าโซน 4,143.31–4,144.46 → M15 ปิดปฏิเสธโซน → M5 หาจังหวะ\nใช้เมื่อ Primaryยังไม่เข้า/ถูกยกเลิก และฐานล่างรับอยู่ด้วย M15บวกใหม่และM5ครบ ไม่มีSellค้าง; ไม่ให้น้ำหนักเท่าขายระยะวัน\nโซนเฝ้ารอ 4,143.31–4,144.46\nแนวเป้าประเมิน 4,147.55\nยังไม่มี Stop · ยังไม่มีหลักฐาน structural swing นอกโซน\nยกเลิก: M15 ปิดต่ำกว่า4,143.31ยกเลิกซื้อสวน; H1 acceptanceต่ำกว่าฐาน H4เช้า4,144.46ให้พักฉากเพื่อประเมินใหม่\nโซน/แนวเป้าหมายเพื่อเตรียมแผน ยังไม่ใช่ Entry / Stop / TP พร้อมใช้\nรอโครงสร้างและเงื่อนไขครบก่อนกำหนดจุดเข้า\nยังไม่มี Stop พร้อมใช้\nยังไม่คำนวณ R:R เพราะ Entry / Stop / Target ไม่ครบพร้อมใช้\n\nDXY · ตัวกรองยืนยัน\nUNAVAILABLE\nDXY102.126 as-of14:32 GMT+7 ลด0.089(-0.09%)จากpreviousclose102.215; dayrange102.075–102.212กำลังก่อตัว ไม่ใช่แท่งปิด\nดอลลาร์อ่อนรายวันแต่ทองอ่อนจากsnapshotเช้า แสดงว่าquoteDXYอย่างเดียวไม่ยืนยันBUY; ไม่มีโครงสร้างDXYปิดจึงไม่ให้CONFIRM/CONTRADICT\n\n\nSPDR · กระแสเงินระยะกลาง\nSPDR cache HIT คงcheckedAt14 ต.ค.09:08:26.538; holdingsล่าสุด12 ต.ค.1,055.41ตัน เพิ่ม2.28ตันจาก9 ต.ค. ไม่อ้างว่าfetchสดบ่ายหรือมีholdings14 ต.ค. เป็นflowระยะกลาง\n2026-10-12 · ถือครอง 1,055.41 ตัน · เปลี่ยน 2.28 ตัน จาก 2026-10-09\nUP · MIXED\n\nข่าว · ภาวะตลาดและความเสี่ยง\nช่วงยุโรปก่อน CPI สหรัฐ\nBowman16:40 LOW ตามFF; FMPให้MEDIUMจึงยึดFFและติดตามคำแถลง. CPI19:30 HIGH ยังไม่มีActual คาดCore m/m0.2%, Core y/y2.5%, CPI m/m0.6%, CPI y/y3.6%. ใช้policyกลาง XAU_V4_2 พักเปิด17:30–21:30 และตรวจฐานใหม่หลังข่าวหากdisplacementผิดปกติ ไม่รอข่าวในรอบนี้\nข้อมูลจริง: FF CPI19:30 HIGHทั้ง4รายการ Actualว่าง; forecast0.2/2.5/0.6/3.6%ตามลำดับ\nการตีความ: ยังไม่ประกาศ ไม่ใช้forecastเป็นActual\nผลต่อทอง: ผลCPIอาจเปลี่ยนดอลลาร์/ยีลด์และทำให้ระดับทองใช้ต่อไม่ได้\nเฝ้า: พักเปิด17:30–21:30ตามpolicyกลาง และประเมินโครงสร้างใหม่เมื่อมีแรงผิดปกติ\nวันที่ 2026-10-14T19:30:00+07:00 · https://www.forexfactory.com/calendar?day=oct14.2026\n\nข้อมูลจริง: FF Bowman16:40 LOW; FMP14:32ให้MEDIUM เวลา16:40ตรงกัน\nการตีความ: ความสำคัญต่างกัน ใช้FFเป็นหลัก ยังไม่มีคำแถลงจริง\nผลต่อทอง: ถ้อยแถลงFedอาจทำให้ราคากระชากก่อนCPI\nเฝ้า: ตรวจspread/โครงสร้างก่อนเข้า ไม่เดาhawk/dove\nวันที่ 2026-10-14T16:40:00+07:00 · https://www.forexfactory.com/calendar?day=oct14.2026\n\nข้อมูลจริง: FMP Treasury cacheHITบ่าย คงเวลาต้นฉบับ09:08:24.458; ล่าสุด13 ต.ค.2Y4.79%/10Y5.21% ลด1/3bpเทียบ9 ต.ค.\nการตีความ: ข้อมูลรายวัน ไม่ใช่ยีลด์สดบ่าย\nผลต่อทอง: ยีลด์ลดอาจช่วยทองแต่ราคาเช้า–บ่ายอ่อนตัว จึงไม่อ้างเหตุเดียว\nเฝ้า: ดูปฏิกิริยาต่อCPIโดยไม่ใช้เป็นtriggerM5\nวันที่ 2026-10-13 · https://site.financialmodelingprep.com/developer/docs/stable/treasury-rates\n\nข้อมูลจริง: FMPnewsMISS14:32มีหัวข้อทอง/ดอลลาร์ก่อนCPI แต่timestampไม่มีoffsetยืนยันและยังไม่อ่านบทความต้นทาง\nการตีความ: ยังไม่ยืนยันสาเหตุราคา/เวลาข่าวจากหัวข้อ\nผลต่อทอง: ใช้เป็นรายการติดตามเท่านั้น ไม่เอาราคาหรือแนวรับของบทความมาปนPepperstone\nเฝ้า: คงข่าวUNVERIFIEDเมื่อขาดต้นทาง ไม่ใช้เปิดเทรด\nวันที่ 2026-10-14 · https://site.financialmodelingprep.com/developer/docs/stable/news-general\n\nEBW / All Indy · ยืนยันประกอบ\nบนกราฟจริงเปลี่ยนเป็น EBW1.10.10 FAST(3000) และ ALL1.2.4.1 FAST(5000). H1 ปิด14:00 RSI37.79 K36.76/D58.80; M15 ปิด14:30 RSI40.38 K14.52/D19.43; M5 ปิด14:35 RSI40.06 K29.09/D24.79. All Indy บน H4 แสดง Runtime error/outputว่าง แต่ H1/M15/M5 อ่านค่าที่ปิดได้. ยังไม่ยืนยัน Inputs/source ทั้งชุด ไม่ใช้คะแนนอินดี้แทนโครงสร้าง\n\nสรุปใช้งานจริง\nWAIT — ยังไม่มี Stop ตามโครงสร้าง · สภาพคล่องฝั่งตรงข้ามใกล้เกินไป · หลักฐานยังไม่พอ · M15 ขัดโครงสร้างใหญ่\nขั้นต่อไป: M15 ปฏิเสธโซน4,147.55–4,149.07แล้ว; รอ M5 หลังเผยแพร่กลับทดสอบโซนและปิดลบต่ำกว่า4,147.55 จากนั้นตรวจรีเทสไม่ผ่าน/StopจริงและRสุทธิ อย่าขายไล่เมื่อถึงฐาน4,144.46–4,143.31\nแผนหลัก: รอเด้งขึ้นไปขาย 4,147.55–4,149.07 · M15 ยืนยันแล้ว · M5 ตามเงื่อนไข\nแผนสำรอง: ซื้อจากแนวรับ · scalp สวนแนวโน้ม 4,143.31–4,144.46 · ยังต้องยืนยัน M15\n\nเครื่องมือประกอบ · ใช้เมื่อมีหลักฐาน\nEMA : UNAVAILABLE · ยังไม่ยืนยันpivot/EMA/FVG/BOS/CHOCHครบ ใช้ OHLCจริงที่ระบุ ไม่ตั้งชื่อSupply/AMMจากภาพ\n\nการทบทวนแผน\nตรวจชนิด M15 → M5 ของฉากที่เลือก ณ เผยแพร่ ด้วยกติกาเดิมและ receipt; ไม่เปิดแผนสำรองย้อนหลัง ไม่ใช่ Pine fill หรือผลบัญชีผู้ใช้\n\nตรวจอินดี้ / AMM ต้นฉบับ\nEBW: UNAVAILABLE · Profileเปลี่ยนเป็นEBW1.10.10FAST(3000)/AllIndy1.2.4.1FAST(5000). Inputs/sourceทั้งชุดยังไม่ยืนยัน; H4AllIndyRuntimeerror. อ่านค่าบนH1/M15/M5ที่ปิดจริงได้เป็นรอง\nInputs บนกราฟยังไม่ยืนยัน; ไม่เอาค่าเริ่มต้นในไฟล์มาแทน\nAMM: UNAVAILABLE · สูตร/output AMM ต้นฉบับยังขาด\n\nหลักฐานประกอบโซนที่เลือก\nSR:afternoon-major-upper: ยังไม่มี confluence ที่อ่านได้เพิ่ม; ใช้หลักฐาน SR ที่ระบุ\nSR:afternoon-critical: ยังไม่มี confluence ที่อ่านได้เพิ่ม; ใช้หลักฐาน SR ที่ระบุ\nSR:afternoon-near-upper: ยังไม่มี confluence ที่อ่านได้เพิ่ม; ใช้หลักฐาน SR ที่ระบุ\nSR:afternoon-lower: ยังไม่มี confluence ที่อ่านได้เพิ่ม; ใช้หลักฐาน SR ที่ระบุ\n\nSPDR · ประวัติที่ตรวจได้\n2026-09-09: 1,050.63 ตัน\n2026-09-10: 1,050.28 ตัน\n2026-09-11: 1,047.42 ตัน\n2026-09-14: 1,047.42 ตัน\n2026-09-15: 1,050.28 ตัน\n2026-09-16: 1,051.99 ตัน\n2026-09-17: 1,052.84 ตัน\n2026-09-18: 1,057.12 ตัน\n2026-09-21: 1,055.41 ตัน\n2026-09-22: 1,055.98 ตัน\n2026-09-23: 1,056.84 ตัน\n2026-09-24: 1,054.55 ตัน\n2026-09-25: 1,054.55 ตัน\n2026-09-28: 1,058.83 ตัน\n2026-09-29: 1,057.41 ตัน\n2026-09-30: 1,055.7 ตัน\n2026-10-01: 1,056.55 ตัน\n2026-10-02: 1,055.7 ตัน\n2026-10-05: 1,056.27 ตัน\n2026-10-06: 1,059.97 ตัน\n2026-10-07: 1,061.11 ตัน\n2026-10-08: 1,055.41 ตัน\n2026-10-09: 1,053.13 ตัน\n2026-10-12: 1,055.41 ตัน\nผลต่าง holdings ตามวันที่มีหลักฐาน ไม่อ้างว่าข้อมูลต่อเนื่องครบทุกวัน\nสุทธิช่วงที่ตรวจได้: 4.78 ตัน\n\nDXY · เงื่อนไขสนับสนุน / ขัดแย้ง\nยังไม่มีระดับ DXY ที่ตรวจโครงสร้างได้พอเพิ่มเงื่อนไข\n\nข้อมูลจริงและแหล่งอ้างอิง\nข้อเท็จจริง: snapshot14:40:14 Bid4,146.64 Ask4,146.75 spread0.11 ราคากลาง4,146.695; เทียบBidเช้า4,161.24 ลด14.60 เป็นสองsnapshot ไม่ใช่ผลเทรด. H4 ปิด13:00ขึ้นถึง4,170.54แล้วกลับปิด4,148.97; H1 ปิด14:00C4,147.55. M15 14:15–14:30 O4,148.99 H4,149.07 L4,143.34 C4,146.31 ปิดลบต่ำกว่าโซนใกล้4,147.55–4,149.07 เป็น rejection ที่สังเกตจริง. M5 14:30–14:35แตะ4,148.06แล้วปิด4,146.87 แต่เป็นแท่งบวก ไม่ครบ trigger แบบปิดลบที่กำหนด. ข้ออนุมาน: ให้รอขายเมื่อเด้งกลับโซนใกล้ พร้อม Stop/R ผ่าน ห้ามรอหลุด4,143.34แล้วขายไล่เพราะฐาน4,143.31อยู่ติดกัน. ซื้อฐานล่างเป็นสำรองหลังยืนยันใหม่\n\nการตีความและเส้นทางในแผนเป็นเงื่อนไข ไม่รับประกันการเคลื่อนที่ของราคา",
+    "comparison":  {
+                       "state":  "AVAILABLE",
+                       "previousPlanId":  "20261014-0913-W1",
+                       "previousSnapshotAt":  "2026-10-14T09:13:42+07:00",
+                       "changes":  [
+                                       "เปลี่ยนฐานโครงสร้าง 20261014-0913-REFRESH → 20261014-1440-REFRESH",
+                                       "แผนหลักเปลี่ยน SELL 4,166.3–4,166.54 → SELL 4,147.55–4,149.07",
+                                       "แผนหลัก M15 PENDING → OBSERVED",
+                                       "แผนสำรองเปลี่ยน BUY 4,144.46–4,148 → BUY 4,143.31–4,144.46",
+                                       "ทบทวนข้อห้ามเข้าใหม่: INSUFFICIENT_EVIDENCE, MISSING_STOP, OPPOSING_LIQUIDITY, HTF_M15_CONFLICT"
+                                   ],
+                       "reason":  "เปลี่ยนฐานโครงสร้าง 20261014-0913-REFRESH → 20261014-1440-REFRESH\nแผนหลักเปลี่ยน SELL 4,166.3–4,166.54 → SELL 4,147.55–4,149.07\nแผนหลัก M15 PENDING → OBSERVED\nแผนสำรองเปลี่ยน BUY 4,144.46–4,148 → BUY 4,143.31–4,144.46\nทบทวนข้อห้ามเข้าใหม่: INSUFFICIENT_EVIDENCE, MISSING_STOP, OPPOSING_LIQUIDITY, HTF_M15_CONFLICT",
+                       "note":  "เปรียบเทียบรายงานสองเวลา ไม่สรุป trigger / fill / ผลเทรดระหว่างกลาง"
+                   },
+    "changeSinceLast":  "เปลี่ยนฐานโครงสร้าง 20261014-0913-REFRESH → 20261014-1440-REFRESH\nแผนหลักเปลี่ยน SELL 4,166.3–4,166.54 → SELL 4,147.55–4,149.07\nแผนหลัก M15 PENDING → OBSERVED\nแผนสำรองเปลี่ยน BUY 4,144.46–4,148 → BUY 4,143.31–4,144.46\nทบทวนข้อห้ามเข้าใหม่: INSUFFICIENT_EVIDENCE, MISSING_STOP, OPPOSING_LIQUIDITY, HTF_M15_CONFLICT",
+    "evidenceArchive":  {
+                            "sha256":  "ea0195d047b57666c9a88477c12b506b2da2c78384dbb054050754ea93433da9",
+                            "capturedAt":  "2026-10-14T14:40:14+07:00",
+                            "method":  "DATA_WINDOW",
+                            "counts":  {
+                                           "H1":  5,
+                                           "W1":  2,
+                                           "D1":  7,
+                                           "H4":  6,
+                                           "M15":  3,
+                                           "M5":  2
+                                       }
+                        },
+    "revision":  "9d4db5db80fc5252-002fc63e2b6e4e81",
+    "imageUrl":  "https://basssg.github.io/XAUChatGPTChat/reports/archive/analysis-20261014-074014.png"
+}
